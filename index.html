@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Get KS Rivals Script | LinkUnlocker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #8b5cf6;
+            --primary-glow: rgba(139, 92, 246, 0.5);
+            --success: #10b981;
+            --success-glow: rgba(16, 185, 129, 0.5);
+            --youtube: #ff0000;
+            --discord: #5865f2;
+            --bg-dark: #0a0a0f;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.08);
+            --text: #ffffff;
+            --text-muted: rgba(255, 255, 255, 0.5);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-dark);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(ellipse at 80% 20%, rgba(99, 102, 241, 0.08) 0%, transparent 40%),
+                        radial-gradient(ellipse at 20% 80%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
+            animation: bgPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+        }
+
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.5;
+            animation: orbFloat 20s ease-in-out infinite;
+        }
+
+        .orb-1 {
+            width: 400px;
+            height: 400px;
+            background: var(--primary);
+            top: -100px;
+            right: -100px;
+            animation-delay: 0s;
+        }
+
+        .orb-2 {
+            width: 300px;
+            height: 300px;
+            background: #6366f1;
+            bottom: -50px;
+            left: -50px;
+            animation-delay: -7s;
+        }
+
+        .orb-3 {
+            width: 200px;
+            height: 200px;
+            background: #8b5cf6;
+            top: 50%;
+            left: 50%;
+            animation-delay: -14s;
+        }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(50px, -50px) scale(1.1); }
+            50% { transform: translate(-30px, 30px) scale(0.9); }
+            75% { transform: translate(30px, 50px) scale(1.05); }
+        }
+
+        /* Particle System */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(139, 92, 246, 0.6);
+            border-radius: 50%;
+            animation: particleFloat 15s linear infinite;
+        }
+
+        @keyframes particleFloat {
+            0% {
+                transform: translateY(100vh) scale(0);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) scale(1);
+                opacity: 0;
+            }
+        }
+
+        /* Main Container */
+        .container {
+            width: 100%;
+            max-width: 480px;
+            position: relative;
+        }
+
+        /* Glass Card */
+        .card {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px 32px;
+            position: relative;
+            overflow: hidden;
+            animation: cardEnter 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes cardEnter {
+            from {
+                opacity: 0;
+                transform: translateY(40px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+
+        .logo-icon {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), #6366f1);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            color: white;
+            position: relative;
+            animation: logoFloat 3s ease-in-out infinite;
+            box-shadow: 0 20px 40px rgba(139, 92, 246, 0.3);
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 22px;
+            background: linear-gradient(135deg, var(--primary), #6366f1, var(--primary));
+            background-size: 200% 200%;
+            animation: gradientMove 3s ease infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes gradientMove {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 8px;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Progress Section */
+        .progress-section {
+            margin-bottom: 32px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .progress-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .progress-count {
+            font-size: 13px;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #6366f1);
+            border-radius: 3px;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s linear infinite;
+        }
+
+        @keyframes shimmer {
+            from { transform: translateX(-100%); }
+            to { transform: translateX(100%); }
+        }
+
+        /* Task List */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .task-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .task-item::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .task-item:hover {
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .task-item:hover::before {
+            opacity: 1;
+        }
+
+        .task-item:active {
+            transform: scale(0.98);
+        }
+
+        .task-item.disabled {
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .task-item.completed {
+            border-color: rgba(16, 185, 129, 0.3);
+            background: rgba(16, 185, 129, 0.05);
+        }
+
+        .task-item.processing {
+            pointer-events: none;
+        }
+
+        .task-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .task-icon.youtube {
+            background: linear-gradient(135deg, var(--youtube), #cc0000);
+        }
+
+        .task-icon.discord {
+            background: linear-gradient(135deg, var(--discord), #4752c4);
+        }
+
+        .task-content {
+            flex: 1;
+        }
+
+        .task-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 4px;
+        }
+
+        .task-desc {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .task-status {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
+        }
+
+        .task-status.pending {
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .task-status.pending i {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+        .task-status.processing {
+            background: rgba(139, 92, 246, 0.1);
+            border: 2px solid var(--primary);
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        .task-status.processing i {
+            color: var(--primary);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.4); }
+            50% { box-shadow: 0 0 0 8px rgba(139, 92, 246, 0); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .task-status.completed {
+            background: var(--success);
+            border: none;
+        }
+
+        .task-status.completed i {
+            color: white;
+            font-size: 14px;
+        }
+
+        /* Timer */
+        .timer {
+            position: absolute;
+            bottom: 4px;
+            right: 20px;
+            font-size: 11px;
+            color: var(--primary);
+            font-weight: 600;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Get Script Button */
+        .get-script-btn {
+            width: 100%;
+            padding: 18px 24px;
+            border: none;
+            border-radius: 16px;
+            font-size: 16px;
+            font-weight: 600;
+            font-family: inherit;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .get-script-btn.locked {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .get-script-btn.locked i {
+            font-size: 14px;
+        }
+
+        .get-script-btn.unlocked {
+            background: linear-gradient(135deg, var(--success), #059669);
+            color: white;
+            box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4);
+            animation: glowPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { 
+                box-shadow: 0 10px 40px rgba(16, 185, 129, 0.4),
+                            0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+            50% { 
+                box-shadow: 0 10px 40px rgba(16, 185, 129, 0.6),
+                            0 0 30px 10px rgba(16, 185, 129, 0.2);
+            }
+        }
+
+        .get-script-btn.unlocked::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(135deg, var(--success), #34d399, var(--success));
+            background-size: 200% 200%;
+            animation: gradientMove 3s ease infinite;
+            z-index: -1;
+            border-radius: 18px;
+        }
+
+        .get-script-btn.unlocked:hover {
+            transform: translateY(-3px) scale(1.02);
+        }
+
+        .get-script-btn.unlocked:active {
+            transform: scale(0.98);
+        }
+
+        /* Ripple Effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+
+        /* Security Notice */
+        .security-notice {
+            margin-top: 24px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .security-notice i {
+            color: var(--primary);
+            font-size: 16px;
+            margin-top: 2px;
+        }
+
+        .security-notice p {
+            font-size: 12px;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer p {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer a:hover {
+            color: #a78bfa;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            padding: 16px 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast i {
+            font-size: 18px;
+        }
+
+        .toast.success i {
+            color: var(--success);
+        }
+
+        .toast.error i {
+            color: #ef4444;
+        }
+
+        .toast.info i {
+            color: var(--primary);
+        }
+
+        .toast p {
+            font-size: 14px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal {
+            background: var(--bg-card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 20px;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-icon i {
+            font-size: 28px;
+            color: #ef4444;
+        }
+
+        .modal h3 {
+            font-size: 20px;
+            color: var(--text);
+            margin-bottom: 12px;
+        }
+
+        .modal p {
+            font-size: 14px;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            background: var(--primary);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .modal-btn:hover {
+            background: #7c3aed;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .card {
+                padding: 32px 24px;
+            }
+
+            .title {
+                font-size: 24px;
+            }
+
+            .task-item {
+                padding: 14px 16px;
+            }
+
+            .task-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="card">
+            <!-- Header -->
+            <div class="header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                </div>
+                <h1 class="title">Get KS Rivals Script</h1>
+                <p class="subtitle">Complete all tasks to unlock the script</p>
+            </div>
+
+            <!-- Progress Section -->
+            <div class="progress-section">
+                <div class="progress-header">
+                    <span class="progress-label">Progress</span>
+                    <span class="progress-count" id="progressCount">0/3 Completed</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <!-- Task List -->
+            <div class="task-list">
+                <!-- Subscribe Task -->
+                <div class="task-item" id="task-subscribe" onclick="startTask('subscribe')">
+                    <div class="task-icon youtube">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Subscribe to Channel</div>
+                        <div class="task-desc">Subscribe to KS Script on YouTube</div>
+                    </div>
+                    <div class="task-status pending" id="status-subscribe">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="timer" id="timer-subscribe"></div>
+                </div>
+
+                <!-- Like Task -->
+                <div class="task-item disabled" id="task-like" onclick="startTask('like')">
+                    <div class="task-icon youtube">
+                        <i class="fas fa-heart"></i>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Like the Video</div>
+                        <div class="task-desc">Like our featured video</div>
+                    </div>
+                    <div class="task-status pending" id="status-like">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="timer" id="timer-like"></div>
+                </div>
+
+                <!-- Discord Task -->
+                <div class="task-item disabled" id="task-discord" onclick="startTask('discord')">
+                    <div class="task-icon discord">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <div class="task-content">
+                        <div class="task-title">Join Discord</div>
+                        <div class="task-desc">Join our community server</div>
+                    </div>
+                    <div class="task-status pending" id="status-discord">
+                        <i class="fas fa-arrow-right"></i>
+                    </div>
+                    <div class="timer" id="timer-discord"></div>
+                </div>
+            </div>
+
+            <!-- Get Script Button -->
+            <button class="get-script-btn locked" id="getScriptBtn" onclick="getScript()">
+                <i class="fas fa-lock"></i>
+                <span>Complete All Tasks to Unlock</span>
+            </button>
+
+            <!-- Security Notice -->
+            <div class="security-notice">
+                <i class="fas fa-shield-alt"></i>
+                <p>Your progress is verified and secured. Tasks must be completed in order and cannot be skipped.</p>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p>Powered by <a href="#">KS Script</a> &copy; 2024</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <p id="toastMessage">Task completed!</p>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal">
+            <div class="modal-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <h3>Verification Failed</h3>
+            <p id="modalMessage">Please complete the task properly before continuing.</p>
+            <button class="modal-btn" onclick="closeModal()">Try Again</button>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            SUBSCRIBE_TIME: 15,  // seconds required on subscribe page
+            LIKE_TIME: 12,       // seconds required on like page
+            DISCORD_TIME: 18,   // seconds required on discord page
+            FINAL_URL: 'https://ks-script.github.io/KS.WEB/',
+            SUBSCRIBE_URL: 'https://www.youtube.com/@KS_SCRIPT_Owner?sub_confirmation=1',
+            LIKE_URL: 'https://www.youtube.com/shorts/bGm4dt_Isrk',
+            DISCORD_URL: 'https://discord.com/channels/@me'
+        };
+
+        // State Management with encryption
+        const STATE_KEY = 'ks_rivals_state_v2';
+        const SECRET = 'KS_RIVALS_2024_SECURE';
+
+        function generateHash(data) {
+            let hash = 0;
+            const str = JSON.stringify(data) + SECRET;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(36);
+        }
+
+        function getState() {
+            try {
+                const stored = localStorage.getItem(STATE_KEY);
+                if (!stored) return createInitialState();
+                
+                const parsed = JSON.parse(atob(stored));
+                const { data, hash, timestamp } = parsed;
+                
+                // Verify hash
+                if (generateHash({ ...data, timestamp }) !== hash) {
+                    localStorage.removeItem(STATE_KEY);
+                    return createInitialState();
+                }
+                
+                // Check if state is too old (24 hours)
+                if (Date.now() - timestamp > 24 * 60 * 60 * 1000) {
+                    localStorage.removeItem(STATE_KEY);
+                    return createInitialState();
+                }
+                
+                return data;
+            } catch (e) {
+                localStorage.removeItem(STATE_KEY);
+                return createInitialState();
+            }
+        }
+
+        function saveState(state) {
+            const timestamp = Date.now();
+            const hash = generateHash({ ...state, timestamp });
+            const data = btoa(JSON.stringify({ data: state, hash, timestamp }));
+            localStorage.setItem(STATE_KEY, data);
+        }
+
+        function createInitialState() {
+            return {
+                subscribe: { completed: false, startTime: null, endTime: null },
+                like: { completed: false, startTime: null, endTime: null },
+                discord: { completed: false, startTime: null, endTime: null },
+                sessionId: generateSessionId()
+            };
+        }
+
+        function generateSessionId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        // Task Management
+        let state = getState();
+        let activeTask = null;
+        let timerInterval = null;
+        let windowCheckInterval = null;
+
+        function initializeUI() {
+            // Check for saved state and update UI
+            if (state.subscribe.completed) {
+                markTaskCompleted('subscribe');
+            }
+            if (state.like.completed) {
+                document.getElementById('task-like').classList.remove('disabled');
+                if (state.like.completed) {
+                    markTaskCompleted('like');
+                }
+            }
+            if (state.discord.completed) {
+                document.getElementById('task-discord').classList.remove('disabled');
+                if (state.discord.completed) {
+                    markTaskCompleted('discord');
+                }
+            }
+            
+            updateProgress();
+            checkAllCompleted();
+        }
+
+        function startTask(taskId) {
+            const taskElement = document.getElementById(`task-${taskId}`);
+            const statusElement = document.getElementById(`status-${taskId}`);
+            
+            if (taskElement.classList.contains('completed') || 
+                taskElement.classList.contains('processing') ||
+                taskElement.classList.contains('disabled')) {
+                return;
+            }
+            
+            // Check task order
+            if (taskId === 'like' && !state.subscribe.completed) {
+                showModal('Please subscribe first before liking the video.');
+                return;
+            }
+            if (taskId === 'discord' && !state.like.completed) {
+                showModal('Please like the video first before joining Discord.');
+                return;
+            }
+            
+            activeTask = taskId;
+            
+            // Update UI to processing
+            taskElement.classList.add('processing');
+            statusElement.className = 'task-status processing';
+            statusElement.innerHTML = '<i class="fas fa-spinner"></i>';
+            
+            // Get required time and URL
+            let requiredTime, url;
+            switch (taskId) {
+                case 'subscribe':
+                    requiredTime = CONFIG.SUBSCRIBE_TIME;
+                    url = CONFIG.SUBSCRIBE_URL;
+                    break;
+                case 'like':
+                    requiredTime = CONFIG.LIKE_TIME;
+                    url = CONFIG.LIKE_URL;
+                    break;
+                case 'discord':
+                    requiredTime = CONFIG.DISCORD_TIME;
+                    url = CONFIG.DISCORD_URL;
+                    break;
+            }
+            
+            // Record start time
+            state[taskId].startTime = Date.now();
+            saveState(state);
+            
+            // Open link
+            const newWindow = window.open(url, '_blank');
+            
+            // Start timer
+            let remaining = requiredTime;
+            const timerElement = document.getElementById(`timer-${taskId}`);
+            timerElement.textContent = `${remaining}s`;
+            
+            timerInterval = setInterval(() => {
+                remaining--;
+                timerElement.textContent = `${remaining}s`;
+                
+                if (remaining <= 0) {
+                    clearInterval(timerInterval);
+                    timerElement.textContent = '';
+                    completeTask(taskId);
+                }
+            }, 1000);
+            
+            // Anti-cheat: Check if window is still open
+            let focusLostTime = 0;
+            windowCheckInterval = setInterval(() => {
+                // Additional verification can be added here
+            }, 1000);
+        }
+
+        function completeTask(taskId) {
+            clearInterval(timerInterval);
+            clearInterval(windowCheckInterval);
+            
+            const taskElement = document.getElementById(`task-${taskId}`);
+            const statusElement = document.getElementById(`status-${taskId}`);
+            
+            // Verify timing
+            const now = Date.now();
+            const elapsed = (now - state[taskId].startTime) / 1000;
+            
+            let requiredTime;
+            switch (taskId) {
+                case 'subscribe': requiredTime = CONFIG.SUBSCRIBE_TIME; break;
+                case 'like': requiredTime = CONFIG.LIKE_TIME; break;
+                case 'discord': requiredTime = CONFIG.DISCORD_TIME; break;
+            }
+            
+            // Anti-cheat: Verify minimum time spent
+            if (elapsed < requiredTime - 1) {
+                showModal('Task verification failed. Please try again.');
+                resetTask(taskId);
+                return;
+            }
+            
+            // Mark as completed
+            state[taskId].completed = true;
+            state[taskId].endTime = now;
+            saveState(state);
+            
+            markTaskCompleted(taskId);
+            showToast('success', `${taskId.charAt(0).toUpperCase() + taskId.slice(1)} task completed!`);
+            
+            // Enable next task
+            if (taskId === 'subscribe') {
+                document.getElementById('task-like').classList.remove('disabled');
+            } else if (taskId === 'like') {
+                document.getElementById('task-discord').classList.remove('disabled');
+            }
+            
+            updateProgress();
+            checkAllCompleted();
+            activeTask = null;
+        }
+
+        function markTaskCompleted(taskId) {
+            const taskElement = document.getElementById(`task-${taskId}`);
+            const statusElement = document.getElementById(`status-${taskId}`);
+            
+            taskElement.classList.remove('processing');
+            taskElement.classList.add('completed');
+            statusElement.className = 'task-status completed';
+            statusElement.innerHTML = '<i class="fas fa-check"></i>';
+        }
+
+        function resetTask(taskId) {
+            const taskElement = document.getElementById(`task-${taskId}`);
+            const statusElement = document.getElementById(`status-${taskId}`);
+            const timerElement = document.getElementById(`timer-${taskId}`);
+            
+            taskElement.classList.remove('processing');
+            statusElement.className = 'task-status pending';
+            statusElement.innerHTML = '<i class="fas fa-arrow-right"></i>';
+            timerElement.textContent = '';
+            
+            state[taskId].startTime = null;
+            saveState(state);
+            activeTask = null;
+        }
+
+        function updateProgress() {
+            let completed = 0;
+            if (state.subscribe.completed) completed++;
+            if (state.like.completed) completed++;
+            if (state.discord.completed) completed++;
+            
+            document.getElementById('progressCount').textContent = `${completed}/3 Completed`;
+            document.getElementById('progressFill').style.width = `${(completed / 3) * 100}%`;
+        }
+
+        function checkAllCompleted() {
+            if (state.subscribe.completed && state.like.completed && state.discord.completed) {
+                const btn = document.getElementById('getScriptBtn');
+                btn.className = 'get-script-btn unlocked';
+                btn.innerHTML = '<i class="fas fa-unlock"></i><span>Get Script Now</span>';
+                
+                // Add celebration particles
+                createCelebration();
+            }
+        }
+
+        function getScript() {
+            const btn = document.getElementById('getScriptBtn');
+            if (!btn.classList.contains('unlocked')) return;
+            
+            // Final verification
+            if (!state.subscribe.completed || !state.like.completed || !state.discord.completed) {
+                showModal('Please complete all tasks first.');
+                return;
+            }
+            
+            // Verify timing integrity
+            const subTime = (state.subscribe.endTime - state.subscribe.startTime) / 1000;
+            const likeTime = (state.like.endTime - state.like.startTime) / 1000;
+            const discordTime = (state.discord.endTime - state.discord.startTime) / 1000;
+            
+            if (subTime < CONFIG.SUBSCRIBE_TIME - 2 || 
+                likeTime < CONFIG.LIKE_TIME - 2 || 
+                discordTime < CONFIG.DISCORD_TIME - 2) {
+                showModal('Verification failed. Please complete all tasks properly.');
+                // Reset everything
+                localStorage.removeItem(STATE_KEY);
+                location.reload();
+                return;
+            }
+            
+            // Success - redirect
+            showToast('success', 'Redirecting to script page...');
+            setTimeout(() => {
+                window.location.href = CONFIG.FINAL_URL;
+            }, 1500);
+        }
+
+        // UI Helpers
+        function showToast(type, message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const icon = toast.querySelector('i');
+            
+            toast.className = `toast ${type}`;
+            toastMessage.textContent = message;
+            
+            switch (type) {
+                case 'success':
+                    icon.className = 'fas fa-check-circle';
+                    break;
+                case 'error':
+                    icon.className = 'fas fa-times-circle';
+                    break;
+                case 'info':
+                    icon.className = 'fas fa-info-circle';
+                    break;
+            }
+            
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function showModal(message) {
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modalOverlay').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
+        }
+
+        // Particles
+        function createParticles() {
+            const container = document.getElementById('particles');
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        function createCelebration() {
+            const colors = ['#10b981', '#8b5cf6', '#6366f1', '#f59e0b'];
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.style.cssText = `
+                        position: fixed;
+                        width: 10px;
+                        height: 10px;
+                        background: ${colors[Math.floor(Math.random() * colors.length)]};
+                        left: ${Math.random() * 100}vw;
+                        top: -20px;
+                        border-radius: 50%;
+                        z-index: 9999;
+                        animation: confettiFall ${2 + Math.random() * 2}s linear forwards;
+                    `;
+                    document.body.appendChild(confetti);
+                    setTimeout(() => confetti.remove(), 4000);
+                }, i * 50);
+            }
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Ripple effect
+        document.querySelectorAll('.task-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                if (this.classList.contains('completed') || this.classList.contains('disabled')) return;
+                
+                const ripple = document.createElement('span');
+                ripple.className = 'ripple';
+                ripple.style.left = e.offsetX + 'px';
+                ripple.style.top = e.offsetY + 'px';
+                this.appendChild(ripple);
+                setTimeout(() => ripple.remove(), 600);
+            });
+        });
+
+        // Anti-cheat: Prevent DevTools time manipulation
+        (function() {
+            let lastTime = Date.now();
+            setInterval(() => {
+                const currentTime = Date.now();
+                if (currentTime - lastTime > 2000) {
+                    // Time jump detected, possible manipulation
+                    console.warn('Time anomaly detected');
+                }
+                lastTime = currentTime;
+            }, 1000);
+        })();
+
+        // Initialize
+        createParticles();
+        initializeUI();
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && activeTask) {
+                // Page became hidden while task is active
+                // Continue timer in background
+            }
+        });
+
+        // Keyboard shortcut prevention
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>
