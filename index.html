@@ -15,25 +15,27 @@
 
         :root {
             --primary: #8b5cf6;
-            --primary-glow: rgba(139, 92, 246, 0.5);
+            --primary-dark: #7c3aed;
             --secondary: #06b6d4;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-            --dark-bg: #0a0a0f;
-            --card-bg: rgba(20, 20, 30, 0.7);
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --accent: #f472b6;
+            --bg-dark: #0a0a0f;
+            --bg-card: rgba(255, 255, 255, 0.03);
+            --bg-glass: rgba(255, 255, 255, 0.05);
+            --border-glass: rgba(255, 255, 255, 0.1);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.6);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--dark-bg);
+            background: var(--bg-dark);
             min-height: 100vh;
-            overflow-x: hidden;
             color: var(--text-primary);
+            overflow-x: hidden;
+            position: relative;
         }
 
         /* Animated Background */
@@ -47,91 +49,51 @@
             overflow: hidden;
         }
 
-        .bg-animation::before {
-            content: '';
+        .bg-gradient {
             position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            width: 150%;
+            height: 150%;
+            top: -25%;
+            left: -25%;
             background: 
                 radial-gradient(circle at 20% 80%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
-            animation: bgRotate 30s linear infinite;
+                radial-gradient(circle at 80% 20%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(244, 114, 182, 0.08) 0%, transparent 40%);
+            animation: bgFloat 20s ease-in-out infinite;
         }
 
-        @keyframes bgRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        @keyframes bgFloat {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, 2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
         }
 
-        .floating-orbs {
-            position: fixed;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .orb {
+        .particles {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            animation: float 20s ease-in-out infinite;
-        }
-
-        .orb:nth-child(1) {
-            width: 400px;
-            height: 400px;
-            background: rgba(139, 92, 246, 0.3);
-            top: 10%;
-            left: 10%;
-            animation-delay: 0s;
-        }
-
-        .orb:nth-child(2) {
-            width: 300px;
-            height: 300px;
-            background: rgba(6, 182, 212, 0.3);
-            top: 60%;
-            right: 10%;
-            animation-delay: -5s;
-        }
-
-        .orb:nth-child(3) {
-            width: 250px;
-            height: 250px;
-            background: rgba(16, 185, 129, 0.2);
-            bottom: 10%;
-            left: 30%;
-            animation-delay: -10s;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translate(0, 0) scale(1); }
-            25% { transform: translate(50px, -50px) scale(1.1); }
-            50% { transform: translate(-30px, 30px) scale(0.9); }
-            75% { transform: translate(-50px, -30px) scale(1.05); }
-        }
-
-        /* Grid Pattern */
-        .grid-pattern {
-            position: fixed;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0.3;
+            animation: particleFloat 15s infinite linear;
+        }
+
+        @keyframes particleFloat {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.3; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
         }
 
         /* Main Container */
         .container {
-            max-width: 500px;
+            max-width: 520px;
             margin: 0 auto;
             padding: 40px 20px;
             min-height: 100vh;
@@ -147,105 +109,137 @@
         }
 
         .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 20px;
-        }
-
-        .logo-icon {
-            width: 50px;
-            height: 50px;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 12px;
+            border-radius: 24px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 24px;
-            box-shadow: 0 10px 40px var(--primary-glow);
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 36px;
+            box-shadow: 
+                0 20px 40px rgba(139, 92, 246, 0.3),
+                0 0 60px rgba(139, 92, 246, 0.2);
+            animation: logoPulse 3s ease-in-out infinite;
+            position: relative;
+            overflow: hidden;
         }
 
-        @keyframes pulse {
-            0%, 100% { box-shadow: 0 10px 40px var(--primary-glow); }
-            50% { box-shadow: 0 10px 60px var(--primary-glow), 0 0 80px var(--primary-glow); }
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 40%,
+                rgba(255, 255, 255, 0.1) 50%,
+                transparent 60%
+            );
+            animation: logoShine 4s infinite;
         }
 
-        .logo-text {
-            font-size: 24px;
-            font-weight: 700;
-            background: linear-gradient(135deg, #fff, rgba(255, 255, 255, 0.7));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        @keyframes logoShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        @keyframes logoPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
         .title {
             font-size: 28px;
             font-weight: 800;
-            margin-bottom: 12px;
-            background: linear-gradient(135deg, #fff 0%, rgba(255, 255, 255, 0.8) 100%);
+            background: linear-gradient(135deg, var(--text-primary), var(--primary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
 
         .subtitle {
             color: var(--text-secondary);
             font-size: 15px;
+            font-weight: 400;
             line-height: 1.6;
         }
 
-        /* Main Card */
-        .main-card {
-            background: var(--glass-bg);
+        /* Glass Card */
+        .glass-card {
+            background: var(--bg-glass);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
+            border: 1px solid var(--border-glass);
             border-radius: 24px;
             padding: 32px;
-            box-shadow: 
-                0 25px 50px -12px rgba(0, 0, 0, 0.5),
-                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(139, 92, 246, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
 
         /* Progress Section */
         .progress-section {
-            margin-bottom: 32px;
+            margin-bottom: 28px;
         }
 
         .progress-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
         }
 
-        .progress-label {
-            font-size: 13px;
+        .progress-title {
+            font-size: 14px;
+            font-weight: 600;
             color: var(--text-secondary);
-            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .progress-count {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 14px;
+            font-weight: 700;
             color: var(--primary);
         }
 
         .progress-bar {
             height: 6px;
             background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+            border-radius: 10px;
             overflow: hidden;
+            position: relative;
         }
 
         .progress-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 3px;
+            border-radius: 10px;
             width: 0%;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
         }
 
@@ -256,30 +250,37 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-            animation: shimmer 2s infinite;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: progressShine 2s infinite;
         }
 
-        @keyframes shimmer {
+        @keyframes progressShine {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
 
-        /* Task List */
+        /* Task Items */
         .task-list {
             display: flex;
             flex-direction: column;
             gap: 16px;
-            margin-bottom: 32px;
         }
 
         .task-item {
             background: rgba(255, 255, 255, 0.02);
-            border: 1px solid var(--glass-border);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             border-radius: 16px;
             padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            transition: all 0.3s ease;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -288,22 +289,26 @@
             content: '';
             position: absolute;
             top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent, rgba(255, 255, 255, 0.02));
-            opacity: 0;
-            transition: opacity 0.3s;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.05),
+                transparent
+            );
+            transition: left 0.5s ease;
         }
 
         .task-item:hover::before {
-            opacity: 1;
+            left: 100%;
         }
 
         .task-item:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+            transform: translateX(4px);
         }
 
         .task-item.completed {
@@ -311,57 +316,48 @@
             background: rgba(16, 185, 129, 0.05);
         }
 
-        .task-item.verifying {
-            pointer-events: none;
+        .task-item.pending {
             border-color: rgba(245, 158, 11, 0.3);
+            background: rgba(245, 158, 11, 0.05);
         }
 
-        .task-content {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            z-index: 1;
+        .task-item.verifying {
+            pointer-events: none;
         }
 
         .task-icon {
             width: 48px;
             height: 48px;
-            border-radius: 12px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 22px;
             flex-shrink: 0;
-            transition: all 0.3s;
+            position: relative;
+            transition: all 0.3s ease;
         }
 
         .task-icon.youtube {
             background: linear-gradient(135deg, #ff0000, #cc0000);
-            box-shadow: 0 8px 25px rgba(255, 0, 0, 0.3);
+            box-shadow: 0 8px 20px rgba(255, 0, 0, 0.25);
         }
 
         .task-icon.discord {
             background: linear-gradient(135deg, #5865f2, #4752c4);
-            box-shadow: 0 8px 25px rgba(88, 101, 242, 0.3);
+            box-shadow: 0 8px 20px rgba(88, 101, 242, 0.25);
         }
 
-        .task-item.completed .task-icon {
-            background: linear-gradient(135deg, var(--success), #059669);
-            box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
-        }
-
-        .task-info {
+        .task-content {
             flex: 1;
+            min-width: 0;
         }
 
         .task-title {
             font-size: 15px;
             font-weight: 600;
+            color: var(--text-primary);
             margin-bottom: 4px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
 
         .task-description {
@@ -370,35 +366,41 @@
         }
 
         .task-status {
-            width: 28px;
-            height: 28px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
-        .task-status.pending {
+        .task-status.pending-status {
             background: rgba(255, 255, 255, 0.1);
             color: var(--text-secondary);
         }
 
-        .task-status.verifying {
+        .task-status.verifying-status {
             background: rgba(245, 158, 11, 0.2);
             color: var(--warning);
-            animation: spin 1s linear infinite;
         }
 
-        .task-status.completed {
-            background: linear-gradient(135deg, var(--success), #059669);
-            color: white;
-            box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
+        .task-status.completed-status {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .spinner {
+            width: 18px;
+            height: 18px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--warning);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
         @keyframes spin {
-            from { transform: rotate(0deg); }
             to { transform: rotate(360deg); }
         }
 
@@ -410,14 +412,14 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
             padding: 20px;
         }
 
@@ -427,12 +429,13 @@
         }
 
         .modal {
-            background: var(--card-bg);
-            border: 1px solid var(--glass-border);
+            background: linear-gradient(180deg, rgba(20, 20, 30, 0.95), rgba(10, 10, 15, 0.98));
+            border: 1px solid var(--border-glass);
             border-radius: 24px;
             padding: 32px;
             max-width: 400px;
             width: 100%;
+            text-align: center;
             transform: scale(0.9) translateY(20px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -441,265 +444,312 @@
             transform: scale(1) translateY(0);
         }
 
-        .modal-header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
-
         .modal-icon {
             width: 64px;
             height: 64px;
-            margin: 0 auto 16px;
-            background: linear-gradient(135deg, var(--warning), #d97706);
+            margin: 0 auto 20px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 28px;
-            animation: bounce 1s ease-in-out infinite;
         }
 
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
+        .modal-icon.verifying {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .modal-icon.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .modal-icon.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
         }
 
         .modal-title {
             font-size: 20px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .modal-description {
-            color: var(--text-secondary);
             font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
             line-height: 1.6;
         }
 
-        .verification-code {
-            display: flex;
-            gap: 12px;
-            justify-content: center;
-            margin: 24px 0;
-        }
-
-        .code-input {
-            width: 50px;
-            height: 60px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid var(--glass-border);
-            border-radius: 12px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            color: white;
-            transition: all 0.3s;
-        }
-
-        .code-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 20px var(--primary-glow);
-        }
-
-        .modal-hint {
-            text-align: center;
-            font-size: 13px;
-            color: var(--text-secondary);
+        .modal-progress {
             margin-bottom: 24px;
         }
 
-        .modal-hint strong {
-            color: var(--primary);
+        .modal-progress-bar {
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            overflow: hidden;
         }
 
-        .modal-buttons {
-            display: flex;
-            gap: 12px;
+        .modal-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--warning), var(--primary));
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .modal-timer {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: 12px;
         }
 
         .modal-btn {
-            flex: 1;
-            padding: 14px;
+            width: 100%;
+            padding: 14px 24px;
+            border: none;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            border: none;
+            transition: all 0.3s ease;
         }
 
-        .modal-btn.cancel {
+        .modal-btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+
+        .modal-btn-secondary {
             background: rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
+            color: var(--text-primary);
+            margin-top: 12px;
         }
 
-        .modal-btn.cancel:hover {
+        .modal-btn-secondary:hover {
             background: rgba(255, 255, 255, 0.15);
         }
 
-        .modal-btn.verify {
-            background: linear-gradient(135deg, var(--primary), #7c3aed);
-            color: white;
-            box-shadow: 0 8px 25px var(--primary-glow);
-        }
-
-        .modal-btn.verify:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 35px var(--primary-glow);
-        }
-
         /* Get Script Button */
+        .get-script-section {
+            margin-top: 8px;
+        }
+
         .get-script-btn {
             width: 100%;
-            padding: 18px 24px;
+            padding: 20px 32px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
             border-radius: 16px;
-            font-size: 16px;
+            font-size: 17px;
             font-weight: 700;
-            cursor: pointer;
-            border: none;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 12px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
         }
 
-        .get-script-btn.locked {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            cursor: not-allowed;
+        .get-script-btn i {
+            font-size: 20px;
         }
 
-        .get-script-btn.unlocked {
-            background: linear-gradient(135deg, var(--success), #059669);
+        .get-script-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-color: transparent;
             color: white;
-            box-shadow: 
-                0 10px 40px rgba(16, 185, 129, 0.4),
-                0 0 60px rgba(16, 185, 129, 0.2);
-            animation: glow 2s ease-in-out infinite;
+            cursor: pointer;
+            animation: btnGlow 2s ease-in-out infinite;
         }
 
-        @keyframes glow {
+        .get-script-btn.active::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(
+                45deg,
+                transparent 30%,
+                rgba(255, 255, 255, 0.2) 50%,
+                transparent 70%
+            );
+            animation: btnShine 3s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        @keyframes btnGlow {
             0%, 100% { 
                 box-shadow: 
-                    0 10px 40px rgba(16, 185, 129, 0.4),
-                    0 0 60px rgba(16, 185, 129, 0.2);
+                    0 0 20px rgba(139, 92, 246, 0.4),
+                    0 0 40px rgba(139, 92, 246, 0.2),
+                    0 10px 40px rgba(139, 92, 246, 0.3);
             }
             50% { 
                 box-shadow: 
-                    0 15px 50px rgba(16, 185, 129, 0.5),
-                    0 0 80px rgba(16, 185, 129, 0.3),
-                    0 0 100px rgba(16, 185, 129, 0.1);
+                    0 0 30px rgba(139, 92, 246, 0.6),
+                    0 0 60px rgba(139, 92, 246, 0.3),
+                    0 10px 60px rgba(139, 92, 246, 0.4);
             }
         }
 
-        .get-script-btn.unlocked:hover {
+        .get-script-btn.active:hover {
             transform: translateY(-3px) scale(1.02);
         }
 
-        .get-script-btn.unlocked::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-            animation: shine 3s infinite;
-        }
-
-        @keyframes shine {
-            0% { left: -100%; }
-            50%, 100% { left: 100%; }
-        }
-
         .lock-icon {
-            transition: all 0.3s;
+            transition: all 0.3s ease;
         }
 
-        /* Toast Notification */
-        .toast-container {
-            position: fixed;
-            bottom: 24px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1001;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
+        .get-script-btn.active .lock-icon {
+            display: none;
         }
 
-        .toast {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 12px;
-            padding: 16px 24px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-            animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            white-space: nowrap;
+        .unlock-icon {
+            display: none;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .get-script-btn.active .unlock-icon {
+            display: inline;
         }
 
-        .toast.success .toast-icon {
-            color: var(--success);
+        /* Info Section */
+        .info-section {
+            text-align: center;
+            padding: 20px;
         }
 
-        .toast.error .toast-icon {
-            color: var(--danger);
+        .info-text {
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
         }
 
-        .toast.warning .toast-icon {
-            color: var(--warning);
-        }
-
-        .toast-message {
-            font-size: 14px;
-            font-weight: 500;
+        .info-text i {
+            color: var(--primary);
+            margin-right: 6px;
         }
 
         /* Footer */
         .footer {
             text-align: center;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid var(--glass-border);
-        }
-
-        .footer p {
-            font-size: 12px;
+            padding: 30px 20px;
             color: var(--text-secondary);
+            font-size: 13px;
         }
 
         .footer a {
             color: var(--primary);
             text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer a:hover {
+            color: var(--secondary);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
+            background: rgba(20, 20, 30, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border-glass);
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 280px;
+            transform: translateX(120%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .toast.show {
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success);
+        }
+
+        .toast.warning .toast-icon {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error);
+        }
+
+        .toast.info .toast-icon {
+            background: rgba(139, 92, 246, 0.2);
+            color: var(--primary);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .toast-message {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         /* Responsive */
         @media (max-width: 480px) {
             .container {
-                padding: 20px 16px;
+                padding: 30px 16px;
             }
 
-            .main-card {
-                padding: 24px 20px;
+            .glass-card {
+                padding: 24px;
             }
 
             .title {
@@ -716,633 +766,723 @@
                 font-size: 18px;
             }
 
-            .code-input {
-                width: 45px;
-                height: 55px;
-                font-size: 20px;
+            .toast {
+                min-width: auto;
+                max-width: calc(100vw - 40px);
+            }
+
+            .toast-container {
+                left: 20px;
+                right: 20px;
             }
         }
 
-        /* Particles */
-        .particles {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+        /* Keyframe for completed checkmark */
+        @keyframes checkmark {
+            0% { transform: scale(0) rotate(-45deg); }
+            50% { transform: scale(1.2) rotate(-45deg); }
+            100% { transform: scale(1) rotate(0deg); }
         }
 
-        .particle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: var(--primary);
-            border-radius: 50%;
-            opacity: 0.5;
-            animation: twinkle 3s ease-in-out infinite;
+        .checkmark-animate {
+            animation: checkmark 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        @keyframes twinkle {
-            0%, 100% { opacity: 0.2; transform: scale(1); }
-            50% { opacity: 0.8; transform: scale(1.5); }
+        /* Security Warning Banner */
+        .security-banner {
+            background: rgba(239, 68, 68, 0.1);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--error);
         }
 
-        /* Success Animation */
-        .success-burst {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            pointer-events: none;
-            z-index: 100;
-        }
-
-        .burst-ring {
-            position: absolute;
-            width: 100px;
-            height: 100px;
-            border: 3px solid var(--success);
-            border-radius: 50%;
-            transform: translate(-50%, -50%) scale(0);
-            opacity: 0;
-        }
-
-        .burst-ring.animate {
-            animation: burst 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
-        }
-
-        @keyframes burst {
-            0% {
-                transform: translate(-50%, -50%) scale(0);
-                opacity: 1;
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(5);
-                opacity: 0;
-            }
+        .security-banner.show {
+            display: flex;
         }
     </style>
 </head>
 <body>
-    <!-- Background Elements -->
-    <div class="bg-animation"></div>
-    <div class="grid-pattern"></div>
-    <div class="floating-orbs">
-        <div class="orb"></div>
-        <div class="orb"></div>
-        <div class="orb"></div>
-    </div>
-    <div class="particles" id="particles"></div>
-    <div class="success-burst">
-        <div class="burst-ring" id="burstRing1"></div>
-        <div class="burst-ring" id="burstRing2"></div>
-        <div class="burst-ring" id="burstRing3"></div>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="bg-gradient"></div>
+        <div class="particles" id="particles"></div>
     </div>
 
-    <!-- Main Content -->
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Verification Modal -->
+    <div class="modal-overlay" id="verificationModal">
+        <div class="modal">
+            <div class="modal-icon verifying" id="modalIcon">
+                <div class="spinner"></div>
+            </div>
+            <h3 class="modal-title" id="modalTitle">Verifying...</h3>
+            <p class="modal-description" id="modalDescription">
+                Please wait while we verify your action.
+            </p>
+            <div class="modal-progress" id="modalProgress">
+                <div class="modal-progress-bar">
+                    <div class="modal-progress-fill" id="modalProgressFill"></div>
+                </div>
+                <div class="modal-timer" id="modalTimer">Checking...</div>
+            </div>
+            <button class="modal-btn modal-btn-primary" id="modalBtn" style="display: none;">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <!-- Main Container -->
     <div class="container">
+        <!-- Header -->
         <header class="header">
             <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <span class="logo-text">LinkUnlocker</span>
+                <i class="fas fa-bolt"></i>
             </div>
             <h1 class="title">Get KS Rivals Script</h1>
-            <p class="subtitle">Complete all tasks below to unlock the exclusive script. Each task requires verification.</p>
+            <p class="subtitle">Complete all verification steps below to unlock your script access</p>
         </header>
 
-        <div class="main-card">
+        <!-- Security Banner -->
+        <div class="security-banner" id="securityBanner">
+            <i class="fas fa-exclamation-triangle"></i>
+            <span>Bypass attempt detected. Progress has been reset.</span>
+        </div>
+
+        <!-- Main Card -->
+        <div class="glass-card">
+            <!-- Progress -->
             <div class="progress-section">
                 <div class="progress-header">
-                    <span class="progress-label">Completion Progress</span>
-                    <span class="progress-count" id="progressCount">0/3 Tasks</span>
+                    <span class="progress-title">Verification Progress</span>
+                    <span class="progress-count" id="progressCount">0 / 3</span>
                 </div>
                 <div class="progress-bar">
                     <div class="progress-fill" id="progressFill"></div>
                 </div>
             </div>
 
+            <!-- Task List -->
             <div class="task-list">
-                <!-- Task 1: YouTube Subscribe -->
-                <div class="task-item" id="task-subscribe" onclick="handleTask('subscribe')">
+                <!-- YouTube Subscribe -->
+                <div class="task-item" id="task-subscribe" data-task="subscribe">
+                    <div class="task-icon youtube">
+                        <i class="fab fa-youtube"></i>
+                    </div>
                     <div class="task-content">
-                        <div class="task-icon youtube">
-                            <i class="fab fa-youtube"></i>
-                        </div>
-                        <div class="task-info">
-                            <div class="task-title">
-                                Subscribe to Channel
-                                <span class="task-badge"></span>
-                            </div>
-                            <div class="task-description">Subscribe to KS Script on YouTube</div>
-                        </div>
-                        <div class="task-status pending" id="status-subscribe">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="task-title">Subscribe to Channel</div>
+                        <div class="task-description">Subscribe to KS Script YouTube channel</div>
+                    </div>
+                    <div class="task-status pending-status" id="status-subscribe">
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
 
-                <!-- Task 2: YouTube Like -->
-                <div class="task-item" id="task-like" onclick="handleTask('like')">
+                <!-- YouTube Like -->
+                <div class="task-item" id="task-like" data-task="like">
+                    <div class="task-icon youtube">
+                        <i class="fas fa-heart"></i>
+                    </div>
                     <div class="task-content">
-                        <div class="task-icon youtube">
-                            <i class="fas fa-heart"></i>
-                        </div>
-                        <div class="task-info">
-                            <div class="task-title">Like the Video</div>
-                            <div class="task-description">Like our featured video on YouTube</div>
-                        </div>
-                        <div class="task-status pending" id="status-like">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="task-title">Like the Video</div>
+                        <div class="task-description">Like our featured video</div>
+                    </div>
+                    <div class="task-status pending-status" id="status-like">
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
 
-                <!-- Task 3: Discord Join -->
-                <div class="task-item" id="task-discord" onclick="handleTask('discord')">
+                <!-- Discord Join -->
+                <div class="task-item" id="task-discord" data-task="discord">
+                    <div class="task-icon discord">
+                        <i class="fab fa-discord"></i>
+                    </div>
                     <div class="task-content">
-                        <div class="task-icon discord">
-                            <i class="fab fa-discord"></i>
-                        </div>
-                        <div class="task-info">
-                            <div class="task-title">Join Discord Server</div>
-                            <div class="task-description">Join our community on Discord</div>
-                        </div>
-                        <div class="task-status pending" id="status-discord">
-                            <i class="fas fa-arrow-right"></i>
-                        </div>
+                        <div class="task-title">Join Discord Server</div>
+                        <div class="task-description">Join our community Discord server</div>
+                    </div>
+                    <div class="task-status pending-status" id="status-discord">
+                        <i class="fas fa-chevron-right"></i>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <button class="get-script-btn locked" id="getScriptBtn" onclick="handleGetScript()">
-                <i class="fas fa-lock lock-icon" id="lockIcon"></i>
-                <span id="btnText">Complete All Tasks to Unlock</span>
+        <!-- Get Script Button -->
+        <div class="get-script-section">
+            <button class="get-script-btn" id="getScriptBtn" disabled>
+                <i class="fas fa-lock lock-icon"></i>
+                <i class="fas fa-unlock unlock-icon"></i>
+                <span id="btnText">Complete All Steps to Unlock</span>
             </button>
-
-            <div class="footer">
-                <p>Protected by LinkUnlocker • <a href="#">Terms</a> • <a href="#">Privacy</a></p>
-            </div>
         </div>
-    </div>
 
-    <!-- Verification Modal -->
-    <div class="modal-overlay" id="modalOverlay">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-icon" id="modalIcon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <h2 class="modal-title" id="modalTitle">Verification Required</h2>
-                <p class="modal-description" id="modalDescription">
-                    Please enter the verification code shown on the page you visited.
-                </p>
-            </div>
-            <div class="verification-code">
-                <input type="text" class="code-input" maxlength="1" id="code1" oninput="handleCodeInput(this, 'code2')" onkeydown="handleCodeKeydown(event, this, null)">
-                <input type="text" class="code-input" maxlength="1" id="code2" oninput="handleCodeInput(this, 'code3')" onkeydown="handleCodeKeydown(event, this, 'code1')">
-                <input type="text" class="code-input" maxlength="1" id="code3" oninput="handleCodeInput(this, 'code4')" onkeydown="handleCodeKeydown(event, this, 'code2')">
-                <input type="text" class="code-input" maxlength="1" id="code4" oninput="handleCodeInput(this, null)" onkeydown="handleCodeKeydown(event, this, 'code3')">
-            </div>
-            <p class="modal-hint" id="modalHint">
-                Your code: <strong id="codeHint">----</strong>
+        <!-- Info -->
+        <div class="info-section">
+            <p class="info-text">
+                <i class="fas fa-shield-alt"></i>
+                Secure verification system • Anti-bypass protection enabled
             </p>
-            <div class="modal-buttons">
-                <button class="modal-btn cancel" onclick="closeModal()">Cancel</button>
-                <button class="modal-btn verify" onclick="verifyCode()">Verify</button>
-            </div>
         </div>
-    </div>
 
-    <!-- Toast Container -->
-    <div class="toast-container" id="toastContainer"></div>
+        <!-- Footer -->
+        <footer class="footer">
+            <p>Powered by <a href="#">KS Script</a> • &copy; 2024</p>
+        </footer>
+    </div>
 
     <script>
-        // Configuration
+        // ==========================================
+        // CONFIGURATION
+        // ==========================================
         const CONFIG = {
-            urls: {
+            links: {
                 subscribe: 'https://www.youtube.com/@KS_SCRIPT_Owner?sub_confirmation=1',
                 like: 'https://www.youtube.com/shorts/bGm4dt_Isrk',
                 discord: 'https://discord.com/channels/@me',
                 script: 'https://ks-script.github.io/KS.WEB/'
             },
-            taskNames: {
-                subscribe: 'YouTube Subscribe',
-                like: 'Video Like',
-                discord: 'Discord Join'
+            verification: {
+                minTimeAway: 8000,      // Minimum time user must spend away (ms)
+                maxTimeAway: 300000,    // Maximum time away before reset (5 min)
+                verifyDuration: 5000,   // Verification animation duration (ms)
+                tokenExpiry: 3600000    // Token expiry time (1 hour)
             }
         };
 
-        // State Management with Encryption
-        const STATE_KEY = 'lnk_unlckr_state_v2';
-        const INTEGRITY_KEY = 'lnk_unlckr_integrity';
-        
-        class SecureState {
+        // ==========================================
+        // STATE MANAGEMENT
+        // ==========================================
+        class StateManager {
             constructor() {
+                this.storageKey = 'ks_unlocker_state';
+                this.securityKey = 'ks_security_token';
                 this.state = this.loadState();
-                this.sessionTokens = {};
+                this.initSecurity();
             }
 
-            generateHash(data) {
+            generateToken() {
+                const arr = new Uint8Array(32);
+                crypto.getRandomValues(arr);
+                return Array.from(arr, b => b.toString(16).padStart(2, '0')).join('');
+            }
+
+            hashData(data) {
+                const str = JSON.stringify(data);
                 let hash = 0;
-                const str = JSON.stringify(data) + navigator.userAgent + screen.width;
                 for (let i = 0; i < str.length; i++) {
                     const char = str.charCodeAt(i);
                     hash = ((hash << 5) - hash) + char;
                     hash = hash & hash;
                 }
-                return Math.abs(hash).toString(36);
+                return Math.abs(hash).toString(16);
+            }
+
+            initSecurity() {
+                // Check for tampering
+                const storedHash = localStorage.getItem(this.securityKey);
+                const currentHash = this.hashData(this.state);
+                
+                if (storedHash && storedHash !== currentHash) {
+                    // State was tampered with
+                    this.resetState(true);
+                }
             }
 
             loadState() {
                 try {
-                    const stored = localStorage.getItem(STATE_KEY);
-                    const integrity = localStorage.getItem(INTEGRITY_KEY);
-                    
-                    if (stored && integrity) {
-                        const parsed = JSON.parse(atob(stored));
-                        if (this.generateHash(parsed) === integrity) {
-                            return parsed;
+                    const stored = localStorage.getItem(this.storageKey);
+                    if (stored) {
+                        const decoded = atob(stored);
+                        const parsed = JSON.parse(decoded);
+                        
+                        // Check if token expired
+                        if (parsed.timestamp && 
+                            Date.now() - parsed.timestamp > CONFIG.verification.tokenExpiry) {
+                            return this.getDefaultState();
                         }
+                        
+                        return parsed;
                     }
                 } catch (e) {
-                    console.log('State reset');
+                    console.error('State load error');
                 }
-                
+                return this.getDefaultState();
+            }
+
+            getDefaultState() {
                 return {
                     tasks: {
-                        subscribe: { completed: false, token: null, timestamp: null },
-                        like: { completed: false, token: null, timestamp: null },
-                        discord: { completed: false, token: null, timestamp: null }
+                        subscribe: { completed: false, startTime: null, verified: false },
+                        like: { completed: false, startTime: null, verified: false },
+                        discord: { completed: false, startTime: null, verified: false }
                     },
-                    unlocked: false,
-                    lastActivity: Date.now()
+                    sessionId: this.generateToken(),
+                    timestamp: Date.now(),
+                    completionOrder: []
                 };
             }
 
             saveState() {
-                const encoded = btoa(JSON.stringify(this.state));
-                const integrity = this.generateHash(this.state);
-                localStorage.setItem(STATE_KEY, encoded);
-                localStorage.setItem(INTEGRITY_KEY, integrity);
+                try {
+                    this.state.timestamp = Date.now();
+                    const encoded = btoa(JSON.stringify(this.state));
+                    localStorage.setItem(this.storageKey, encoded);
+                    localStorage.setItem(this.securityKey, this.hashData(this.state));
+                } catch (e) {
+                    console.error('State save error');
+                }
             }
 
-            generateToken(taskId) {
-                const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-                const timestamp = Date.now().toString(36).slice(-4).toUpperCase();
-                return random;
-            }
-
-            setTaskPending(taskId) {
-                const token = this.generateToken(taskId);
-                this.sessionTokens[taskId] = {
-                    code: token,
-                    timestamp: Date.now(),
-                    windowOpened: false
-                };
-                return token;
-            }
-
-            verifyTask(taskId, inputCode) {
-                const session = this.sessionTokens[taskId];
-                
-                if (!session) {
-                    return { success: false, error: 'No active session for this task' };
-                }
-
-                // Check if window was opened
-                if (!session.windowOpened) {
-                    return { success: false, error: 'Please open the link first' };
-                }
-
-                // Check time spent (minimum 5 seconds)
-                const timeSpent = Date.now() - session.timestamp;
-                if (timeSpent < 5000) {
-                    return { success: false, error: 'Please complete the action first' };
-                }
-
-                // Verify code
-                if (inputCode.toUpperCase() !== session.code) {
-                    return { success: false, error: 'Invalid verification code' };
-                }
-
-                // Mark as completed
-                this.state.tasks[taskId] = {
-                    completed: true,
-                    token: session.code,
-                    timestamp: Date.now()
-                };
-                this.state.lastActivity = Date.now();
-                
-                delete this.sessionTokens[taskId];
+            resetState(showWarning = false) {
+                this.state = this.getDefaultState();
                 this.saveState();
-
-                return { success: true };
+                if (showWarning) {
+                    document.getElementById('securityBanner').classList.add('show');
+                    setTimeout(() => {
+                        document.getElementById('securityBanner').classList.remove('show');
+                    }, 5000);
+                }
             }
 
-            isTaskCompleted(taskId) {
-                return this.state.tasks[taskId]?.completed === true;
+            getTask(taskId) {
+                return this.state.tasks[taskId];
             }
 
-            getCompletedCount() {
-                return Object.values(this.state.tasks).filter(t => t.completed).length;
+            updateTask(taskId, updates) {
+                this.state.tasks[taskId] = { ...this.state.tasks[taskId], ...updates };
+                this.saveState();
+            }
+
+            addCompletionOrder(taskId) {
+                if (!this.state.completionOrder.includes(taskId)) {
+                    this.state.completionOrder.push(taskId);
+                    this.saveState();
+                }
             }
 
             isAllCompleted() {
-                return Object.values(this.state.tasks).every(t => t.completed);
+                return Object.values(this.state.tasks).every(task => task.verified);
             }
 
-            markWindowOpened(taskId) {
-                if (this.sessionTokens[taskId]) {
-                    this.sessionTokens[taskId].windowOpened = true;
-                }
+            getCompletedCount() {
+                return Object.values(this.state.tasks).filter(task => task.verified).length;
             }
         }
 
-        const secureState = new SecureState();
-        let currentTask = null;
-        let currentCode = null;
+        // ==========================================
+        // UI CONTROLLER
+        // ==========================================
+        class UIController {
+            constructor(stateManager) {
+                this.state = stateManager;
+                this.activeTask = null;
+                this.windowReference = null;
+                this.checkInterval = null;
+                this.init();
+            }
 
-        // Initialize
-        function init() {
-            createParticles();
-            updateUI();
-            
-            // Anti-tamper: Monitor DevTools
-            let devToolsOpen = false;
-            const threshold = 160;
-            
-            setInterval(() => {
-                if (window.outerHeight - window.innerHeight > threshold || 
-                    window.outerWidth - window.innerWidth > threshold) {
-                    if (!devToolsOpen) {
-                        devToolsOpen = true;
+            init() {
+                this.createParticles();
+                this.bindEvents();
+                this.restoreUIState();
+            }
+
+            createParticles() {
+                const container = document.getElementById('particles');
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 15 + 's';
+                    particle.style.animationDuration = (15 + Math.random() * 10) + 's';
+                    container.appendChild(particle);
+                }
+            }
+
+            bindEvents() {
+                document.querySelectorAll('.task-item').forEach(item => {
+                    item.addEventListener('click', (e) => this.handleTaskClick(e));
+                });
+
+                document.getElementById('getScriptBtn').addEventListener('click', () => {
+                    if (this.state.isAllCompleted()) {
+                        window.location.href = CONFIG.links.script;
                     }
-                } else {
-                    devToolsOpen = false;
+                });
+
+                document.getElementById('modalBtn').addEventListener('click', () => {
+                    this.hideModal();
+                });
+
+                // Window focus detection
+                window.addEventListener('focus', () => this.handleWindowFocus());
+                
+                // Visibility change detection
+                document.addEventListener('visibilitychange', () => {
+                    if (!document.hidden && this.activeTask) {
+                        this.handleReturnFromTask();
+                    }
+                });
+
+                // Anti-devtools (basic)
+                this.initAntiDevtools();
+            }
+
+            initAntiDevtools() {
+                // Detect DevTools opening
+                const threshold = 160;
+                const detectDevTools = () => {
+                    if (window.outerHeight - window.innerHeight > threshold ||
+                        window.outerWidth - window.innerWidth > threshold) {
+                        // DevTools might be open, but don't reset - just log
+                        console.log('Development mode detected');
+                    }
+                };
+                
+                setInterval(detectDevTools, 1000);
+            }
+
+            restoreUIState() {
+                Object.keys(this.state.state.tasks).forEach(taskId => {
+                    const task = this.state.getTask(taskId);
+                    if (task.verified) {
+                        this.updateTaskUI(taskId, 'completed');
+                    } else if (task.startTime && !task.completed) {
+                        // Task was started but not completed
+                        this.updateTaskUI(taskId, 'pending');
+                    }
+                });
+                this.updateProgress();
+            }
+
+            handleTaskClick(e) {
+                const item = e.currentTarget;
+                const taskId = item.dataset.task;
+                const task = this.state.getTask(taskId);
+
+                if (task.verified) {
+                    this.showToast('info', 'Already Completed', 'This task has already been verified.');
+                    return;
                 }
-            }, 500);
-        }
 
-        function createParticles() {
-            const container = document.getElementById('particles');
-            for (let i = 0; i < 30; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.top = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 3 + 's';
-                particle.style.background = ['var(--primary)', 'var(--secondary)', 'var(--success)'][Math.floor(Math.random() * 3)];
-                container.appendChild(particle);
-            }
-        }
-
-        function updateUI() {
-            const tasks = ['subscribe', 'like', 'discord'];
-            
-            tasks.forEach(taskId => {
-                const taskEl = document.getElementById(`task-${taskId}`);
-                const statusEl = document.getElementById(`status-${taskId}`);
-                
-                if (secureState.isTaskCompleted(taskId)) {
-                    taskEl.classList.add('completed');
-                    taskEl.classList.remove('verifying');
-                    statusEl.className = 'task-status completed';
-                    statusEl.innerHTML = '<i class="fas fa-check"></i>';
+                if (this.activeTask) {
+                    this.showToast('warning', 'Task In Progress', 'Please complete the current task first.');
+                    return;
                 }
-            });
 
-            const completed = secureState.getCompletedCount();
-            document.getElementById('progressCount').textContent = `${completed}/3 Tasks`;
-            document.getElementById('progressFill').style.width = `${(completed / 3) * 100}%`;
+                this.startTask(taskId);
+            }
 
-            const btn = document.getElementById('getScriptBtn');
-            const lockIcon = document.getElementById('lockIcon');
-            const btnText = document.getElementById('btnText');
-
-            if (secureState.isAllCompleted()) {
-                btn.classList.remove('locked');
-                btn.classList.add('unlocked');
-                lockIcon.className = 'fas fa-unlock lock-icon';
-                btnText.textContent = 'Get Script Now';
+            startTask(taskId) {
+                this.activeTask = taskId;
                 
-                // Trigger success animation
-                triggerSuccessAnimation();
-            }
-        }
+                // Record start time
+                this.state.updateTask(taskId, {
+                    startTime: Date.now(),
+                    completed: false,
+                    verified: false
+                });
 
-        function triggerSuccessAnimation() {
-            const rings = [
-                document.getElementById('burstRing1'),
-                document.getElementById('burstRing2'),
-                document.getElementById('burstRing3')
-            ];
-            
-            rings.forEach((ring, i) => {
-                setTimeout(() => {
-                    ring.classList.add('animate');
-                    setTimeout(() => ring.classList.remove('animate'), 800);
-                }, i * 150);
-            });
-        }
-
-        function handleTask(taskId) {
-            if (secureState.isTaskCompleted(taskId)) {
-                showToast('This task is already completed!', 'warning');
-                return;
-            }
-
-            const taskEl = document.getElementById(`task-${taskId}`);
-            const statusEl = document.getElementById(`status-${taskId}`);
-
-            // Generate verification code
-            const code = secureState.setTaskPending(taskId);
-            currentTask = taskId;
-            currentCode = code;
-
-            // Update UI to verifying state
-            taskEl.classList.add('verifying');
-            statusEl.className = 'task-status verifying';
-            statusEl.innerHTML = '<i class="fas fa-spinner"></i>';
-
-            // Open the link
-            const url = CONFIG.urls[taskId];
-            const newWindow = window.open(url, '_blank');
-            
-            // Mark window as opened
-            setTimeout(() => {
-                secureState.markWindowOpened(taskId);
-            }, 1000);
-
-            // Show verification modal after delay
-            setTimeout(() => {
-                showVerificationModal(taskId, code);
-            }, 3000);
-        }
-
-        function showVerificationModal(taskId, code) {
-            const modal = document.getElementById('modalOverlay');
-            const codeHint = document.getElementById('codeHint');
-            
-            // Reset inputs
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById(`code${i}`).value = '';
-            }
-            
-            // Show code hint
-            codeHint.textContent = code;
-            
-            modal.classList.add('active');
-            document.getElementById('code1').focus();
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('modalOverlay');
-            modal.classList.remove('active');
-
-            if (currentTask) {
-                const taskEl = document.getElementById(`task-${currentTask}`);
-                const statusEl = document.getElementById(`status-${currentTask}`);
+                // Update UI
+                this.updateTaskUI(taskId, 'pending');
                 
-                if (!secureState.isTaskCompleted(currentTask)) {
-                    taskEl.classList.remove('verifying');
-                    statusEl.className = 'task-status pending';
-                    statusEl.innerHTML = '<i class="fas fa-arrow-right"></i>';
+                // Open link
+                const url = CONFIG.links[taskId];
+                this.windowReference = window.open(url, '_blank');
+                
+                // Show toast
+                this.showToast('info', 'Task Started', 'Complete the action and return to this page.');
+                
+                // Start monitoring
+                this.startMonitoring(taskId);
+            }
+
+            startMonitoring(taskId) {
+                this.checkInterval = setInterval(() => {
+                    // Check if window was closed
+                    if (this.windowReference && this.windowReference.closed) {
+                        clearInterval(this.checkInterval);
+                        // Window closed, but we'll verify when they return to this page
+                    }
+                }, 1000);
+            }
+
+            handleWindowFocus() {
+                if (this.activeTask) {
+                    this.handleReturnFromTask();
                 }
             }
 
-            currentTask = null;
-            currentCode = null;
-        }
+            handleReturnFromTask() {
+                if (!this.activeTask) return;
 
-        function handleCodeInput(current, nextId) {
-            if (current.value.length === 1 && nextId) {
-                document.getElementById(nextId).focus();
-            }
-            
-            // Auto verify if all filled
-            const code1 = document.getElementById('code1').value;
-            const code2 = document.getElementById('code2').value;
-            const code3 = document.getElementById('code3').value;
-            const code4 = document.getElementById('code4').value;
-            
-            if (code1 && code2 && code3 && code4) {
-                setTimeout(verifyCode, 100);
-            }
-        }
+                const taskId = this.activeTask;
+                const task = this.state.getTask(taskId);
+                const timeAway = Date.now() - task.startTime;
 
-        function handleCodeKeydown(event, current, prevId) {
-            if (event.key === 'Backspace' && !current.value && prevId) {
-                document.getElementById(prevId).focus();
-            }
-        }
+                clearInterval(this.checkInterval);
 
-        function verifyCode() {
-            if (!currentTask) return;
+                // Check minimum time requirement
+                if (timeAway < CONFIG.verification.minTimeAway) {
+                    this.showToast('warning', 'Too Quick!', 'Please complete the task properly.');
+                    this.state.updateTask(taskId, { startTime: null });
+                    this.updateTaskUI(taskId, 'pending');
+                    this.activeTask = null;
+                    return;
+                }
 
-            const inputCode = 
-                document.getElementById('code1').value +
-                document.getElementById('code2').value +
-                document.getElementById('code3').value +
-                document.getElementById('code4').value;
+                // Check maximum time (session expired)
+                if (timeAway > CONFIG.verification.maxTimeAway) {
+                    this.showToast('error', 'Session Expired', 'Please start the task again.');
+                    this.state.updateTask(taskId, { startTime: null, completed: false });
+                    this.updateTaskUI(taskId, 'default');
+                    this.activeTask = null;
+                    return;
+                }
 
-            if (inputCode.length !== 4) {
-                showToast('Please enter the complete code', 'error');
-                return;
+                // Start verification process
+                this.startVerification(taskId);
             }
 
-            const result = secureState.verifyTask(currentTask, inputCode);
+            startVerification(taskId) {
+                this.showModal('verifying');
+                this.updateTaskUI(taskId, 'verifying');
 
-            if (result.success) {
-                closeModal();
-                showToast(`${CONFIG.taskNames[currentTask]} verified successfully!`, 'success');
-                updateUI();
-            } else {
-                showToast(result.error, 'error');
-                
-                // Shake animation for inputs
-                document.querySelectorAll('.code-input').forEach(input => {
-                    input.style.animation = 'none';
-                    setTimeout(() => {
-                        input.style.animation = 'shake 0.5s';
-                    }, 10);
+                const duration = CONFIG.verification.verifyDuration;
+                const startTime = Date.now();
+                const progressFill = document.getElementById('modalProgressFill');
+                const timer = document.getElementById('modalTimer');
+
+                const updateProgress = () => {
+                    const elapsed = Date.now() - startTime;
+                    const progress = Math.min((elapsed / duration) * 100, 100);
+                    progressFill.style.width = progress + '%';
+
+                    const remaining = Math.ceil((duration - elapsed) / 1000);
+                    timer.textContent = `Verifying... ${remaining}s`;
+
+                    if (elapsed < duration) {
+                        requestAnimationFrame(updateProgress);
+                    } else {
+                        this.completeVerification(taskId);
+                    }
+                };
+
+                requestAnimationFrame(updateProgress);
+            }
+
+            completeVerification(taskId) {
+                // Multi-step verification
+                this.performVerificationChecks(taskId).then(passed => {
+                    if (passed) {
+                        this.state.updateTask(taskId, {
+                            completed: true,
+                            verified: true,
+                            verifiedAt: Date.now()
+                        });
+                        this.state.addCompletionOrder(taskId);
+
+                        this.showModal('success', taskId);
+                        this.updateTaskUI(taskId, 'completed');
+                        this.updateProgress();
+
+                        if (this.state.isAllCompleted()) {
+                            setTimeout(() => {
+                                this.activateGetScriptButton();
+                            }, 500);
+                        }
+                    } else {
+                        this.showModal('error');
+                        this.state.updateTask(taskId, { startTime: null, completed: false });
+                        this.updateTaskUI(taskId, 'default');
+                    }
+
+                    this.activeTask = null;
                 });
             }
-        }
 
-        function handleGetScript() {
-            if (!secureState.isAllCompleted()) {
-                showToast('Please complete all tasks first!', 'error');
-                return;
+            async performVerificationChecks(taskId) {
+                // Simulate verification checks
+                const checks = [
+                    this.checkTimeSpent(taskId),
+                    this.checkSessionIntegrity(),
+                    this.checkCompletionOrder(taskId)
+                ];
+
+                const results = await Promise.all(checks);
+                return results.every(r => r === true);
             }
 
-            showToast('Redirecting to script page...', 'success');
-            
-            setTimeout(() => {
-                window.location.href = CONFIG.urls.script;
-            }, 1000);
+            checkTimeSpent(taskId) {
+                return new Promise(resolve => {
+                    const task = this.state.getTask(taskId);
+                    const timeSpent = Date.now() - task.startTime;
+                    resolve(timeSpent >= CONFIG.verification.minTimeAway);
+                });
+            }
+
+            checkSessionIntegrity() {
+                return new Promise(resolve => {
+                    const currentHash = this.state.hashData(this.state.state);
+                    const storedHash = localStorage.getItem(this.state.securityKey);
+                    resolve(currentHash === storedHash);
+                });
+            }
+
+            checkCompletionOrder(taskId) {
+                return new Promise(resolve => {
+                    // Check that tasks weren't completed impossibly fast
+                    const order = this.state.state.completionOrder;
+                    if (order.length > 0) {
+                        const lastTask = order[order.length - 1];
+                        const lastTaskData = this.state.getTask(lastTask);
+                        if (lastTaskData.verifiedAt) {
+                            const timeSinceLastTask = Date.now() - lastTaskData.verifiedAt;
+                            if (timeSinceLastTask < 3000) {
+                                resolve(false);
+                                return;
+                            }
+                        }
+                    }
+                    resolve(true);
+                });
+            }
+
+            showModal(type, taskId = null) {
+                const modal = document.getElementById('verificationModal');
+                const icon = document.getElementById('modalIcon');
+                const title = document.getElementById('modalTitle');
+                const desc = document.getElementById('modalDescription');
+                const progress = document.getElementById('modalProgress');
+                const btn = document.getElementById('modalBtn');
+
+                modal.classList.add('active');
+
+                if (type === 'verifying') {
+                    icon.className = 'modal-icon verifying';
+                    icon.innerHTML = '<div class="spinner"></div>';
+                    title.textContent = 'Verifying...';
+                    desc.textContent = 'Please wait while we verify your action. This may take a few seconds.';
+                    progress.style.display = 'block';
+                    btn.style.display = 'none';
+                } else if (type === 'success') {
+                    icon.className = 'modal-icon success';
+                    icon.innerHTML = '<i class="fas fa-check checkmark-animate"></i>';
+                    title.textContent = 'Verification Successful!';
+                    
+                    const taskNames = {
+                        subscribe: 'YouTube subscription',
+                        like: 'video like',
+                        discord: 'Discord join'
+                    };
+                    desc.textContent = `Your ${taskNames[taskId]} has been verified successfully.`;
+                    progress.style.display = 'none';
+                    btn.style.display = 'block';
+                    btn.textContent = 'Continue';
+                } else if (type === 'error') {
+                    icon.className = 'modal-icon error';
+                    icon.innerHTML = '<i class="fas fa-times"></i>';
+                    title.textContent = 'Verification Failed';
+                    desc.textContent = 'We could not verify your action. Please try again and make sure to complete the task properly.';
+                    progress.style.display = 'none';
+                    btn.style.display = 'block';
+                    btn.textContent = 'Try Again';
+                }
+            }
+
+            hideModal() {
+                document.getElementById('verificationModal').classList.remove('active');
+            }
+
+            updateTaskUI(taskId, status) {
+                const item = document.getElementById(`task-${taskId}`);
+                const statusEl = document.getElementById(`status-${taskId}`);
+
+                item.classList.remove('completed', 'pending', 'verifying');
+
+                if (status === 'completed') {
+                    item.classList.add('completed');
+                    statusEl.className = 'task-status completed-status';
+                    statusEl.innerHTML = '<i class="fas fa-check checkmark-animate"></i>';
+                } else if (status === 'pending' || status === 'verifying') {
+                    item.classList.add('pending');
+                    statusEl.className = 'task-status verifying-status';
+                    statusEl.innerHTML = '<div class="spinner" style="width:16px;height:16px;border-width:2px;"></div>';
+                } else {
+                    statusEl.className = 'task-status pending-status';
+                    statusEl.innerHTML = '<i class="fas fa-chevron-right"></i>';
+                }
+            }
+
+            updateProgress() {
+                const completed = this.state.getCompletedCount();
+                const total = 3;
+                const percentage = (completed / total) * 100;
+
+                document.getElementById('progressCount').textContent = `${completed} / ${total}`;
+                document.getElementById('progressFill').style.width = percentage + '%';
+            }
+
+            activateGetScriptButton() {
+                const btn = document.getElementById('getScriptBtn');
+                btn.classList.add('active');
+                btn.disabled = false;
+                document.getElementById('btnText').textContent = 'Get Your Script';
+                
+                this.showToast('success', 'All Tasks Completed!', 'You can now access your script.');
+            }
+
+            showToast(type, title, message) {
+                const container = document.getElementById('toastContainer');
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+                
+                const icons = {
+                    success: 'fa-check',
+                    warning: 'fa-exclamation',
+                    error: 'fa-times',
+                    info: 'fa-info'
+                };
+
+                toast.innerHTML = `
+                    <div class="toast-icon">
+                        <i class="fas ${icons[type]}"></i>
+                    </div>
+                    <div class="toast-content">
+                        <div class="toast-title">${title}</div>
+                        <div class="toast-message">${message}</div>
+                    </div>
+                `;
+
+                container.appendChild(toast);
+                
+                setTimeout(() => toast.classList.add('show'), 10);
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                    setTimeout(() => toast.remove(), 400);
+                }, 4000);
+            }
         }
 
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast ${type}`;
-            
-            const icons = {
-                success: 'fa-check-circle',
-                error: 'fa-times-circle',
-                warning: 'fa-exclamation-triangle',
-                info: 'fa-info-circle'
-            };
-            
-            toast.innerHTML = `
-                <i class="fas ${icons[type]} toast-icon"></i>
-                <span class="toast-message">${message}</span>
-            `;
-            
-            container.appendChild(toast);
-            
-            setTimeout(() => {
-                toast.style.animation = 'slideUp 0.3s reverse';
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            const stateManager = new StateManager();
+            const ui = new UIController(stateManager);
 
-        // Add shake animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes shake {
-                0%, 100% { transform: translateX(0); }
-                20% { transform: translateX(-5px); }
-                40% { transform: translateX(5px); }
-                60% { transform: translateX(-5px); }
-                80% { transform: translateX(5px); }
-            }
-        `;
-        document.head.appendChild(style);
-
-        // Initialize on load
-        window.addEventListener('load', init);
-
-        // Handle visibility change for window tracking
-        document.addEventListener('visibilitychange', () => {
-            if (document.visibilityState === 'visible' && currentTask) {
-                secureState.markWindowOpened(currentTask);
-            }
-        });
-
-        // Prevent easy console manipulation
-        Object.defineProperty(window, 'secureState', {
-            get: function() {
-                console.log('%c⚠️ Security Warning', 'color: red; font-size: 24px; font-weight: bold;');
-                console.log('%cAttempting to access protected state is not allowed.', 'color: orange; font-size: 14px;');
-                return null;
-            },
-            set: function() {
-                return false;
+            // Check if all tasks already completed
+            if (stateManager.isAllCompleted()) {
+                ui.activateGetScriptButton();
             }
         });
     </script>
