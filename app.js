@@ -1,839 +1,582 @@
-// ==========================================
-// STATE MANAGEMENT
-// ==========================================
-const STATE = {
-    steps: {
-        1: { completed: false, clicked: false, token: null },
-        2: { completed: false, clicked: false, token: null },
-        3: { completed: false, clicked: false, token: null, discordName: null }
+// ========================================
+// LinkUnlocker - Advanced Verification System
+// ========================================
+
+// Configuration
+const CONFIG = {
+    links: {
+        1: 'https://www.youtube.com/@KS_SCRIPT_Owner?sub_confirmation=1',
+        2: 'https://www.youtube.com/shorts/bGm4dt_Isrk',
+        3: 'https://discord.com/channels/@me'  // Replace with actual Discord invite link
     },
-    captchaCode: '',
-    sessionId: generateSessionId(),
-    antiTamper: {
-        startTime: Date.now(),
-        clickSequence: [],
+    redirectUrl: 'https://ks-script.github.io/KS.WEB/',
+    verificationTime: {
+        1: 8,  // 8 seconds for YouTube subscribe
+        2: 10, // 10 seconds for video like (needs to watch)
+        3: 6   // 6 seconds for Discord join
+    },
+    stepNames: {
+        1: 'YouTube Subscribe',
+        2: 'Video Like',
+        3: 'Discord Join'
+    }
+};
+
+// State Management
+const state = {
+    steps: {
+        1: { completed: false, verifying: false, token: null, attempts: 0 },
+        2: { completed: false, verifying: false, token: null, attempts: 0 },
+        3: { completed: false, verifying: false, token: null, attempts: 0 }
+    },
+    currentVerification: null,
+    openedWindow: null,
+    timerInterval: null,
+    visibilityChanged: false,
+    antiCheat: {
         mouseMovements: 0,
-        interactionScore: 0
+        lastActivity: Date.now(),
+        sessionToken: null
     }
 };
 
-// Obfuscated verification tokens
-const VERIFY_KEYS = {
-    salt: btoa(Date.now().toString(36)),
-    hmac: function(data) {
-        let hash = 0;
-        const str = data + this.salt + STATE.sessionId;
-        for (let i = 0; i < str.length; i++) {
-            const char = str.charCodeAt(i);
-            hash = ((hash << 5) - hash) + char;
-            hash = hash & hash;
-        }
-        return Math.abs(hash).toString(36);
-    }
-};
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+    initParticles();
+    initAntiCheat();
+    loadSavedState();
+    updateUI();
+});
 
-// ==========================================
-// ANTI-TAMPER SYSTEM
-// ==========================================
-function generateSessionId() {
-    return 'ks_' + Math.random().toString(36).substr(2, 9) + '_' + Date.now().toString(36);
+// ========================================
+// Particle Animation
+// ========================================
+function initParticles() {
+    const container = document.getElementById('particles');
+    const particleCount = 50;
+    
+    for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        particle.className = 'particle';
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.animationDelay = `${Math.random() * 15}s`;
+        particle.style.animationDuration = `${15 + Math.random() * 10}s`;
+        
+        const colors = ['#6366f1', '#8b5cf6', '#a855f7', '#6366f1'];
+        particle.style.background = colors[Math.floor(Math.random() * colors.length)];
+        
+        container.appendChild(particle);
+    }
 }
 
-// Track mouse movements for bot detection
-document.addEventListener('mousemove', () => {
-    STATE.antiTamper.mouseMovements++;
-});
+// ========================================
+// Anti-Cheat System
+// ========================================
+function initAntiCheat() {
+    // Generate session token
+    state.antiCheat.sessionToken = generateToken();
+    
+    // Track mouse movements
+    document.addEventListener('mousemove', () => {
+        state.antiCheat.mouseMovements++;
+        state.antiCheat.lastActivity = Date.now();
+    });
+    
+    // Track keyboard activity
+    document.addEventListener('keydown', () => {
+        state.antiCheat.lastActivity = Date.now();
+    });
+    
+    // Detect developer tools
+    const devToolsCheck = setInterval(() => {
+        const widthThreshold = window.outerWidth - window.innerWidth > 160;
+        const heightThreshold = window.outerHeight - window.innerHeight > 160;
+        
+        if (widthThreshold || heightThreshold) {
+            console.clear();
+            console.log('%c⚠️ Developer tools detected!', 'color: red; font-size: 24px;');
+        }
+    }, 1000);
+    
+    // Visibility change detection
+    document.addEventListener('visibilitychange', () => {
+        if (state.currentVerification !== null) {
+            if (document.hidden) {
+                state.visibilityChanged = true;
+            }
+        }
+    });
+}
 
-// Track interactions
-document.addEventListener('click', () => {
-    STATE.antiTamper.interactionScore++;
-    STATE.antiTamper.clickSequence.push(Date.now());
-});
+// ========================================
+// Token Generation & Verification
+// ========================================
+function generateToken() {
+    const timestamp = Date.now();
+    const random = Math.random().toString(36).substring(2, 15);
+    const userAgent = btoa(navigator.userAgent.slice(0, 20));
+    return btoa(`${timestamp}:${random}:${userAgent}`);
+}
 
-// Detect console tampering
-(function() {
-    const originalConsoleLog = console.log;
-    let devToolsOpened = false;
+function validateToken(token, step) {
+    try {
+        const decoded = atob(token);
+        const parts = decoded.split(':');
+        const timestamp = parseInt(parts[0]);
+        const now = Date.now();
+        
+        // Token must be recent (within last 2 minutes)
+        if (now - timestamp > 120000) return false;
+        
+        // Token must be old enough (verification time passed)
+        const minTime = CONFIG.verificationTime[step] * 1000;
+        if (now - timestamp < minTime) return false;
+        
+        return true;
+    } catch {
+        return false;
+    }
+}
 
-    const checkDevTools = setInterval(() => {
-        const threshold = 160;
-        if (window.outerWidth - window.innerWidth > threshold ||
-            window.outerHeight - window.innerHeight > threshold) {
-            if (!devToolsOpened) {
-                devToolsOpened = true;
+function encryptState(data) {
+    const json = JSON.stringify(data);
+    const encoded = btoa(json);
+    const shuffled = encoded.split('').reverse().join('');
+    return btoa(shuffled + ':' + generateChecksum(json));
+}
+
+function decryptState(encrypted) {
+    try {
+        const decoded = atob(encrypted);
+        const [shuffled, checksum] = decoded.split(':');
+        const encoded = shuffled.split('').reverse().join('');
+        const json = atob(encoded);
+        
+        if (generateChecksum(json) !== checksum) {
+            return null;
+        }
+        
+        return JSON.parse(json);
+    } catch {
+        return null;
+    }
+}
+
+function generateChecksum(data) {
+    let hash = 0;
+    for (let i = 0; i < data.length; i++) {
+        const char = data.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
+    }
+    return Math.abs(hash).toString(36);
+}
+
+// ========================================
+// State Management
+// ========================================
+function saveState() {
+    const saveData = {
+        steps: {},
+        timestamp: Date.now(),
+        session: state.antiCheat.sessionToken
+    };
+    
+    for (const step in state.steps) {
+        if (state.steps[step].completed) {
+            saveData.steps[step] = {
+                completed: true,
+                token: state.steps[step].token,
+                time: Date.now()
+            };
+        }
+    }
+    
+    const encrypted = encryptState(saveData);
+    localStorage.setItem('ks_verify_state', encrypted);
+}
+
+function loadSavedState() {
+    const saved = localStorage.getItem('ks_verify_state');
+    if (!saved) return;
+    
+    const data = decryptState(saved);
+    if (!data) {
+        localStorage.removeItem('ks_verify_state');
+        return;
+    }
+    
+    // Check if saved state is too old (24 hours)
+    if (Date.now() - data.timestamp > 86400000) {
+        localStorage.removeItem('ks_verify_state');
+        return;
+    }
+    
+    // Restore completed steps
+    for (const step in data.steps) {
+        if (data.steps[step].completed && data.steps[step].token) {
+            state.steps[step].completed = true;
+            state.steps[step].token = data.steps[step].token;
+        }
+    }
+}
+
+// ========================================
+// Verification Process
+// ========================================
+function startVerification(step) {
+    if (state.steps[step].completed || state.steps[step].verifying) {
+        return;
+    }
+    
+    // Anti-spam check
+    state.steps[step].attempts++;
+    if (state.steps[step].attempts > 5) {
+        showToast('Too many attempts. Please wait.', 'warning');
+        return;
+    }
+    
+    // Generate verification token
+    const token = generateToken();
+    state.steps[step].token = token;
+    state.steps[step].verifying = true;
+    state.currentVerification = step;
+    state.visibilityChanged = false;
+    
+    // Update UI
+    updateStepStatus(step, 'verifying');
+    showVerificationModal(step);
+    
+    // Open link in new tab
+    state.openedWindow = window.open(CONFIG.links[step], '_blank');
+    
+    // Start verification timer
+    startVerificationTimer(step);
+}
+
+function showVerificationModal(step) {
+    const modal = document.getElementById('verificationModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalText = document.getElementById('modalText');
+    const timerText = document.getElementById('timerText');
+    
+    modalTitle.textContent = `Verifying ${CONFIG.stepNames[step]}...`;
+    modalText.textContent = 'Please complete the action in the new tab and return here.';
+    timerText.textContent = CONFIG.verificationTime[step];
+    
+    // Reset mini steps
+    document.querySelectorAll('.mini-step').forEach(el => {
+        el.classList.remove('active', 'completed');
+    });
+    document.getElementById('miniStep1').classList.add('active');
+    
+    modal.classList.add('show');
+    
+    // Reset timer circle
+    const timerProgress = document.getElementById('timerProgress');
+    timerProgress.style.strokeDashoffset = '283';
+}
+
+function startVerificationTimer(step) {
+    let timeLeft = CONFIG.verificationTime[step];
+    const totalTime = CONFIG.verificationTime[step];
+    const timerText = document.getElementById('timerText');
+    const timerProgress = document.getElementById('timerProgress');
+    
+    // Mark step 1 as completed after a short delay
+    setTimeout(() => {
+        document.getElementById('miniStep1').classList.remove('active');
+        document.getElementById('miniStep1').classList.add('completed');
+        document.getElementById('miniStep2').classList.add('active');
+    }, 1000);
+    
+    state.timerInterval = setInterval(() => {
+        timeLeft--;
+        timerText.textContent = timeLeft;
+        
+        // Update progress circle
+        const progress = ((totalTime - timeLeft) / totalTime) * 283;
+        timerProgress.style.strokeDashoffset = 283 - progress;
+        
+        if (timeLeft <= 0) {
+            clearInterval(state.timerInterval);
+            
+            // Check if user actually left the page
+            if (state.visibilityChanged) {
+                document.getElementById('miniStep2').classList.remove('active');
+                document.getElementById('miniStep2').classList.add('completed');
+                document.getElementById('miniStep3').classList.add('active');
+                
+                // Complete verification after brief delay
+                setTimeout(() => completeVerification(step), 500);
+            } else {
+                failVerification(step, 'Please visit the link and complete the action.');
             }
         }
     }, 1000);
-})();
-
-// Prevent direct state modification
-Object.freeze(VERIFY_KEYS);
-
-function isHumanLike() {
-    const elapsed = Date.now() - STATE.antiTamper.startTime;
-    const hasMouseMovement = STATE.antiTamper.mouseMovements > 5;
-    const hasClicks = STATE.antiTamper.clickSequence.length > 2;
-    const notTooFast = elapsed > 3000;
-
-    // Check click timing patterns (bots click too regularly)
-    if (STATE.antiTamper.clickSequence.length >= 3) {
-        const intervals = [];
-        for (let i = 1; i < STATE.antiTamper.clickSequence.length; i++) {
-            intervals.push(STATE.antiTamper.clickSequence[i] - STATE.antiTamper.clickSequence[i-1]);
-        }
-        const avgInterval = intervals.reduce((a, b) => a + b, 0) / intervals.length;
-        const variance = intervals.reduce((sum, val) => sum + Math.pow(val - avgInterval, 2), 0) / intervals.length;
-        // Bots have very low variance in click timing
-        if (variance < 10 && intervals.length > 5) return false;
-    }
-
-    return hasMouseMovement && hasClicks && notTooFast;
 }
 
-// ==========================================
-// PARTICLE SYSTEM
-// ==========================================
-(function initParticles() {
-    const canvas = document.getElementById('particles');
-    const ctx = canvas.getContext('2d');
-    let particles = [];
-    let animationId;
-
-    function resize() {
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
+function completeVerification(step) {
+    const token = state.steps[step].token;
+    
+    // Validate token
+    if (!validateToken(token, step)) {
+        failVerification(step, 'Verification failed. Please try again.');
+        return;
     }
-
-    resize();
-    window.addEventListener('resize', resize);
-
-    class Particle {
-        constructor() {
-            this.reset();
-        }
-
-        reset() {
-            this.x = Math.random() * canvas.width;
-            this.y = Math.random() * canvas.height;
-            this.size = Math.random() * 2 + 0.5;
-            this.speedX = (Math.random() - 0.5) * 0.3;
-            this.speedY = (Math.random() - 0.5) * 0.3;
-            this.opacity = Math.random() * 0.3 + 0.05;
-            this.fadeSpeed = Math.random() * 0.005 + 0.002;
-            this.growing = Math.random() > 0.5;
-        }
-
-        update() {
-            this.x += this.speedX;
-            this.y += this.speedY;
-
-            if (this.growing) {
-                this.opacity += this.fadeSpeed;
-                if (this.opacity >= 0.35) this.growing = false;
-            } else {
-                this.opacity -= this.fadeSpeed;
-                if (this.opacity <= 0.05) this.growing = true;
-            }
-
-            if (this.x < 0 || this.x > canvas.width || this.y < 0 || this.y > canvas.height) {
-                this.reset();
-            }
-        }
-
-        draw() {
-            ctx.beginPath();
-            ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-            ctx.fillStyle = `rgba(108, 92, 231, ${this.opacity})`;
-            ctx.fill();
-        }
+    
+    // Additional verification checks
+    if (!performAdditionalChecks(step)) {
+        failVerification(step, 'Verification could not be completed.');
+        return;
     }
-
-    const particleCount = Math.min(80, Math.floor(window.innerWidth / 15));
-    for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-    }
-
-    function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach(p => {
-            p.update();
-            p.draw();
-        });
-
-        // Draw connections
-        for (let i = 0; i < particles.length; i++) {
-            for (let j = i + 1; j < particles.length; j++) {
-                const dx = particles[i].x - particles[j].x;
-                const dy = particles[i].y - particles[j].y;
-                const dist = Math.sqrt(dx * dx + dy * dy);
-
-                if (dist < 120) {
-                    ctx.beginPath();
-                    ctx.moveTo(particles[i].x, particles[i].y);
-                    ctx.lineTo(particles[j].x, particles[j].y);
-                    ctx.strokeStyle = `rgba(108, 92, 231, ${0.03 * (1 - dist / 120)})`;
-                    ctx.lineWidth = 0.5;
-                    ctx.stroke();
-                }
-            }
-        }
-
-        animationId = requestAnimationFrame(animate);
-    }
-
-    animate();
-})();
-
-// ==========================================
-// SCRIPT BUTTON PARTICLES
-// ==========================================
-(function initScriptParticles() {
-    const container = document.getElementById('scriptParticles');
-    for (let i = 0; i < 20; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'script-particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.top = Math.random() * 100 + '%';
-        particle.style.animationDelay = Math.random() * 3 + 's';
-        particle.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        container.appendChild(particle);
-    }
-})();
-
-// ==========================================
-// VERIFICATION CODES - Dynamic per session
-// ==========================================
-const SESSION_CODES = {
-    subscribe: generateVerifyCode('sub'),
-    video: generateVideoQuiz()
-};
-
-function generateVerifyCode(type) {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code = 'KS-';
-    for (let i = 0; i < 5; i++) {
-        code += chars[Math.floor(Math.random() * chars.length)];
-    }
-    return code;
-}
-
-function generateVideoQuiz() {
-    // Questions about the video content - user must watch to answer
-    const quizzes = [
-        {
-            question: "What type of content is shown in the video?",
-            options: ["Gaming Script", "Cooking Recipe", "Travel Vlog", "Music Video"],
-            correct: 0
-        },
-        {
-            question: "What platform is the script designed for?",
-            options: ["Minecraft", "Roblox Rivals", "Fortnite", "Apex Legends"],
-            correct: 1
-        },
-        {
-            question: "What is the channel name shown in the video?",
-            options: ["Pro Gamer", "KS Script", "Game Master", "Script Hub"],
-            correct: 1
-        }
-    ];
-
-    return quizzes[Math.floor(Math.random() * quizzes.length)];
-}
-
-// ==========================================
-// STEP HANDLERS
-// ==========================================
-
-// Step 1: Subscribe
-function handleSubscribe() {
-    if (STATE.steps[1].completed) return;
-
-    STATE.steps[1].clicked = true;
-    STATE.antiTamper.clickSequence.push({ type: 'subscribe', time: Date.now() });
-
-    // Open YouTube subscribe link
-    const subWindow = window.open('https://www.youtube.com/@KS_SCRIPT_Owner?sub_confirmation=1', '_blank');
-
-    const btn = document.getElementById('subBtn');
-    btn.innerHTML = '<div class="spinner"></div><span>Opening...</span>';
-
+    
+    // Mark as completed
+    state.steps[step].completed = true;
+    state.steps[step].verifying = false;
+    state.currentVerification = null;
+    
+    // Update UI
+    document.getElementById('miniStep3').classList.remove('active');
+    document.getElementById('miniStep3').classList.add('completed');
+    
     setTimeout(() => {
-        btn.innerHTML = '<i class="fab fa-youtube"></i><span>Subscribed?</span><div class="btn-shine"></div>';
-        document.getElementById('verifySection1').style.display = 'block';
-        document.getElementById('hint1').innerHTML = `
-            <i class="fas fa-info-circle"></i>
-            Enter this verification code to confirm: <strong style="color: var(--accent-light); user-select: all; letter-spacing: 1px;">${SESSION_CODES.subscribe}</strong>
-        `;
-        updateStatus(1, 'verifying', 'Verifying');
+        hideVerificationModal();
+        updateStepStatus(step, 'completed');
+        updateProgress();
+        saveState();
+        
+        showToast(`${CONFIG.stepNames[step]} verified!`, 'success');
+        
+        // Check if all steps completed
+        checkAllCompleted();
+    }, 1000);
+}
 
-        showToast('info', 'Verification Required', 'Please enter the verification code to confirm your subscription.');
+function performAdditionalChecks(step) {
+    // Check for suspicious patterns
+    if (state.antiCheat.mouseMovements < 5) {
+        console.log('Low activity detected');
+        // Still allow but flag
+    }
+    
+    // Check time since last activity
+    if (Date.now() - state.antiCheat.lastActivity > 60000) {
+        console.log('User may be inactive');
+    }
+    
+    return true;
+}
+
+function failVerification(step, message) {
+    state.steps[step].verifying = false;
+    state.currentVerification = null;
+    
+    clearInterval(state.timerInterval);
+    hideVerificationModal();
+    updateStepStatus(step, 'failed');
+    
+    showToast(message, 'error');
+    
+    // Reset step UI after delay
+    setTimeout(() => {
+        updateStepStatus(step, 'pending');
     }, 2000);
 }
 
-// Step 2: Like
-function handleLike() {
-    if (STATE.steps[2].completed || !STATE.steps[1].completed) return;
-
-    STATE.steps[2].clicked = true;
-    STATE.antiTamper.clickSequence.push({ type: 'like', time: Date.now() });
-
-    // Open video
-    window.open('https://www.youtube.com/shorts/bGm4dt_Isrk', '_blank');
-
-    const btn = document.getElementById('likeBtn');
-    btn.innerHTML = '<div class="spinner"></div><span>Opening...</span>';
-
-    setTimeout(() => {
-        btn.innerHTML = '<i class="fas fa-thumbs-up"></i><span>Liked?</span><div class="btn-shine"></div>';
-        document.getElementById('verifySection2').style.display = 'block';
-
-        // Show quiz
-        const quiz = SESSION_CODES.video;
-        document.getElementById('quizQuestion').textContent = quiz.question;
-        const optionsContainer = document.getElementById('quizOptions');
-        optionsContainer.innerHTML = '';
-
-        quiz.options.forEach((opt, idx) => {
-            const btn = document.createElement('button');
-            btn.className = 'quiz-option';
-            btn.textContent = opt;
-            btn.onclick = () => handleQuizAnswer(idx, btn);
-            optionsContainer.appendChild(btn);
-        });
-
-        updateStatus(2, 'verifying', 'Verifying');
-        showToast('info', 'Video Quiz', 'Answer the question about the video to verify.');
-    }, 3000);
+function cancelVerification() {
+    if (state.currentVerification !== null) {
+        const step = state.currentVerification;
+        state.steps[step].verifying = false;
+        state.currentVerification = null;
+        
+        clearInterval(state.timerInterval);
+        hideVerificationModal();
+        updateStepStatus(step, 'pending');
+    }
 }
 
-function handleQuizAnswer(selectedIdx, btnElement) {
-    const quiz = SESSION_CODES.video;
-    const allOptions = document.querySelectorAll('.quiz-option');
+function hideVerificationModal() {
+    const modal = document.getElementById('verificationModal');
+    modal.classList.remove('show');
+}
 
-    allOptions.forEach(opt => opt.style.pointerEvents = 'none');
-
-    if (selectedIdx === quiz.correct) {
-        btnElement.classList.add('correct');
-
-        // Additional human check
-        if (!isHumanLike()) {
-            setTimeout(() => {
-                showToast('error', 'Verification Failed', 'Suspicious activity detected. Please try again.');
-                allOptions.forEach(opt => {
-                    opt.classList.remove('correct', 'wrong');
-                    opt.style.pointerEvents = 'auto';
-                });
-            }, 1000);
-            return;
+// ========================================
+// UI Updates
+// ========================================
+function updateUI() {
+    for (const step in state.steps) {
+        if (state.steps[step].completed) {
+            updateStepStatus(step, 'completed');
         }
-
-        setTimeout(() => {
-            completeStep(2);
-        }, 800);
-    } else {
-        btnElement.classList.add('wrong');
-        allOptions[quiz.correct].classList.add('correct');
-
-        showToast('error', 'Wrong Answer', 'Please watch the video carefully and try again.');
-
-        setTimeout(() => {
-            // Generate new quiz
-            SESSION_CODES.video = generateVideoQuiz();
-            const newQuiz = SESSION_CODES.video;
-            document.getElementById('quizQuestion').textContent = newQuiz.question;
-            const optionsContainer = document.getElementById('quizOptions');
-            optionsContainer.innerHTML = '';
-
-            newQuiz.options.forEach((opt, idx) => {
-                const btn = document.createElement('button');
-                btn.className = 'quiz-option';
-                btn.textContent = opt;
-                btn.onclick = () => handleQuizAnswer(idx, btn);
-                optionsContainer.appendChild(btn);
-            });
-        }, 2000);
     }
-}
-
-// Step 3: Discord
-function handleDiscord() {
-    if (STATE.steps[3].completed || !STATE.steps[2].completed) return;
-
-    STATE.steps[3].clicked = true;
-    STATE.antiTamper.clickSequence.push({ type: 'discord', time: Date.now() });
-
-    // Open Discord
-    window.open('https://discord.com/channels/@me', '_blank');
-
-    const btn = document.getElementById('discordBtn');
-    btn.innerHTML = '<div class="spinner"></div><span>Opening...</span>';
-
-    setTimeout(() => {
-        btn.innerHTML = '<i class="fab fa-discord"></i><span>Joined?</span><div class="btn-shine"></div>';
-        document.getElementById('verifySection3').style.display = 'block';
-        updateStatus(3, 'verifying', 'Verifying');
-
-        showToast('info', 'Discord Verification', 'Enter your Discord username to verify.');
-    }, 2000);
-}
-
-// ==========================================
-// VERIFICATION SYSTEM
-// ==========================================
-function verifyStep(step) {
-    switch(step) {
-        case 1:
-            verifySubscribe();
-            break;
-        case 3:
-            verifyDiscord();
-            break;
-    }
-}
-
-function verifySubscribe() {
-    const input = document.getElementById('verifyInput1');
-    const value = input.value.trim().toUpperCase();
-    const expected = SESSION_CODES.subscribe.toUpperCase();
-
-    if (!value) {
-        shakeElement(input);
-        showToast('warning', 'Empty Field', 'Please enter the verification code.');
-        return;
-    }
-
-    if (!STATE.steps[1].clicked) {
-        shakeElement(input);
-        showToast('error', 'Not Clicked', 'Please click the Subscribe button first.');
-        return;
-    }
-
-    if (value === expected) {
-        // Additional timing check
-        const timeSinceClick = Date.now() - STATE.antiTamper.clickSequence.find(c => c.type === 'subscribe')?.time;
-        if (timeSinceClick < 2000) {
-            shakeElement(input);
-            showToast('error', 'Too Fast', 'Please wait a moment and try again.');
-            return;
-        }
-
-        completeStep(1);
-    } else {
-        shakeElement(input);
-        showToast('error', 'Invalid Code', 'The verification code is incorrect. Please check and try again.');
-        input.value = '';
-    }
-}
-
-function verifyDiscord() {
-    const input = document.getElementById('verifyInput3');
-    const value = input.value.trim();
-
-    if (!value) {
-        shakeElement(input);
-        showToast('warning', 'Empty Field', 'Please enter your Discord username.');
-        return;
-    }
-
-    // Validate Discord username format
-    const discordRegex = /^.{2,32}$/;
-    if (!discordRegex.test(value)) {
-        shakeElement(input);
-        showToast('error', 'Invalid Username', 'Please enter a valid Discord username.');
-        return;
-    }
-
-    STATE.steps[3].discordName = value;
-
-    // Show CAPTCHA for final verification
-    document.getElementById('captchaSection').style.display = 'block';
-    document.getElementById('hint3').innerHTML = `
-        <i class="fas fa-info-circle"></i>
-        Complete the CAPTCHA to finish verification
-    `;
-    generateCaptcha();
-
-    showToast('info', 'Almost Done', 'Complete the CAPTCHA to verify your Discord membership.');
-}
-
-// ==========================================
-// CAPTCHA SYSTEM
-// ==========================================
-function generateCaptcha() {
-    const canvas = document.getElementById('captchaCanvas');
-    const ctx = canvas.getContext('2d');
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-    let code = '';
-
-    for (let i = 0; i < 5; i++) {
-        code += chars[Math.floor(Math.random() * chars.length)];
-    }
-
-    STATE.captchaCode = code;
-
-    // Draw CAPTCHA
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    // Background
-    ctx.fillStyle = 'rgba(10, 10, 15, 0.9)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    // Noise lines
-    for (let i = 0; i < 6; i++) {
-        ctx.beginPath();
-        ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
-        ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-        ctx.strokeStyle = `rgba(${Math.random() * 100 + 50}, ${Math.random() * 100 + 50}, ${Math.random() * 200 + 55}, 0.3)`;
-        ctx.lineWidth = 1;
-        ctx.stroke();
-    }
-
-    // Noise dots
-    for (let i = 0; i < 30; i++) {
-        ctx.fillStyle = `rgba(${Math.random() * 200}, ${Math.random() * 200}, ${Math.random() * 200}, 0.3)`;
-        ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
-    }
-
-    // Draw characters
-    const colors = ['#6c5ce7', '#a29bfe', '#00f5a0', '#00b4d8', '#ff6b6b'];
-    for (let i = 0; i < code.length; i++) {
-        ctx.save();
-        const x = 25 + i * 35;
-        const y = 35 + (Math.random() - 0.5) * 15;
-        const angle = (Math.random() - 0.5) * 0.5;
-
-        ctx.translate(x, y);
-        ctx.rotate(angle);
-        ctx.font = `${Math.random() * 8 + 20}px 'Inter', monospace`;
-        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
-        ctx.textAlign = 'center';
-        ctx.fillText(code[i], 0, 0);
-        ctx.restore();
-    }
-}
-
-function verifyCaptcha() {
-    const input = document.getElementById('captchaInput');
-    const value = input.value.trim().toUpperCase();
-
-    if (!value) {
-        shakeElement(input);
-        showToast('warning', 'Empty Field', 'Please enter the CAPTCHA code.');
-        return;
-    }
-
-    if (!isHumanLike()) {
-        shakeElement(input);
-        showToast('error', 'Bot Detected', 'Suspicious activity detected. Please refresh and try again.');
-        return;
-    }
-
-    if (value === STATE.captchaCode) {
-        completeStep(3);
-    } else {
-        shakeElement(input);
-        showToast('error', 'Invalid CAPTCHA', 'The CAPTCHA code is incorrect. A new one has been generated.');
-        input.value = '';
-        generateCaptcha();
-    }
-}
-
-// ==========================================
-// STEP COMPLETION
-// ==========================================
-function completeStep(step) {
-    STATE.steps[step].completed = true;
-    STATE.steps[step].token = VERIFY_KEYS.hmac(`step${step}_${Date.now()}`);
-
-    const card = document.getElementById(`step${step}`);
-    card.classList.add('completed');
-    card.classList.remove('active');
-
-    updateStatus(step, 'done', 'Completed');
-
-    // Hide verify section
-    const verifySection = document.getElementById(`verifySection${step}`);
-    if (verifySection) {
-        verifySection.style.display = 'none';
-    }
-
-    showToast('success', `Step ${step} Complete!`, getStepCompletionMessage(step));
-
-    // Unlock next step
-    const nextStep = step + 1;
-    if (nextStep <= 3) {
-        setTimeout(() => unlockStep(nextStep), 600);
-    }
-
     updateProgress();
+    checkAllCompleted();
+}
 
-    // Check if all complete
-    if (STATE.steps[1].completed && STATE.steps[2].completed && STATE.steps[3].completed) {
-        setTimeout(unlockScript, 1000);
+function updateStepStatus(step, status) {
+    const stepCard = document.getElementById(`step${step}`);
+    const statusEl = document.getElementById(`status${step}`);
+    const statusText = statusEl.querySelector('.status-text');
+    
+    stepCard.classList.remove('completed', 'verifying', 'failed');
+    
+    switch (status) {
+        case 'completed':
+            stepCard.classList.add('completed');
+            statusText.textContent = 'Completed';
+            break;
+        case 'verifying':
+            stepCard.classList.add('verifying');
+            statusText.textContent = 'Verifying...';
+            break;
+        case 'failed':
+            statusText.textContent = 'Failed';
+            break;
+        default:
+            statusText.textContent = 'Not Started';
     }
 }
 
-function getStepCompletionMessage(step) {
-    switch(step) {
-        case 1: return 'YouTube subscription verified successfully!';
-        case 2: return 'Video like verified successfully!';
-        case 3: return 'Discord membership verified successfully!';
-    }
-}
-
-function unlockStep(step) {
-    const card = document.getElementById(`step${step}`);
-    const lock = document.getElementById(`lock${step}`);
-
-    card.classList.remove('locked');
-    card.classList.add('active');
-
-    if (lock) {
-        lock.style.opacity = '0';
-        lock.style.pointerEvents = 'none';
-        setTimeout(() => lock.style.display = 'none', 300);
-    }
-
-    // Enable button
-    const btnIds = { 2: 'likeBtn', 3: 'discordBtn' };
-    const btn = document.getElementById(btnIds[step]);
-    if (btn) btn.disabled = false;
-
-    updateStatus(step, 'pending', 'Pending');
-    showToast('info', `Step ${step} Unlocked`, 'You can now proceed with this step.');
-}
-
-// ==========================================
-// UNLOCK SCRIPT
-// ==========================================
-function unlockScript() {
-    const btn = document.getElementById('getScriptBtn');
-    btn.classList.add('unlocked');
-    btn.disabled = false;
-
-    document.querySelector('.script-sub').textContent = 'All steps completed! Click to get your script';
-
-    // Update header badge
-    const badge = document.querySelector('.header-badge');
-    badge.innerHTML = '<span class="pulse-dot" style="background: var(--success);"></span><span>Verified ✓</span>';
-    badge.style.borderColor = 'rgba(0, 245, 160, 0.2)';
-
-    showModal(
-        'success',
-        '<i class="fas fa-check-circle"></i>',
-        'All Steps Completed!',
-        'Congratulations! You have successfully completed all verification steps. Click the "Get Script" button to access your script.'
-    );
-}
-
-function getScript() {
-    const btn = document.getElementById('getScriptBtn');
-    if (!btn.classList.contains('unlocked')) return;
-
-    // Final integrity check
-    const allCompleted = STATE.steps[1].completed && STATE.steps[2].completed && STATE.steps[3].completed;
-    const allTokens = STATE.steps[1].token && STATE.steps[2].token && STATE.steps[3].token;
-    const humanCheck = STATE.antiTamper.mouseMovements > 10 && STATE.antiTamper.interactionScore > 5;
-
-    if (!allCompleted || !allTokens) {
-        showToast('error', 'Verification Error', 'Please complete all steps properly.');
-        return;
-    }
-
-    if (!humanCheck) {
-        showToast('error', 'Security Check Failed', 'Unable to verify human interaction. Please try again.');
-        return;
-    }
-
-    // Redirect
-    btn.innerHTML = `
-        <div class="script-btn-content">
-            <div class="script-icon" style="background: linear-gradient(135deg, var(--accent), var(--success)); color: white; box-shadow: 0 0 30px var(--success-glow);">
-                <div class="spinner"></div>
-            </div>
-            <div class="script-text">
-                <span class="script-title" style="background: linear-gradient(135deg, var(--accent-light), var(--success)); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Redirecting...</span>
-                <span class="script-sub" style="color: var(--text-secondary);">Please wait</span>
-            </div>
-        </div>
-    `;
-
-    showToast('success', 'Redirecting', 'Taking you to the script page...');
-
-    setTimeout(() => {
-        window.location.href = 'https://ks-script.github.io/KS.WEB/';
-    }, 1500);
-}
-
-// ==========================================
-// UI HELPERS
-// ==========================================
 function updateProgress() {
-    const completed = Object.values(STATE.steps).filter(s => s.completed).length;
-    const percent = Math.round((completed / 3) * 100);
-
-    document.getElementById('progressBar').style.width = percent + '%';
-    document.getElementById('progressText').textContent = `${completed} / 3 Completed`;
-    document.getElementById('progressPercent').textContent = percent + '%';
+    const completed = Object.values(state.steps).filter(s => s.completed).length;
+    const total = Object.keys(state.steps).length;
+    const percent = Math.round((completed / total) * 100);
+    
+    document.getElementById('progressFill').style.width = `${percent}%`;
+    document.getElementById('progressText').textContent = `${completed} / ${total} Completed`;
+    document.getElementById('progressPercent').textContent = `${percent}%`;
 }
 
-function updateStatus(step, type, text) {
-    const status = document.getElementById(`status${step}`);
-    status.innerHTML = `<span class="status-text ${type}">${text}</span>`;
-}
-
-function shakeElement(element) {
-    element.classList.add('shake');
-    element.style.borderColor = 'var(--error)';
-    setTimeout(() => {
-        element.classList.remove('shake');
-        element.style.borderColor = '';
-    }, 500);
-}
-
-// ==========================================
-// TOAST SYSTEM
-// ==========================================
-function showToast(type, title, message, duration = 5000) {
-    const container = document.getElementById('toastContainer');
-
-    const icons = {
-        success: 'fas fa-check-circle',
-        error: 'fas fa-times-circle',
-        info: 'fas fa-info-circle',
-        warning: 'fas fa-exclamation-triangle'
-    };
-
-    const toast = document.createElement('div');
-    toast.className = `toast ${type}`;
-    toast.innerHTML = `
-        <div class="toast-icon">
-            <i class="${icons[type]}"></i>
-        </div>
-        <div class="toast-content">
-            <div class="toast-title">${title}</div>
-            <div class="toast-message">${message}</div>
-        </div>
-        <button class="toast-close" onclick="removeToast(this.parentElement)">
-            <i class="fas fa-times"></i>
-        </button>
-    `;
-
-    container.appendChild(toast);
-
-    setTimeout(() => removeToast(toast), duration);
-
-    return toast;
-}
-
-function removeToast(toast) {
-    if (!toast || !toast.parentElement) return;
-    toast.classList.add('removing');
-    setTimeout(() => {
-        if (toast.parentElement) {
-            toast.parentElement.removeChild(toast);
-        }
-    }, 300);
-}
-
-// ==========================================
-// MODAL SYSTEM
-// ==========================================
-function showModal(type, icon, title, text) {
-    const overlay = document.getElementById('modalOverlay');
-    const iconEl = document.getElementById('modalIcon');
-    const titleEl = document.getElementById('modalTitle');
-    const textEl = document.getElementById('modalText');
-
-    iconEl.className = `modal-icon ${type}`;
-    iconEl.innerHTML = icon;
-    titleEl.textContent = title;
-    textEl.textContent = text;
-
-    overlay.classList.add('active');
-}
-
-function closeModal() {
-    document.getElementById('modalOverlay').classList.remove('active');
-}
-
-// Close modal on overlay click
-document.getElementById('modalOverlay').addEventListener('click', (e) => {
-    if (e.target === e.currentTarget) closeModal();
-});
-
-// ==========================================
-// KEYBOARD SHORTCUTS
-// ==========================================
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-
-    // Prevent common bypass attempts
-    if (e.key === 'Enter') {
-        const activeInput = document.activeElement;
-        if (activeInput && activeInput.classList.contains('verify-input')) {
-            const step = activeInput.closest('.step-card')?.dataset.step;
-            if (step) {
-                if (step === '1') verifyStep(1);
-                else if (step === '3') {
-                    if (document.getElementById('captchaSection').style.display !== 'none') {
-                        verifyCaptcha();
-                    } else {
-                        verifyStep(3);
-                    }
-                }
-            }
-        }
-        if (activeInput && activeInput.id === 'captchaInput') {
-            verifyCaptcha();
+function checkAllCompleted() {
+    const allCompleted = Object.values(state.steps).every(s => s.completed);
+    const unlockBtn = document.getElementById('unlockBtn');
+    const lockIcon = document.getElementById('lockIcon');
+    const unlockText = document.getElementById('unlockText');
+    const unlockHint = document.getElementById('unlockHint');
+    
+    if (allCompleted) {
+        unlockBtn.disabled = false;
+        unlockBtn.classList.add('active');
+        lockIcon.className = 'fas fa-unlock';
+        unlockText.textContent = 'Get Script';
+        unlockHint.textContent = 'Click to get your script!';
+        unlockHint.classList.add('ready');
+        
+        // Show success modal after a brief delay (first time only)
+        if (!localStorage.getItem('ks_success_shown')) {
+            setTimeout(() => {
+                document.getElementById('successModal').classList.add('show');
+                localStorage.setItem('ks_success_shown', 'true');
+            }, 500);
         }
     }
-});
+}
 
-// ==========================================
-// ANTI-BYPASS: Protect global functions
-// ==========================================
-(function protectFunctions() {
-    const originalComplete = completeStep;
+// ========================================
+// Script Unlock
+// ========================================
+function unlockScript() {
+    const allCompleted = Object.values(state.steps).every(s => s.completed);
+    
+    if (!allCompleted) {
+        showToast('Please complete all verification steps.', 'warning');
+        return;
+    }
+    
+    // Final verification
+    const finalToken = generateFinalToken();
+    if (!validateFinalToken(finalToken)) {
+        showToast('Verification expired. Please refresh and try again.', 'error');
+        return;
+    }
+    
+    // Redirect to script
+    window.location.href = CONFIG.redirectUrl;
+}
 
-    // Override to add validation
-    window._internalComplete = function(step) {
-        // Verify the step was actually interacted with
-        if (!STATE.steps[step].clicked) {
-            console.warn('Step not properly initiated');
-            return;
-        }
+function redirectToScript() {
+    document.getElementById('successModal').classList.remove('show');
+    unlockScript();
+}
 
-        // Verify previous steps
-        for (let i = 1; i < step; i++) {
-            if (!STATE.steps[i].completed || !STATE.steps[i].token) {
-                console.warn('Previous steps not completed');
+function generateFinalToken() {
+    const tokens = Object.values(state.steps).map(s => s.token).join(':');
+    const session = state.antiCheat.sessionToken;
+    return btoa(`${tokens}:${session}:${Date.now()}`);
+}
+
+function validateFinalToken(token) {
+    try {
+        const decoded = atob(token);
+        const parts = decoded.split(':');
+        const timestamp = parseInt(parts[parts.length - 1]);
+        
+        // Final token should be recent
+        return Date.now() - timestamp < 5000;
+    } catch {
+        return false;
+    }
+}
+
+// ========================================
+// Toast Notifications
+// ========================================
+function showToast(message, type = 'success') {
+    const toast = document.getElementById('toast');
+    const toastIcon = toast.querySelector('.toast-icon i');
+    const toastTitle = toast.querySelector('.toast-title');
+    const toastMessage = toast.querySelector('.toast-message');
+    
+    // Set icon and color based on type
+    const configs = {
+        success: { icon: 'fa-check', color: '#10b981', title: 'Success' },
+        error: { icon: 'fa-times', color: '#ef4444', title: 'Error' },
+        warning: { icon: 'fa-exclamation', color: '#f59e0b', title: 'Warning' }
+    };
+    
+    const config = configs[type] || configs.success;
+    
+    toastIcon.className = `fas ${config.icon}`;
+    toast.style.borderLeftColor = config.color;
+    toast.querySelector('.toast-icon').style.background = `${config.color}20`;
+    toast.querySelector('.toast-icon').style.color = config.color;
+    toast.querySelector('.toast-progress').style.background = config.color;
+    
+    toastTitle.textContent = config.title;
+    toastMessage.textContent = message;
+    
+    // Show toast
+    toast.classList.add('show');
+    
+    // Hide after delay
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3500);
+}
+
+// ========================================
+// Prevent Console Manipulation
+// ========================================
+(function() {
+    const originalConsole = { ...console };
+    
+    // Override console methods
+    ['log', 'warn', 'error', 'info'].forEach(method => {
+        console[method] = function(...args) {
+            // Check for manipulation attempts
+            const stack = new Error().stack;
+            if (stack && stack.includes('eval')) {
                 return;
             }
-        }
-
-        originalComplete(step);
-    };
-})();
-
-// ==========================================
-// INITIALIZATION
-// ==========================================
-document.addEventListener('DOMContentLoaded', () => {
-    // Initialize first step as active
-    document.getElementById('step1').classList.add('active');
-
-    // Disable right-click context menu on verification elements
-    document.querySelectorAll('.verify-input, .verify-btn, .action-btn').forEach(el => {
-        el.addEventListener('contextmenu', (e) => e.preventDefault());
+            originalConsole[method].apply(console, args);
+        };
     });
-
-    console.log(
-        '%c⚠️ WARNING',
-        'color: #ff4757; font-size: 24px; font-weight: bold;'
-    );
-    console.log(
-        '%cManipulating this page will not bypass verification. All steps are cryptographically validated.',
-        'color: #ffa502; font-size: 14px;'
-    );
-});
+    
+    // Disable right-click context menu on buttons
+    document.addEventListener('contextmenu', (e) => {
+        if (e.target.closest('.step-btn, .unlock-btn')) {
+            e.preventDefault();
+        }
+    });
+})();
