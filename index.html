@@ -19,21 +19,21 @@
             --glass-bg: rgba(255, 255, 255, 0.03);
             --glass-border: rgba(255, 255, 255, 0.08);
             --text-primary: #ffffff;
-            --text-secondary: #8b8b9e;
-            --accent-red: #ff3b3b;
-            --accent-blue: #5865f2;
-            --accent-green: #00d26a;
-            --accent-gold: #ffd700;
-            --glow-red: rgba(255, 59, 59, 0.4);
-            --glow-blue: rgba(88, 101, 242, 0.4);
-            --glow-green: rgba(0, 210, 106, 0.4);
-            --glow-gold: rgba(255, 215, 0, 0.5);
+            --text-secondary: rgba(255, 255, 255, 0.6);
+            --accent-youtube: #ff0033;
+            --accent-discord: #5865F2;
+            --accent-success: #00ff88;
+            --accent-glow: #00ff88;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-success: linear-gradient(135deg, #00ff88 0%, #00d4ff 100%);
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background: var(--bg-primary);
             min-height: 100vh;
+            color: var(--text-primary);
             overflow-x: hidden;
             position: relative;
         }
@@ -56,44 +56,24 @@
             top: -25%;
             left: -25%;
             background: 
-                radial-gradient(circle at 20% 80%, rgba(255, 59, 59, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 80% 20%, rgba(88, 101, 242, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 40% 40%, rgba(0, 210, 106, 0.05) 0%, transparent 30%);
+                radial-gradient(ellipse at 20% 20%, rgba(102, 126, 234, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(118, 75, 162, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 40% 60%, rgba(240, 147, 251, 0.1) 0%, transparent 40%);
             animation: bgMove 20s ease-in-out infinite;
         }
 
         @keyframes bgMove {
             0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            33% { transform: translate(2%, 2%) rotate(1deg); }
-            66% { transform: translate(-2%, 1%) rotate(-1deg); }
-        }
-
-        .grid-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
-            background-size: 50px 50px;
-            animation: gridMove 30s linear infinite;
-        }
-
-        @keyframes gridMove {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+            25% { transform: translate(2%, 2%) rotate(1deg); }
+            50% { transform: translate(-1%, 3%) rotate(-1deg); }
+            75% { transform: translate(3%, -2%) rotate(0.5deg); }
         }
 
         /* Floating Particles */
         .particles {
             position: absolute;
-            top: 0;
-            left: 0;
             width: 100%;
             height: 100%;
-            overflow: hidden;
         }
 
         .particle {
@@ -102,10 +82,10 @@
             height: 4px;
             background: rgba(255, 255, 255, 0.1);
             border-radius: 50%;
-            animation: particleFloat 15s infinite;
+            animation: float 15s infinite;
         }
 
-        @keyframes particleFloat {
+        @keyframes float {
             0%, 100% {
                 transform: translateY(100vh) scale(0);
                 opacity: 0;
@@ -126,111 +106,69 @@
         .container {
             position: relative;
             z-index: 1;
-            max-width: 500px;
-            margin: 0 auto;
-            padding: 40px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            align-items: center;
             justify-content: center;
+            padding: 40px 20px;
         }
 
         /* Header */
         .header {
             text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .logo-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 20px;
+            margin-bottom: 50px;
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            background: linear-gradient(135deg, var(--accent-red), var(--accent-blue));
-            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            font-weight: 800;
-            color: white;
-            position: relative;
-            z-index: 1;
-            animation: logoPulse 3s ease-in-out infinite;
+            gap: 10px;
         }
 
-        .logo::before {
+        .logo::before, .logo::after {
             content: '';
-            position: absolute;
-            inset: -3px;
-            background: linear-gradient(135deg, var(--accent-red), var(--accent-blue));
-            border-radius: 23px;
-            z-index: -1;
-            opacity: 0.5;
-            filter: blur(10px);
-            animation: logoGlow 3s ease-in-out infinite;
+            width: 30px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--text-secondary));
         }
 
-        @keyframes logoPulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-
-        @keyframes logoGlow {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 0.6; transform: scale(1.1); }
+        .logo::after {
+            background: linear-gradient(90deg, var(--text-secondary), transparent);
         }
 
         .title {
-            font-size: 28px;
-            font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 8px;
-            letter-spacing: -0.5px;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 15px;
+            line-height: 1.2;
         }
 
         .subtitle {
-            font-size: 14px;
+            font-size: 1rem;
             color: var(--text-secondary);
             font-weight: 400;
+            max-width: 400px;
+            margin: 0 auto;
+            line-height: 1.6;
         }
 
-        /* Glass Card */
-        .card {
-            background: var(--glass-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--glass-border);
-            border-radius: 24px;
-            padding: 32px;
-            margin-bottom: 24px;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.3s ease;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-        }
-
-        .card:hover {
-            border-color: rgba(255, 255, 255, 0.12);
-            transform: translateY(-2px);
-        }
-
-        /* Progress Section */
-        .progress-section {
-            margin-bottom: 28px;
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            max-width: 500px;
+            margin-bottom: 40px;
         }
 
         .progress-header {
@@ -240,51 +178,49 @@
             margin-bottom: 12px;
         }
 
-        .progress-title {
+        .progress-label {
             font-size: 13px;
-            font-weight: 600;
             color: var(--text-secondary);
-            text-transform: uppercase;
-            letter-spacing: 1px;
+            font-weight: 500;
         }
 
         .progress-count {
             font-size: 13px;
+            color: var(--accent-success);
             font-weight: 600;
-            color: var(--text-primary);
         }
 
         .progress-bar {
+            width: 100%;
             height: 6px;
-            background: rgba(255, 255, 255, 0.05);
+            background: var(--glass-bg);
             border-radius: 10px;
             overflow: hidden;
-            position: relative;
+            border: 1px solid var(--glass-border);
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent-red), var(--accent-blue));
+            background: var(--gradient-success);
             border-radius: 10px;
-            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
+            transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.5);
         }
 
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            width: 100px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: progressShine 2s infinite;
-        }
-
-        @keyframes progressShine {
-            0% { transform: translateX(-100px); }
-            100% { transform: translateX(100%); }
+        /* Main Card */
+        .main-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 
+                0 25px 50px -12px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
         /* Task Items */
@@ -295,15 +231,15 @@
         }
 
         .task-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             align-items: center;
             gap: 16px;
-            padding: 18px 20px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 16px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
         }
@@ -312,58 +248,61 @@
             content: '';
             position: absolute;
             top: 0;
-            left: -100%;
+            left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
-            transition: left 0.5s ease;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
         }
 
         .task-item:hover::before {
-            left: 100%;
+            opacity: 1;
         }
 
         .task-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.1);
-            transform: translateX(4px);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .task-item.completed {
-            border-color: rgba(0, 210, 106, 0.3);
-            background: rgba(0, 210, 106, 0.05);
+            border-color: rgba(0, 255, 136, 0.3);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .task-item.completed .task-icon {
+            background: var(--accent-success);
+            box-shadow: 0 0 30px rgba(0, 255, 136, 0.4);
         }
 
         .task-item.verifying {
-            border-color: rgba(255, 215, 0, 0.3);
-            background: rgba(255, 215, 0, 0.05);
             pointer-events: none;
+            opacity: 0.7;
         }
 
         .task-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
+            width: 50px;
+            height: 50px;
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 20px;
+            color: white;
             flex-shrink: 0;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            position: relative;
         }
 
         .task-icon.youtube {
-            background: linear-gradient(135deg, #ff0000, #cc0000);
-            box-shadow: 0 4px 15px rgba(255, 0, 0, 0.2);
+            background: linear-gradient(135deg, #ff0033 0%, #cc0029 100%);
+            box-shadow: 0 4px 20px rgba(255, 0, 51, 0.3);
         }
 
         .task-icon.discord {
-            background: linear-gradient(135deg, #5865f2, #4752c4);
-            box-shadow: 0 4px 15px rgba(88, 101, 242, 0.2);
-        }
-
-        .task-item:hover .task-icon {
-            transform: scale(1.05);
+            background: linear-gradient(135deg, #5865F2 0%, #4752c4 100%);
+            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
         }
 
         .task-content {
@@ -378,138 +317,111 @@
         }
 
         .task-desc {
-            font-size: 12px;
+            font-size: 13px;
             color: var(--text-secondary);
         }
 
         .task-status {
-            width: 28px;
-            height: 28px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
+            border: 2px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            flex-shrink: 0;
         }
 
-        .task-status.pending {
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            color: var(--text-secondary);
+        .task-item.completed .task-status {
+            background: var(--accent-success);
+            border-color: var(--accent-success);
         }
 
-        .task-status.verifying {
-            background: rgba(255, 215, 0, 0.1);
-            border: 2px solid var(--accent-gold);
-            color: var(--accent-gold);
-            animation: pulse 1s infinite;
+        .task-status i {
+            font-size: 14px;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s;
         }
 
-        .task-status.completed {
-            background: var(--accent-green);
-            border: none;
-            color: white;
-            animation: checkmark 0.5s ease;
+        .task-item.completed .task-status i {
+            opacity: 1;
+            transform: scale(1);
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.1); opacity: 0.7; }
+        /* Spinner */
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top-color: var(--accent-success);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
         }
 
-        @keyframes checkmark {
-            0% { transform: scale(0) rotate(-45deg); }
-            50% { transform: scale(1.2) rotate(0deg); }
-            100% { transform: scale(1) rotate(0deg); }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
-        /* Unlock Button */
-        .unlock-section {
-            margin-top: 8px;
-        }
-
-        .unlock-btn {
+        /* Get Script Button */
+        .get-script-btn {
             width: 100%;
-            padding: 18px 24px;
+            margin-top: 30px;
+            padding: 18px 32px;
             border: none;
-            border-radius: 16px;
+            border-radius: 14px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 10px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
         }
 
-        .unlock-btn.locked {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .get-script-btn.locked {
+            background: rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
-            cursor: not-allowed;
+            border: 1px solid var(--glass-border);
+            pointer-events: none;
         }
 
-        .unlock-btn.unlocked {
-            background: linear-gradient(135deg, var(--accent-green), #00b359);
+        .get-script-btn.unlocked {
+            background: var(--gradient-success);
+            color: #000;
             border: none;
-            color: white;
             box-shadow: 
-                0 4px 20px rgba(0, 210, 106, 0.3),
-                0 0 40px rgba(0, 210, 106, 0.2);
-            animation: unlockGlow 2s ease-in-out infinite;
+                0 0 30px rgba(0, 255, 136, 0.4),
+                0 0 60px rgba(0, 255, 136, 0.2);
+            animation: glowPulse 2s ease-in-out infinite;
         }
 
-        .unlock-btn.unlocked:hover {
-            transform: scale(1.02);
-            box-shadow: 
-                0 6px 30px rgba(0, 210, 106, 0.4),
-                0 0 60px rgba(0, 210, 106, 0.3);
-        }
-
-        @keyframes unlockGlow {
-            0%, 100% { 
+        @keyframes glowPulse {
+            0%, 100% {
                 box-shadow: 
-                    0 4px 20px rgba(0, 210, 106, 0.3),
-                    0 0 40px rgba(0, 210, 106, 0.2);
+                    0 0 30px rgba(0, 255, 136, 0.4),
+                    0 0 60px rgba(0, 255, 136, 0.2);
             }
-            50% { 
+            50% {
                 box-shadow: 
-                    0 4px 30px rgba(0, 210, 106, 0.5),
-                    0 0 60px rgba(0, 210, 106, 0.4);
+                    0 0 40px rgba(0, 255, 136, 0.6),
+                    0 0 80px rgba(0, 255, 136, 0.3);
             }
         }
 
-        .unlock-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s ease;
+        .get-script-btn.unlocked:hover {
+            transform: translateY(-3px);
+            box-shadow: 
+                0 0 50px rgba(0, 255, 136, 0.5),
+                0 0 100px rgba(0, 255, 136, 0.3);
         }
 
-        .unlock-btn.unlocked:hover::before {
-            left: 100%;
-        }
-
-        .lock-icon {
+        .get-script-btn i {
             font-size: 18px;
-            transition: all 0.3s ease;
-        }
-
-        .unlock-btn.unlocked .lock-icon {
-            animation: iconBounce 0.5s ease;
-        }
-
-        @keyframes iconBounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
         }
 
         /* Verification Modal */
@@ -521,13 +433,14 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(10px);
+            z-index: 1000;
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
+            padding: 20px;
         }
 
         .modal-overlay.active {
@@ -539,12 +452,12 @@
             background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
             border-radius: 24px;
-            padding: 32px;
-            max-width: 400px;
-            width: 90%;
-            text-align: center;
+            padding: 40px;
+            max-width: 420px;
+            width: 100%;
             transform: scale(0.9) translateY(20px);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            text-align: center;
         }
 
         .modal-overlay.active .modal {
@@ -552,42 +465,35 @@
         }
 
         .modal-icon {
-            width: 64px;
-            height: 64px;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
             border-radius: 50%;
-            margin: 0 auto 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 28px;
+            font-size: 36px;
         }
 
         .modal-icon.verifying {
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--accent-gold);
-            animation: spin 1s linear infinite;
+            background: linear-gradient(135deg, rgba(0, 212, 255, 0.2), rgba(0, 255, 136, 0.2));
+            color: var(--accent-success);
         }
 
         .modal-icon.success {
-            background: rgba(0, 210, 106, 0.1);
-            color: var(--accent-green);
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-success);
         }
 
         .modal-icon.error {
-            background: rgba(255, 59, 59, 0.1);
-            color: var(--accent-red);
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+            background: rgba(255, 0, 51, 0.2);
+            color: var(--accent-youtube);
         }
 
         .modal-title {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .modal-desc {
@@ -597,51 +503,105 @@
             margin-bottom: 24px;
         }
 
+        .modal-timer {
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--accent-success);
+            margin-bottom: 16px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .modal-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 24px;
+            text-align: left;
+        }
+
+        .modal-step {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .modal-step.active {
+            color: var(--text-primary);
+            background: rgba(0, 255, 136, 0.05);
+        }
+
+        .modal-step.completed {
+            color: var(--accent-success);
+        }
+
+        .modal-step i {
+            width: 24px;
+            font-size: 16px;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 16px;
+            text-align: center;
+            letter-spacing: 8px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: var(--accent-success);
+            box-shadow: 0 0 20px rgba(0, 255, 136, 0.2);
+        }
+
         .modal-btn {
-            padding: 14px 32px;
+            width: 100%;
+            padding: 16px;
             border: none;
             border-radius: 12px;
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s;
         }
 
         .modal-btn.primary {
-            background: linear-gradient(135deg, var(--accent-blue), #4752c4);
-            color: white;
+            background: var(--gradient-success);
+            color: #000;
         }
 
         .modal-btn.primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 4px 20px rgba(88, 101, 242, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 255, 136, 0.3);
         }
 
         .modal-btn.secondary {
             background: rgba(255, 255, 255, 0.05);
             color: var(--text-secondary);
-            margin-left: 12px;
+            margin-top: 12px;
         }
 
-        .modal-btn.secondary:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Timer */
-        .timer-display {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-gold);
-            margin: 16px 0;
-            font-variant-numeric: tabular-nums;
+        .modal-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
         }
 
         /* Footer */
         .footer {
+            margin-top: 40px;
             text-align: center;
-            margin-top: 32px;
-            padding-top: 24px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .footer-text {
@@ -650,139 +610,111 @@
         }
 
         .footer-link {
-            color: var(--accent-blue);
+            color: var(--accent-success);
             text-decoration: none;
-            transition: color 0.3s ease;
+            transition: opacity 0.3s;
         }
 
         .footer-link:hover {
-            color: #7289da;
+            opacity: 0.8;
         }
 
-        /* Security Badge */
-        .security-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 16px;
-            background: rgba(0, 210, 106, 0.1);
-            border: 1px solid rgba(0, 210, 106, 0.2);
-            border-radius: 20px;
-            font-size: 11px;
-            color: var(--accent-green);
-            margin-top: 16px;
-        }
-
-        .security-badge i {
-            font-size: 10px;
-        }
-
-        /* Toast Notification */
-        .toast {
+        /* Toast Notifications */
+        .toast-container {
             position: fixed;
             bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(100px);
+            right: 30px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .toast {
             background: var(--bg-secondary);
             border: 1px solid var(--glass-border);
-            padding: 16px 24px;
             border-radius: 12px;
+            padding: 16px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
-            z-index: 1001;
-            opacity: 0;
-            transition: all 0.3s ease;
+            min-width: 300px;
+            transform: translateX(120%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
         .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .toast.error {
+            border-color: rgba(255, 0, 51, 0.3);
         }
 
         .toast-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 16px;
+        }
+
+        .toast.success .toast-icon {
+            background: rgba(0, 255, 136, 0.2);
+            color: var(--accent-success);
+        }
+
+        .toast.error .toast-icon {
+            background: rgba(255, 0, 51, 0.2);
+            color: var(--accent-youtube);
+        }
+
+        .toast-content {
+            flex: 1;
+        }
+
+        .toast-title {
             font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
         }
 
-        .toast-icon.success {
-            background: rgba(0, 210, 106, 0.1);
-            color: var(--accent-green);
-        }
-
-        .toast-icon.error {
-            background: rgba(255, 59, 59, 0.1);
-            color: var(--accent-red);
-        }
-
-        .toast-icon.warning {
-            background: rgba(255, 215, 0, 0.1);
-            color: var(--accent-gold);
-        }
-
-        .toast-text {
-            font-size: 13px;
-            color: var(--text-primary);
+        .toast-message {
+            font-size: 12px;
+            color: var(--text-secondary);
         }
 
         /* Responsive */
-        @media (max-width: 480px) {
-            .container {
-                padding: 24px 16px;
-            }
-
-            .card {
+        @media (max-width: 600px) {
+            .main-card {
                 padding: 24px;
-                border-radius: 20px;
-            }
-
-            .title {
-                font-size: 24px;
             }
 
             .task-item {
-                padding: 14px 16px;
+                padding: 16px;
             }
 
             .task-icon {
-                width: 42px;
-                height: 42px;
+                width: 44px;
+                height: 44px;
                 font-size: 18px;
             }
-        }
 
-        /* Confetti Animation */
-        .confetti {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1002;
-        }
-
-        .confetti-piece {
-            position: absolute;
-            width: 10px;
-            height: 10px;
-            top: -20px;
-            animation: confetti-fall 3s linear forwards;
-        }
-
-        @keyframes confetti-fall {
-            0% {
-                transform: translateY(0) rotate(0deg);
-                opacity: 1;
+            .toast-container {
+                left: 20px;
+                right: 20px;
+                bottom: 20px;
             }
-            100% {
-                transform: translateY(100vh) rotate(720deg);
-                opacity: 0;
+
+            .toast {
+                min-width: auto;
             }
         }
     </style>
@@ -791,697 +723,486 @@
     <!-- Background Animation -->
     <div class="bg-animation">
         <div class="bg-gradient"></div>
-        <div class="grid-overlay"></div>
         <div class="particles" id="particles"></div>
     </div>
 
     <!-- Main Container -->
     <div class="container">
-        <!-- Header -->
         <header class="header">
-            <div class="logo-container">
-                <div class="logo">KS</div>
-            </div>
+            <div class="logo">LinkUnlocker</div>
             <h1 class="title">Get KS Rivals Script</h1>
-            <p class="subtitle">Complete all steps to unlock your script</p>
+            <p class="subtitle">Complete all verification steps below to unlock your exclusive script access</p>
         </header>
 
-        <!-- Main Card -->
-        <div class="card">
-            <!-- Progress Section -->
-            <div class="progress-section">
-                <div class="progress-header">
-                    <span class="progress-title">Progress</span>
-                    <span class="progress-count" id="progressCount">0 / 3</span>
-                </div>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
+        <!-- Progress Bar -->
+        <div class="progress-container">
+            <div class="progress-header">
+                <span class="progress-label">Verification Progress</span>
+                <span class="progress-count" id="progressCount">0 / 3 Completed</span>
             </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+        </div>
 
-            <!-- Tasks -->
+        <!-- Main Card -->
+        <div class="main-card">
             <div class="tasks">
                 <!-- YouTube Subscribe -->
-                <div class="task-item" id="task-subscribe" onclick="startTask('subscribe')">
+                <div class="task-item" id="task-subscribe" onclick="handleTask('subscribe')">
                     <div class="task-icon youtube">
                         <i class="fab fa-youtube"></i>
                     </div>
                     <div class="task-content">
                         <div class="task-title">Subscribe to Channel</div>
-                        <div class="task-desc">Subscribe to KS Script YouTube channel</div>
+                        <div class="task-desc">Subscribe to KS Script YouTube Channel</div>
                     </div>
-                    <div class="task-status pending" id="status-subscribe">
-                        <i class="fas fa-arrow-right"></i>
+                    <div class="task-status">
+                        <i class="fas fa-check"></i>
                     </div>
                 </div>
 
                 <!-- YouTube Like -->
-                <div class="task-item" id="task-like" onclick="startTask('like')">
+                <div class="task-item" id="task-like" onclick="handleTask('like')">
                     <div class="task-icon youtube">
-                        <i class="fas fa-thumbs-up"></i>
+                        <i class="fas fa-heart"></i>
                     </div>
                     <div class="task-content">
                         <div class="task-title">Like the Video</div>
-                        <div class="task-desc">Like our showcase video</div>
+                        <div class="task-desc">Watch and like our latest video</div>
                     </div>
-                    <div class="task-status pending" id="status-like">
-                        <i class="fas fa-arrow-right"></i>
+                    <div class="task-status">
+                        <i class="fas fa-check"></i>
                     </div>
                 </div>
 
                 <!-- Discord Join -->
-                <div class="task-item" id="task-discord" onclick="startTask('discord')">
+                <div class="task-item" id="task-discord" onclick="handleTask('discord')">
                     <div class="task-icon discord">
                         <i class="fab fa-discord"></i>
                     </div>
                     <div class="task-content">
                         <div class="task-title">Join Discord Server</div>
-                        <div class="task-desc">Join our community server</div>
+                        <div class="task-desc">Join our community for updates</div>
                     </div>
-                    <div class="task-status pending" id="status-discord">
-                        <i class="fas fa-arrow-right"></i>
+                    <div class="task-status">
+                        <i class="fas fa-check"></i>
                     </div>
                 </div>
             </div>
 
-            <!-- Unlock Button -->
-            <div class="unlock-section">
-                <button class="unlock-btn locked" id="unlockBtn" onclick="handleUnlock()">
-                    <i class="fas fa-lock lock-icon" id="lockIcon"></i>
-                    <span id="unlockText">Complete All Steps</span>
-                </button>
-            </div>
+            <!-- Get Script Button -->
+            <button class="get-script-btn locked" id="getScriptBtn" onclick="getScript()">
+                <i class="fas fa-lock"></i>
+                <span>Complete All Steps to Unlock</span>
+            </button>
         </div>
 
-        <!-- Footer -->
         <footer class="footer">
-            <p class="footer-text">
-                Powered by <a href="#" class="footer-link">KS Script</a>
-            </p>
-            <div class="security-badge">
-                <i class="fas fa-shield-alt"></i>
-                Secure Verification System
-            </div>
+            <p class="footer-text">Protected by advanced verification • <a href="#" class="footer-link">Need help?</a></p>
         </footer>
     </div>
 
     <!-- Verification Modal -->
     <div class="modal-overlay" id="modalOverlay">
-        <div class="modal" id="verificationModal">
-            <div class="modal-icon verifying" id="modalIcon">
-                <i class="fas fa-spinner" id="modalIconInner"></i>
-            </div>
-            <h3 class="modal-title" id="modalTitle">Verifying...</h3>
-            <p class="modal-desc" id="modalDesc">Please complete the action and return to this page.</p>
-            <div class="timer-display" id="timerDisplay" style="display: none;">00:00</div>
-            <div id="modalButtons">
-                <button class="modal-btn secondary" onclick="cancelVerification()">Cancel</button>
-            </div>
+        <div class="modal" id="modal">
+            <!-- Modal content will be dynamically inserted -->
         </div>
     </div>
 
-    <!-- Toast -->
-    <div class="toast" id="toast">
-        <div class="toast-icon success" id="toastIcon">
-            <i class="fas fa-check"></i>
-        </div>
-        <span class="toast-text" id="toastText">Action completed!</span>
-    </div>
-
-    <!-- Confetti Container -->
-    <div class="confetti" id="confetti"></div>
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        // ==================== CONFIGURATION ====================
+        // Configuration
         const CONFIG = {
             urls: {
                 subscribe: 'https://www.youtube.com/@KS_SCRIPT_Owner?sub_confirmation=1',
                 like: 'https://www.youtube.com/shorts/bGm4dt_Isrk',
                 discord: 'https://discord.com/channels/@me',
-                final: 'https://ks-script.github.io/KS.WEB/'
+                script: 'https://ks-script.github.io/KS.WEB/'
             },
             verification: {
-                minTimeAway: {
-                    subscribe: 8000,   // 8 seconds minimum
-                    like: 6000,        // 6 seconds minimum
-                    discord: 10000     // 10 seconds minimum
-                },
-                cooldown: 30000  // 30 seconds cooldown if verification fails
+                minTime: 15, // Minimum seconds before verification can complete
+                codeLength: 6
             }
         };
 
-        // ==================== STATE MANAGEMENT ====================
-        const state = {
+        // State Management
+        let state = {
             tasks: {
-                subscribe: { completed: false, attempts: 0, lastAttempt: 0 },
-                like: { completed: false, attempts: 0, lastAttempt: 0 },
-                discord: { completed: false, attempts: 0, lastAttempt: 0 }
+                subscribe: { completed: false, startTime: null, verified: false },
+                like: { completed: false, startTime: null, verified: false },
+                discord: { completed: false, startTime: null, verified: false }
             },
-            currentTask: null,
-            tabLeftTime: null,
-            verificationInProgress: false,
-            sessionToken: null
+            activeTask: null,
+            sessionId: null
         };
 
-        // ==================== SECURITY ====================
-        // Generate unique session token
-        function generateSessionToken() {
-            const array = new Uint32Array(4);
-            crypto.getRandomValues(array);
-            return Array.from(array, x => x.toString(16)).join('');
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            createParticles();
+            loadState();
+            updateUI();
+            generateSessionId();
+        });
+
+        // Generate unique session
+        function generateSessionId() {
+            state.sessionId = 'KS' + Date.now().toString(36) + Math.random().toString(36).substr(2, 9);
         }
 
-        // Hash function for state verification
-        async function hashState(data) {
-            const encoder = new TextEncoder();
-            const dataBuffer = encoder.encode(JSON.stringify(data) + state.sessionToken);
-            const hashBuffer = await crypto.subtle.digest('SHA-256', dataBuffer);
-            const hashArray = Array.from(new Uint8Array(hashBuffer));
-            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        // Save state with integrity check
-        async function saveState() {
-            const stateData = {
-                tasks: state.tasks,
-                timestamp: Date.now()
-            };
-            const hash = await hashState(stateData);
-            const encrypted = btoa(JSON.stringify({ data: stateData, hash, token: state.sessionToken }));
-            localStorage.setItem('ks_state', encrypted);
-        }
-
-        // Load and verify state
-        async function loadState() {
-            try {
-                const encrypted = localStorage.getItem('ks_state');
-                if (!encrypted) return false;
-
-                const { data, hash, token } = JSON.parse(atob(encrypted));
-                
-                // Verify session token
-                if (token !== state.sessionToken) {
-                    // Different session, verify integrity
-                    state.sessionToken = token;
-                }
-
-                const currentHash = await hashState(data);
-                if (currentHash !== hash) {
-                    // State was tampered with
-                    console.warn('State integrity check failed');
-                    localStorage.removeItem('ks_state');
-                    return false;
-                }
-
-                // Check if state is too old (1 hour)
-                if (Date.now() - data.timestamp > 3600000) {
-                    localStorage.removeItem('ks_state');
-                    return false;
-                }
-
-                state.tasks = data.tasks;
-                return true;
-            } catch (e) {
-                localStorage.removeItem('ks_state');
-                return false;
-            }
-        }
-
-        // ==================== UI UPDATES ====================
-        function updateProgress() {
-            const completed = Object.values(state.tasks).filter(t => t.completed).length;
-            const total = 3;
-            const percentage = (completed / total) * 100;
-
-            document.getElementById('progressCount').textContent = `${completed} / ${total}`;
-            document.getElementById('progressFill').style.width = `${percentage}%`;
-
-            // Update task statuses
-            Object.keys(state.tasks).forEach(taskId => {
-                const task = state.tasks[taskId];
-                const statusEl = document.getElementById(`status-${taskId}`);
-                const taskEl = document.getElementById(`task-${taskId}`);
-
-                if (task.completed) {
-                    statusEl.className = 'task-status completed';
-                    statusEl.innerHTML = '<i class="fas fa-check"></i>';
-                    taskEl.classList.add('completed');
-                    taskEl.classList.remove('verifying');
-                } else if (state.currentTask === taskId && state.verificationInProgress) {
-                    statusEl.className = 'task-status verifying';
-                    statusEl.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-                    taskEl.classList.add('verifying');
-                } else {
-                    statusEl.className = 'task-status pending';
-                    statusEl.innerHTML = '<i class="fas fa-arrow-right"></i>';
-                    taskEl.classList.remove('verifying');
-                }
-            });
-
-            // Update unlock button
-            const unlockBtn = document.getElementById('unlockBtn');
-            const lockIcon = document.getElementById('lockIcon');
-            const unlockText = document.getElementById('unlockText');
-
-            if (completed === total) {
-                unlockBtn.classList.remove('locked');
-                unlockBtn.classList.add('unlocked');
-                lockIcon.className = 'fas fa-unlock lock-icon';
-                unlockText.textContent = 'Get Script Now!';
-                
-                // Show celebration
-                if (!state.celebrationShown) {
-                    state.celebrationShown = true;
-                    showConfetti();
-                    showToast('success', 'All tasks completed! You can now get the script.');
-                }
-            }
-        }
-
-        // ==================== TASK HANDLING ====================
-        function startTask(taskId) {
-            if (state.tasks[taskId].completed) {
-                showToast('success', 'You have already completed this task!');
-                return;
-            }
-
-            if (state.verificationInProgress) {
-                showToast('warning', 'Please complete the current verification first.');
-                return;
-            }
-
-            // Check cooldown
-            const lastAttempt = state.tasks[taskId].lastAttempt;
-            const timeSinceLastAttempt = Date.now() - lastAttempt;
-            
-            if (state.tasks[taskId].attempts >= 3 && timeSinceLastAttempt < CONFIG.verification.cooldown) {
-                const remaining = Math.ceil((CONFIG.verification.cooldown - timeSinceLastAttempt) / 1000);
-                showToast('error', `Too many failed attempts. Please wait ${remaining}s.`);
-                return;
-            }
-
-            // Reset attempts after cooldown
-            if (timeSinceLastAttempt >= CONFIG.verification.cooldown) {
-                state.tasks[taskId].attempts = 0;
-            }
-
-            state.currentTask = taskId;
-            state.verificationInProgress = true;
-            state.tabLeftTime = null;
-
-            // Open the URL
-            window.open(CONFIG.urls[taskId], '_blank');
-
-            // Show verification modal
-            showModal(taskId);
-
-            // Start listening for tab visibility
-            document.addEventListener('visibilitychange', handleVisibilityChange);
-
-            // Update UI
-            updateProgress();
-        }
-
-        function handleVisibilityChange() {
-            if (!state.currentTask || !state.verificationInProgress) return;
-
-            if (document.hidden) {
-                // User left the tab
-                state.tabLeftTime = Date.now();
-            } else {
-                // User returned
-                if (state.tabLeftTime) {
-                    const timeAway = Date.now() - state.tabLeftTime;
-                    const minTime = CONFIG.verification.minTimeAway[state.currentTask];
-
-                    if (timeAway >= minTime) {
-                        // Sufficient time spent - show confirmation
-                        showConfirmationModal();
-                    } else {
-                        // Not enough time
-                        const remaining = Math.ceil((minTime - timeAway) / 1000);
-                        updateModalMessage('warning', 'Action Not Completed', 
-                            `Please spend at least ${remaining} more seconds completing the action.`);
-                        setTimeout(() => {
-                            showModal(state.currentTask);
-                        }, 2000);
-                    }
-                }
-            }
-        }
-
-        // ==================== MODAL HANDLING ====================
-        function showModal(taskId) {
-            const taskNames = {
-                subscribe: 'subscribing to the channel',
-                like: 'liking the video',
-                discord: 'joining the Discord server'
-            };
-
-            const modal = document.getElementById('modalOverlay');
-            const icon = document.getElementById('modalIcon');
-            const iconInner = document.getElementById('modalIconInner');
-            const title = document.getElementById('modalTitle');
-            const desc = document.getElementById('modalDesc');
-            const timer = document.getElementById('timerDisplay');
-            const buttons = document.getElementById('modalButtons');
-
-            icon.className = 'modal-icon verifying';
-            iconInner.className = 'fas fa-external-link-alt';
-            title.textContent = 'Waiting for Action...';
-            desc.textContent = `Complete ${taskNames[taskId]} in the new tab, then return here.`;
-            timer.style.display = 'none';
-            buttons.innerHTML = '<button class="modal-btn secondary" onclick="cancelVerification()">Cancel</button>';
-
-            modal.classList.add('active');
-        }
-
-        function showConfirmationModal() {
-            const taskId = state.currentTask;
-            const taskNames = {
-                subscribe: 'subscribed to the channel',
-                like: 'liked the video',
-                discord: 'joined the Discord server'
-            };
-
-            const icon = document.getElementById('modalIcon');
-            const iconInner = document.getElementById('modalIconInner');
-            const title = document.getElementById('modalTitle');
-            const desc = document.getElementById('modalDesc');
-            const timer = document.getElementById('timerDisplay');
-            const buttons = document.getElementById('modalButtons');
-
-            icon.className = 'modal-icon verifying';
-            iconInner.className = 'fas fa-question';
-            title.textContent = 'Confirm Action';
-            desc.textContent = `Did you ${taskNames[taskId]}?`;
-            timer.style.display = 'none';
-
-            buttons.innerHTML = `
-                <button class="modal-btn primary" onclick="confirmAction(true)">Yes, I did!</button>
-                <button class="modal-btn secondary" onclick="confirmAction(false)">Not yet</button>
-            `;
-        }
-
-        async function confirmAction(confirmed) {
-            const taskId = state.currentTask;
-
-            if (confirmed) {
-                // Additional verification challenge
-                await performVerificationChallenge(taskId);
-            } else {
-                // User admitted they didn't complete
-                updateModalMessage('warning', 'Please Complete', 
-                    'Please complete the action and return to verify.');
-                setTimeout(() => {
-                    showModal(taskId);
-                }, 2000);
-            }
-        }
-
-        async function performVerificationChallenge(taskId) {
-            const icon = document.getElementById('modalIcon');
-            const iconInner = document.getElementById('modalIconInner');
-            const title = document.getElementById('modalTitle');
-            const desc = document.getElementById('modalDesc');
-            const timer = document.getElementById('timerDisplay');
-            const buttons = document.getElementById('modalButtons');
-
-            icon.className = 'modal-icon verifying';
-            iconInner.className = 'fas fa-spinner fa-spin';
-            title.textContent = 'Verifying...';
-            desc.textContent = 'Please wait while we verify your action.';
-            buttons.innerHTML = '';
-            timer.style.display = 'block';
-
-            // Verification countdown
-            let countdown = 5;
-            timer.textContent = `00:0${countdown}`;
-
-            const interval = setInterval(() => {
-                countdown--;
-                timer.textContent = `00:0${countdown}`;
-            }, 1000);
-
-            // Perform verification steps
-            await new Promise(resolve => setTimeout(resolve, 5000));
-            clearInterval(interval);
-
-            // Calculate verification score
-            const timeSpent = Date.now() - state.tabLeftTime;
-            const minTime = CONFIG.verification.minTimeAway[taskId];
-            const attempts = state.tasks[taskId].attempts;
-
-            // Verification logic
-            let verified = false;
-
-            if (timeSpent >= minTime) {
-                // Additional checks based on behavior
-                const behaviorScore = calculateBehaviorScore(taskId, timeSpent);
-                verified = behaviorScore >= 0.6; // 60% confidence
-            }
-
-            if (verified) {
-                completeTask(taskId);
-            } else {
-                failVerification(taskId);
-            }
-        }
-
-        function calculateBehaviorScore(taskId, timeSpent) {
-            let score = 0;
-            const minTime = CONFIG.verification.minTimeAway[taskId];
-            const optimalTime = minTime * 3;
-
-            // Time score (0-0.4)
-            if (timeSpent >= optimalTime) {
-                score += 0.4;
-            } else if (timeSpent >= minTime) {
-                score += 0.2 + (0.2 * (timeSpent - minTime) / (optimalTime - minTime));
-            }
-
-            // Session freshness (0-0.3)
-            const sessionAge = Date.now() - (state.sessionStartTime || Date.now());
-            if (sessionAge < 300000) { // Less than 5 minutes
-                score += 0.3;
-            } else if (sessionAge < 600000) { // Less than 10 minutes
-                score += 0.2;
-            } else {
-                score += 0.1;
-            }
-
-            // Attempt penalty (0-0.3)
-            const attempts = state.tasks[taskId].attempts;
-            score += Math.max(0, 0.3 - (attempts * 0.1));
-
-            return Math.min(1, score);
-        }
-
-        async function completeTask(taskId) {
-            state.tasks[taskId].completed = true;
-            state.tasks[taskId].completedAt = Date.now();
-            state.verificationInProgress = false;
-            state.currentTask = null;
-
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-
-            updateModalMessage('success', 'Verified!', 'Task completed successfully!');
-            
-            await saveState();
-
-            setTimeout(() => {
-                hideModal();
-                updateProgress();
-                showToast('success', 'Task verified successfully!');
-            }, 1500);
-        }
-
-        async function failVerification(taskId) {
-            state.tasks[taskId].attempts++;
-            state.tasks[taskId].lastAttempt = Date.now();
-            state.verificationInProgress = false;
-            state.currentTask = null;
-
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-
-            updateModalMessage('error', 'Verification Failed', 
-                'We could not verify your action. Please try again.');
-
-            await saveState();
-
-            setTimeout(() => {
-                hideModal();
-                updateProgress();
-                
-                if (state.tasks[taskId].attempts >= 3) {
-                    showToast('error', 'Too many failed attempts. Please wait 30 seconds.');
-                } else {
-                    showToast('error', 'Verification failed. Please try again.');
-                }
-            }, 2000);
-        }
-
-        function updateModalMessage(type, titleText, descText) {
-            const icon = document.getElementById('modalIcon');
-            const iconInner = document.getElementById('modalIconInner');
-            const title = document.getElementById('modalTitle');
-            const desc = document.getElementById('modalDesc');
-            const timer = document.getElementById('timerDisplay');
-
-            timer.style.display = 'none';
-
-            if (type === 'success') {
-                icon.className = 'modal-icon success';
-                iconInner.className = 'fas fa-check';
-            } else if (type === 'error') {
-                icon.className = 'modal-icon error';
-                iconInner.className = 'fas fa-times';
-            } else if (type === 'warning') {
-                icon.className = 'modal-icon verifying';
-                iconInner.className = 'fas fa-exclamation';
-            }
-
-            title.textContent = titleText;
-            desc.textContent = descText;
-        }
-
-        function cancelVerification() {
-            state.verificationInProgress = false;
-            state.currentTask = null;
-            state.tabLeftTime = null;
-            
-            document.removeEventListener('visibilitychange', handleVisibilityChange);
-            
-            hideModal();
-            updateProgress();
-            showToast('warning', 'Verification cancelled.');
-        }
-
-        function hideModal() {
-            document.getElementById('modalOverlay').classList.remove('active');
-        }
-
-        // ==================== UNLOCK HANDLING ====================
-        function handleUnlock() {
-            const completed = Object.values(state.tasks).filter(t => t.completed).length;
-            
-            if (completed < 3) {
-                showToast('error', 'Please complete all tasks first!');
-                return;
-            }
-
-            // Redirect to final URL
-            window.location.href = CONFIG.urls.final;
-        }
-
-        // ==================== TOAST NOTIFICATIONS ====================
-        function showToast(type, message) {
-            const toast = document.getElementById('toast');
-            const icon = document.getElementById('toastIcon');
-            const text = document.getElementById('toastText');
-
-            const icons = {
-                success: 'fa-check',
-                error: 'fa-times',
-                warning: 'fa-exclamation'
-            };
-
-            icon.className = `toast-icon ${type}`;
-            icon.innerHTML = `<i class="fas ${icons[type]}"></i>`;
-            text.textContent = message;
-
-            toast.classList.add('show');
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // ==================== VISUAL EFFECTS ====================
+        // Create floating particles
         function createParticles() {
             const container = document.getElementById('particles');
-            
-            for (let i = 0; i < 30; i++) {
+            for (let i = 0; i < 50; i++) {
                 const particle = document.createElement('div');
                 particle.className = 'particle';
                 particle.style.left = Math.random() * 100 + '%';
                 particle.style.animationDelay = Math.random() * 15 + 's';
-                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                particle.style.animationDuration = (15 + Math.random() * 10) + 's';
                 container.appendChild(particle);
             }
         }
 
-        function showConfetti() {
-            const container = document.getElementById('confetti');
-            const colors = ['#ff3b3b', '#5865f2', '#00d26a', '#ffd700', '#ff69b4'];
+        // Load state from localStorage
+        function loadState() {
+            const saved = localStorage.getItem('ks_linkunlocker_state');
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    // Verify integrity
+                    if (verifyStateIntegrity(parsed)) {
+                        state.tasks = parsed.tasks;
+                    }
+                } catch (e) {
+                    console.log('State reset');
+                }
+            }
+        }
 
-            for (let i = 0; i < 100; i++) {
-                const confetti = document.createElement('div');
-                confetti.className = 'confetti-piece';
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.animationDelay = Math.random() * 0.5 + 's';
-                confetti.style.animationDuration = (2 + Math.random() * 2) + 's';
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                container.appendChild(confetti);
+        // Save state to localStorage
+        function saveState() {
+            const dataToSave = {
+                tasks: state.tasks,
+                timestamp: Date.now(),
+                checksum: generateChecksum(state.tasks)
+            };
+            localStorage.setItem('ks_linkunlocker_state', JSON.stringify(dataToSave));
+        }
+
+        // Generate checksum for integrity
+        function generateChecksum(tasks) {
+            const str = JSON.stringify(tasks) + 'KS_SECRET_2024';
+            let hash = 0;
+            for (let i = 0; i < str.length; i++) {
+                const char = str.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            return hash.toString(36);
+        }
+
+        // Verify state integrity
+        function verifyStateIntegrity(saved) {
+            if (!saved || !saved.tasks || !saved.checksum) return false;
+            const expectedChecksum = generateChecksum(saved.tasks);
+            return saved.checksum === expectedChecksum;
+        }
+
+        // Handle task click
+        function handleTask(taskId) {
+            const task = state.tasks[taskId];
+            
+            if (task.completed) {
+                showToast('Already Completed', 'This step is already verified!', 'success');
+                return;
             }
 
-            setTimeout(() => {
-                container.innerHTML = '';
-            }, 5000);
+            state.activeTask = taskId;
+            
+            // Open external link
+            window.open(CONFIG.urls[taskId], '_blank');
+            
+            // Start verification process
+            task.startTime = Date.now();
+            showVerificationModal(taskId);
         }
 
-        // ==================== ANTI-TAMPER ====================
-        function setupAntiTamper() {
-            // Disable right-click context menu on sensitive elements
-            document.addEventListener('contextmenu', (e) => {
-                if (e.target.closest('.task-item') || e.target.closest('.unlock-btn')) {
-                    e.preventDefault();
-                }
-            });
+        // Show verification modal
+        function showVerificationModal(taskId) {
+            const modal = document.getElementById('modal');
+            const overlay = document.getElementById('modalOverlay');
+            
+            const taskNames = {
+                subscribe: 'Subscribe',
+                like: 'Like Video',
+                discord: 'Join Discord'
+            };
 
-            // Detect DevTools (basic)
-            let devtoolsOpen = false;
-            const threshold = 160;
-
-            setInterval(() => {
-                const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+            const verificationCode = generateVerificationCode();
+            
+            modal.innerHTML = `
+                <div class="modal-icon verifying">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h2 class="modal-title">Verifying ${taskNames[taskId]}</h2>
+                <p class="modal-desc">Please complete the action in the new tab, then return here to verify.</p>
                 
-                if (widthThreshold || heightThreshold) {
-                    if (!devtoolsOpen) {
-                        devtoolsOpen = true;
-                        console.log('%c⚠️ DevTools Detected', 'font-size: 24px; color: red;');
-                        console.log('%cManipulating the verification system will not work.', 'font-size: 14px;');
-                    }
-                } else {
-                    devtoolsOpen = false;
+                <div class="modal-timer" id="modalTimer">${CONFIG.verification.minTime}</div>
+                
+                <div class="modal-steps">
+                    <div class="modal-step active" id="step1">
+                        <i class="fas fa-external-link-alt"></i>
+                        <span>Complete action in new tab</span>
+                    </div>
+                    <div class="modal-step" id="step2">
+                        <i class="fas fa-clock"></i>
+                        <span>Wait for verification timer</span>
+                    </div>
+                    <div class="modal-step" id="step3">
+                        <i class="fas fa-keyboard"></i>
+                        <span>Enter verification code</span>
+                    </div>
+                </div>
+
+                <p class="modal-desc" style="margin-bottom: 12px; font-size: 12px;">
+                    Your verification code: <strong style="color: var(--accent-success); letter-spacing: 2px;">${verificationCode}</strong>
+                </p>
+                
+                <input type="text" class="modal-input" id="codeInput" placeholder="ENTER CODE" maxlength="6" disabled>
+                
+                <button class="modal-btn primary" id="verifyBtn" onclick="verifyTask('${taskId}', '${verificationCode}')" disabled>
+                    Waiting...
+                </button>
+                <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+            `;
+
+            overlay.classList.add('active');
+            
+            // Start countdown
+            let timeLeft = CONFIG.verification.minTime;
+            const timerEl = document.getElementById('modalTimer');
+            const step1 = document.getElementById('step1');
+            const step2 = document.getElementById('step2');
+            const step3 = document.getElementById('step3');
+            const codeInput = document.getElementById('codeInput');
+            const verifyBtn = document.getElementById('verifyBtn');
+
+            const countdown = setInterval(() => {
+                timeLeft--;
+                timerEl.textContent = timeLeft;
+                
+                if (timeLeft <= 10) {
+                    step1.classList.remove('active');
+                    step1.classList.add('completed');
+                    step2.classList.add('active');
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdown);
+                    timerEl.innerHTML = '<i class="fas fa-check" style="font-size: 36px;"></i>';
+                    step2.classList.remove('active');
+                    step2.classList.add('completed');
+                    step3.classList.add('active');
+                    codeInput.disabled = false;
+                    codeInput.focus();
+                    verifyBtn.disabled = false;
+                    verifyBtn.textContent = 'Verify';
                 }
             }, 1000);
-
-            // Freeze state object
-            Object.freeze(CONFIG);
         }
 
-        // ==================== INITIALIZATION ====================
-        async function init() {
-            state.sessionToken = generateSessionToken();
-            state.sessionStartTime = Date.now();
-
-            // Try to load existing state
-            await loadState();
-
-            // Initialize UI
-            createParticles();
-            updateProgress();
-            setupAntiTamper();
-
-            console.log('%c🔒 LinkUnlocker Security Active', 'font-size: 16px; color: #00d26a;');
+        // Generate verification code
+        function generateVerificationCode() {
+            const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+            let code = '';
+            for (let i = 0; i < CONFIG.verification.codeLength; i++) {
+                code += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return code;
         }
 
-        // Start the application
-        document.addEventListener('DOMContentLoaded', init);
+        // Verify task
+        function verifyTask(taskId, expectedCode) {
+            const codeInput = document.getElementById('codeInput');
+            const enteredCode = codeInput.value.toUpperCase().trim();
+            
+            if (enteredCode !== expectedCode) {
+                codeInput.style.borderColor = 'var(--accent-youtube)';
+                codeInput.style.animation = 'shake 0.5s';
+                showToast('Invalid Code', 'Please enter the correct verification code.', 'error');
+                
+                setTimeout(() => {
+                    codeInput.style.borderColor = 'var(--glass-border)';
+                    codeInput.style.animation = '';
+                }, 500);
+                return;
+            }
+
+            // Verify timing
+            const task = state.tasks[taskId];
+            const elapsed = (Date.now() - task.startTime) / 1000;
+            
+            if (elapsed < CONFIG.verification.minTime) {
+                showToast('Too Fast', 'Please complete the action before verifying.', 'error');
+                return;
+            }
+
+            // Mark as completed
+            task.completed = true;
+            task.verified = true;
+            saveState();
+            
+            closeModal();
+            updateUI();
+            
+            const taskNames = {
+                subscribe: 'Subscription',
+                like: 'Video Like',
+                discord: 'Discord Join'
+            };
+            
+            showToast('Verified!', `${taskNames[taskId]} has been verified successfully.`, 'success');
+            
+            // Check if all complete
+            checkAllComplete();
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('active');
+            state.activeTask = null;
+        }
+
+        // Update UI based on state
+        function updateUI() {
+            const completedCount = Object.values(state.tasks).filter(t => t.completed).length;
+            
+            // Update progress
+            document.getElementById('progressCount').textContent = `${completedCount} / 3 Completed`;
+            document.getElementById('progressFill').style.width = `${(completedCount / 3) * 100}%`;
+            
+            // Update task items
+            Object.keys(state.tasks).forEach(taskId => {
+                const taskEl = document.getElementById(`task-${taskId}`);
+                if (state.tasks[taskId].completed) {
+                    taskEl.classList.add('completed');
+                }
+            });
+            
+            // Update button
+            const btn = document.getElementById('getScriptBtn');
+            if (completedCount === 3) {
+                btn.classList.remove('locked');
+                btn.classList.add('unlocked');
+                btn.innerHTML = '<i class="fas fa-unlock"></i><span>Get Your Script</span>';
+            }
+        }
+
+        // Check if all tasks complete
+        function checkAllComplete() {
+            const allComplete = Object.values(state.tasks).every(t => t.completed);
+            if (allComplete) {
+                setTimeout(() => {
+                    showToast('🎉 All Steps Complete!', 'Click the button below to get your script.', 'success');
+                }, 500);
+            }
+        }
+
+        // Get script
+        function getScript() {
+            const allComplete = Object.values(state.tasks).every(t => t.completed);
+            if (!allComplete) {
+                showToast('Not Ready', 'Please complete all verification steps first.', 'error');
+                return;
+            }
+            
+            // Add confetti effect
+            createConfetti();
+            
+            setTimeout(() => {
+                window.location.href = CONFIG.urls.script;
+            }, 1500);
+        }
+
+        // Create confetti
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: fixed;
+                    width: ${Math.random() * 10 + 5}px;
+                    height: ${Math.random() * 10 + 5}px;
+                    background: hsl(${Math.random() * 360}, 100%, 50%);
+                    left: ${Math.random() * 100}vw;
+                    top: -20px;
+                    z-index: 9999;
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                    animation: confettiFall ${Math.random() * 2 + 2}s linear forwards;
+                `;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 4000);
+            }
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiFall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                25% { transform: translateX(-10px); }
+                75% { transform: translateX(10px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Show toast notification
+        function showToast(title, message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <div class="toast-icon">
+                    <i class="fas fa-${type === 'success' ? 'check' : 'times'}"></i>
+                </div>
+                <div class="toast-content">
+                    <div class="toast-title">${title}</div>
+                    <div class="toast-message">${message}</div>
+                </div>
+            `;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 10);
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 400);
+            }, 4000);
+        }
+
+        // Prevent dev tools bypass (basic)
+        document.addEventListener('contextmenu', e => e.preventDefault());
+        document.addEventListener('keydown', e => {
+            if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
+                e.preventDefault();
+            }
+        });
+
+        // Click outside modal to close
+        document.getElementById('modalOverlay').addEventListener('click', (e) => {
+            if (e.target === document.getElementById('modalOverlay')) {
+                closeModal();
+            }
+        });
     </script>
 </body>
 </html>
