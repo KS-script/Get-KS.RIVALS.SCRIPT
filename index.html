@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Get KS Rivals Script | LinkUnlocker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,377 +14,147 @@
         }
 
         :root {
-            --glass-bg: rgba(255, 255, 255, 0.05);
-            --glass-bg-hover: rgba(255, 255, 255, 0.08);
-            --glass-border: rgba(255, 255, 255, 0.1);
-            --glass-border-hover: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            --glass-blur: blur(20px);
-            
-            --primary-black: #0a0a0f;
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
             --text-primary: #ffffff;
             --text-secondary: rgba(255, 255, 255, 0.6);
-            --text-muted: rgba(255, 255, 255, 0.4);
-            
-            --accent-green: #00ff88;
-            --accent-green-glow: rgba(0, 255, 136, 0.4);
-            --accent-red: #ff3366;
-            --accent-blue: #5865F2;
-            --accent-purple: #a855f7;
-            --accent-cyan: #06b6d4;
-        }
-
-        html, body {
-            height: 100%;
+            --accent: #ffffff;
+            --success: #00ff88;
+            --youtube: #ff0033;
+            --discord: #5865F2;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: var(--primary-black);
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
             min-height: 100vh;
-            overflow-x: hidden;
             color: var(--text-primary);
-            position: relative;
+            overflow-x: hidden;
         }
 
-        /* ============================================
-           ANIMATED BACKGROUND FOR GLASSMORPHISM
-           ============================================ */
-        .bg-container {
+        /* Animated Background */
+        .bg-animation {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: -1;
+            z-index: 0;
             overflow: hidden;
-            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #0a0a0f 100%);
         }
 
-        /* Gradient Mesh Background */
-        .gradient-mesh {
+        .bg-animation::before {
+            content: '';
             position: absolute;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(at 80% 20%, rgba(168, 85, 247, 0.15) 0px, transparent 50%),
-                radial-gradient(at 20% 80%, rgba(6, 182, 212, 0.15) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, rgba(0, 255, 136, 0.05) 0px, transparent 50%),
-                radial-gradient(at 0% 0%, rgba(88, 101, 242, 0.1) 0px, transparent 40%),
-                radial-gradient(at 100% 100%, rgba(255, 51, 102, 0.1) 0px, transparent 40%);
-        }
-
-        /* Animated Orbs */
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            opacity: 0.6;
-            animation: orbFloat 20s ease-in-out infinite;
-        }
-
-        .orb-1 {
-            width: 500px;
-            height: 500px;
-            background: linear-gradient(135deg, rgba(168, 85, 247, 0.3), rgba(6, 182, 212, 0.2));
-            top: -150px;
-            right: -100px;
-            animation-delay: 0s;
-        }
-
-        .orb-2 {
-            width: 400px;
-            height: 400px;
-            background: linear-gradient(135deg, rgba(0, 255, 136, 0.2), rgba(88, 101, 242, 0.2));
-            bottom: -100px;
-            left: -100px;
-            animation-delay: -7s;
-        }
-
-        .orb-3 {
-            width: 300px;
-            height: 300px;
-            background: linear-gradient(135deg, rgba(255, 51, 102, 0.2), rgba(168, 85, 247, 0.2));
-            top: 40%;
-            left: 30%;
-            animation-delay: -14s;
-        }
-
-        .orb-4 {
-            width: 250px;
-            height: 250px;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(0, 255, 136, 0.15));
-            top: 20%;
-            left: 60%;
-            animation-delay: -5s;
-        }
-
-        @keyframes orbFloat {
-            0%, 100% { 
-                transform: translate(0, 0) rotate(0deg) scale(1); 
-            }
-            25% { 
-                transform: translate(30px, -40px) rotate(90deg) scale(1.1); 
-            }
-            50% { 
-                transform: translate(-20px, 20px) rotate(180deg) scale(0.95); 
-            }
-            75% { 
-                transform: translate(40px, 30px) rotate(270deg) scale(1.05); 
-            }
-        }
-
-        /* Animated Grid */
-        .grid-overlay {
-            position: absolute;
-            width: 200%;
-            height: 200%;
             top: -50%;
             left: -50%;
-            background-image: 
-                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-            background-size: 60px 60px;
-            transform: perspective(500px) rotateX(60deg);
-            animation: gridScroll 20s linear infinite;
-        }
-
-        @keyframes gridScroll {
-            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-            100% { transform: perspective(500px) rotateX(60deg) translateY(60px); }
-        }
-
-        /* Noise Texture */
-        .noise-overlay {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            opacity: 0.03;
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-        }
-
-        /* Light Rays */
-        .light-rays {
-            position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 200%;
+            height: 200%;
             background: 
-                conic-gradient(from 180deg at 50% 50%, transparent 0deg, rgba(255,255,255,0.02) 60deg, transparent 120deg);
-            animation: rayRotate 30s linear infinite;
+                radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.015) 0%, transparent 30%);
+            animation: bgMove 20s ease-in-out infinite;
         }
 
-        @keyframes rayRotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        @keyframes bgMove {
+            0%, 100% { transform: translate(0, 0) rotate(0deg); }
+            33% { transform: translate(2%, 2%) rotate(1deg); }
+            66% { transform: translate(-1%, 1%) rotate(-1deg); }
         }
 
-        /* ============================================
-           MAIN CONTAINER
-           ============================================ */
-        .main-wrapper {
+        .grid-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 520px;
+            margin: 0 auto;
+            padding: 40px 20px;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            justify-content: center;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%);
+            border-radius: 24px;
+            display: flex;
             align-items: center;
             justify-content: center;
-            padding: 40px 20px;
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        .logo i {
+            font-size: 32px;
+            color: var(--text-primary);
             position: relative;
             z-index: 1;
         }
 
-        /* ============================================
-           HEADER
-           ============================================ */
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            animation: fadeSlideDown 0.8s ease-out;
-        }
-
-        @keyframes fadeSlideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .logo-wrapper {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 24px;
-        }
-
-        .logo-box {
-            width: 70px;
-            height: 70px;
-            background: linear-gradient(135deg, #ffffff 0%, #a0a0a0 100%);
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 32px;
-            color: var(--primary-black);
-            position: relative;
-            box-shadow: 
-                0 20px 40px rgba(0, 0, 0, 0.4),
-                0 0 60px rgba(255, 255, 255, 0.1),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            animation: logoPulse 3s ease-in-out infinite;
-        }
-
-        .logo-box::before {
-            content: '';
-            position: absolute;
-            inset: -3px;
-            border-radius: 23px;
-            background: linear-gradient(135deg, rgba(255,255,255,0.5), transparent, rgba(255,255,255,0.2));
-            z-index: -1;
-            opacity: 0.5;
-        }
-
-        @keyframes logoPulse {
-            0%, 100% { 
-                box-shadow: 
-                    0 20px 40px rgba(0, 0, 0, 0.4),
-                    0 0 60px rgba(255, 255, 255, 0.1);
-            }
-            50% { 
-                box-shadow: 
-                    0 20px 50px rgba(0, 0, 0, 0.5),
-                    0 0 80px rgba(255, 255, 255, 0.2);
-            }
-        }
-
-        .main-title {
-            font-size: 48px;
-            font-weight: 900;
-            letter-spacing: -2px;
-            line-height: 1.1;
-            background: linear-gradient(135deg, #ffffff 0%, #888888 50%, #ffffff 100%);
-            background-size: 200% auto;
+        .title {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.7) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: shimmerText 3s ease-in-out infinite;
-            margin-bottom: 12px;
-        }
-
-        @keyframes shimmerText {
-            0%, 100% { background-position: 0% center; }
-            50% { background-position: 100% center; }
         }
 
         .subtitle {
-            font-size: 16px;
             color: var(--text-secondary);
-            font-weight: 400;
-            letter-spacing: 0.5px;
-        }
-
-        /* ============================================
-           GLASSMORPHISM CARD
-           ============================================ */
-        .glass-card {
-            width: 100%;
-            max-width: 500px;
-            background: var(--glass-bg);
-            backdrop-filter: var(--glass-blur);
-            -webkit-backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--glass-border);
-            border-radius: 28px;
-            padding: 36px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: var(--glass-shadow);
-            animation: fadeSlideUp 0.8s ease-out 0.2s both;
-        }
-
-        @keyframes fadeSlideUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Card Inner Glow */
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.3), 
-                transparent
-            );
-        }
-
-        .glass-card::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: radial-gradient(
-                ellipse at 50% 0%,
-                rgba(255, 255, 255, 0.05) 0%,
-                transparent 60%
-            );
-            pointer-events: none;
-        }
-
-        /* ============================================
-           SECURITY BADGE
-           ============================================ */
-        .security-badge {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            padding: 10px 20px;
-            background: rgba(0, 255, 136, 0.1);
-            border: 1px solid rgba(0, 255, 136, 0.2);
-            border-radius: 100px;
-            margin-bottom: 28px;
-            font-size: 12px;
-            font-weight: 600;
-            color: var(--accent-green);
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-
-        .security-badge i {
             font-size: 14px;
+            font-weight: 400;
+            line-height: 1.6;
         }
 
-        .security-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--accent-green);
-            border-radius: 50%;
-            animation: securityPulse 2s ease-in-out infinite;
-        }
-
-        @keyframes securityPulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(0.8); }
-        }
-
-        /* ============================================
-           PROGRESS SECTION
-           ============================================ */
+        /* Progress Section */
         .progress-section {
             margin-bottom: 32px;
         }
@@ -393,78 +163,54 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
         }
 
         .progress-label {
-            font-size: 13px;
-            font-weight: 600;
+            font-size: 12px;
+            font-weight: 500;
             color: var(--text-secondary);
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
-        .progress-value {
-            font-size: 14px;
-            font-weight: 700;
+        .progress-count {
+            font-size: 13px;
+            font-weight: 600;
             color: var(--text-primary);
         }
 
-        .progress-track {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.08);
-            border-radius: 4px;
+        .progress-bar {
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
             overflow: hidden;
-            position: relative;
         }
 
         .progress-fill {
             height: 100%;
             width: 0%;
-            background: linear-gradient(90deg, var(--accent-green), #00cc6a);
-            border-radius: 4px;
+            background: linear-gradient(90deg, #fff, rgba(255,255,255,0.8));
+            border-radius: 2px;
             transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
         }
 
-        .progress-fill::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: progressShine 2s ease-in-out infinite;
-        }
-
-        @keyframes progressShine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
-        }
-
-        /* ============================================
-           TASK CARDS
-           ============================================ */
-        .tasks-container {
+        /* Task Cards */
+        .tasks {
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            margin-bottom: 28px;
+            gap: 12px;
+            margin-bottom: 32px;
         }
 
         .task-card {
             background: var(--glass-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
             border: 1px solid var(--glass-border);
-            border-radius: 18px;
+            border-radius: 16px;
             padding: 20px;
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            cursor: pointer;
+            backdrop-filter: blur(20px);
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
             position: relative;
             overflow: hidden;
         }
@@ -475,94 +221,69 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
-        }
-
-        .task-card::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.03) 50%, transparent 60%);
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 50%);
             opacity: 0;
             transition: opacity 0.3s;
         }
 
         .task-card:hover {
-            transform: translateY(-3px);
-            background: var(--glass-bg-hover);
-            border-color: var(--glass-border-hover);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
         }
 
-        .task-card:hover::after {
+        .task-card:hover::before {
             opacity: 1;
         }
 
-        .task-card:active {
-            transform: translateY(-1px);
-        }
-
-        /* Task Card States */
         .task-card.completed {
             border-color: rgba(0, 255, 136, 0.3);
-            background: rgba(0, 255, 136, 0.08);
+            background: rgba(0, 255, 136, 0.05);
         }
 
-        .task-card.completed .task-icon-wrapper {
-            background: var(--accent-green);
-            box-shadow: 0 0 30px var(--accent-green-glow);
-        }
-
-        .task-card.completed .task-icon-wrapper i {
-            color: var(--primary-black);
-        }
-
-        .task-card.processing {
+        .task-card.verifying {
             pointer-events: none;
             opacity: 0.7;
         }
 
-        .task-card.locked {
-            opacity: 0.5;
-            pointer-events: none;
+        .task-content {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            position: relative;
+            z-index: 1;
         }
 
-        /* Task Icon */
-        .task-icon-wrapper {
-            width: 54px;
-            height: 54px;
-            border-radius: 16px;
+        .task-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 20px;
             flex-shrink: 0;
             transition: all 0.3s;
-            position: relative;
         }
 
-        .task-icon-wrapper.youtube {
+        .task-icon.youtube {
             background: rgba(255, 0, 51, 0.15);
+            color: var(--youtube);
         }
 
-        .task-icon-wrapper.youtube i {
-            color: #ff0033;
-            font-size: 24px;
-        }
-
-        .task-icon-wrapper.discord {
+        .task-icon.discord {
             background: rgba(88, 101, 242, 0.15);
+            color: var(--discord);
         }
 
-        .task-icon-wrapper.discord i {
-            color: #5865F2;
-            font-size: 24px;
+        .task-card.completed .task-icon {
+            background: rgba(0, 255, 136, 0.15);
+            color: var(--success);
         }
 
-        /* Task Content */
         .task-info {
             flex: 1;
-            min-width: 0;
         }
 
         .task-title {
@@ -572,194 +293,229 @@
             color: var(--text-primary);
         }
 
-        .task-desc {
+        .task-description {
             font-size: 13px;
             color: var(--text-secondary);
         }
 
-        /* Task Status */
-        .task-status-wrapper {
-            flex-shrink: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .status-circle {
-            width: 30px;
-            height: 30px;
+        .task-status {
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
-            border: 2px solid rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.2);
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
+            flex-shrink: 0;
         }
 
-        .task-card.completed .status-circle {
-            background: var(--accent-green);
-            border-color: var(--accent-green);
+        .task-card.completed .task-status {
+            background: var(--success);
+            border-color: var(--success);
         }
 
-        .status-circle i {
+        .task-status i {
             font-size: 12px;
-            color: var(--primary-black);
+            color: #000;
             opacity: 0;
             transform: scale(0);
-            transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: all 0.3s;
         }
 
-        .task-card.completed .status-circle i {
+        .task-card.completed .task-status i {
             opacity: 1;
             transform: scale(1);
         }
 
-        /* Loading Spinner */
-        .loading-spinner {
-            width: 24px;
-            height: 24px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-top-color: var(--text-primary);
+        .task-card.verifying .task-status {
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .task-card.verifying .task-status::after {
+            content: '';
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: #fff;
             border-radius: 50%;
-            animation: spinAnimation 0.8s linear infinite;
-            display: none;
+            animation: spin 0.8s linear infinite;
         }
 
-        .task-card.processing .loading-spinner {
-            display: block;
-        }
-
-        .task-card.processing .status-circle {
-            display: none;
-        }
-
-        @keyframes spinAnimation {
+        @keyframes spin {
             to { transform: rotate(360deg); }
         }
 
-        /* ============================================
-           UNLOCK BUTTON
-           ============================================ */
-        .unlock-btn {
+        /* Get Script Button */
+        .get-script-btn {
             width: 100%;
-            padding: 20px 32px;
+            padding: 18px 32px;
             border: none;
-            border-radius: 16px;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
             font-size: 15px;
-            font-weight: 700;
+            font-weight: 600;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
             overflow: hidden;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-            font-family: inherit;
-        }
-
-        .unlock-btn.locked {
             background: rgba(255, 255, 255, 0.05);
-            color: var(--text-muted);
-            cursor: not-allowed;
-            border: 1px solid rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .unlock-btn.unlocked {
-            background: linear-gradient(135deg, #ffffff 0%, #e8e8e8 100%);
-            color: var(--primary-black);
+        .get-script-btn.locked {
+            cursor: not-allowed;
+        }
+
+        .get-script-btn.unlocked {
+            background: linear-gradient(135deg, #fff 0%, #e0e0e0 100%);
+            color: #000;
             border: none;
             box-shadow: 
-                0 10px 40px rgba(255, 255, 255, 0.25),
-                0 0 80px rgba(255, 255, 255, 0.15),
-                inset 0 1px 0 rgba(255, 255, 255, 0.8);
-            animation: buttonGlow 2s ease-in-out infinite;
+                0 0 30px rgba(255, 255, 255, 0.3),
+                0 0 60px rgba(255, 255, 255, 0.1);
+            animation: pulse-glow 2s ease-in-out infinite;
         }
 
-        @keyframes buttonGlow {
-            0%, 100% {
+        @keyframes pulse-glow {
+            0%, 100% { 
                 box-shadow: 
-                    0 10px 40px rgba(255, 255, 255, 0.25),
-                    0 0 80px rgba(255, 255, 255, 0.15);
+                    0 0 30px rgba(255, 255, 255, 0.3),
+                    0 0 60px rgba(255, 255, 255, 0.1);
             }
-            50% {
+            50% { 
                 box-shadow: 
-                    0 15px 60px rgba(255, 255, 255, 0.35),
-                    0 0 120px rgba(255, 255, 255, 0.25);
+                    0 0 40px rgba(255, 255, 255, 0.5),
+                    0 0 80px rgba(255, 255, 255, 0.2);
             }
         }
 
-        .unlock-btn.unlocked:hover {
-            transform: translateY(-4px) scale(1.02);
+        .get-script-btn.unlocked:hover {
+            transform: translateY(-2px) scale(1.02);
             box-shadow: 
-                0 20px 60px rgba(255, 255, 255, 0.35),
-                0 0 100px rgba(255, 255, 255, 0.25);
+                0 0 50px rgba(255, 255, 255, 0.5),
+                0 0 100px rgba(255, 255, 255, 0.2);
         }
 
-        .unlock-btn.unlocked:active {
-            transform: translateY(-2px) scale(1.01);
-        }
-
-        .btn-inner {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            position: relative;
-            z-index: 2;
-        }
-
-        .btn-icon {
-            font-size: 18px;
-            transition: transform 0.3s;
-        }
-
-        .unlock-btn.unlocked .btn-icon {
-            animation: iconBounce 0.6s ease-out;
-        }
-
-        @keyframes iconBounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-
-        /* Shimmer Effect */
-        .unlock-btn.unlocked::before {
+        .get-script-btn.unlocked::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(
-                90deg,
-                transparent,
-                rgba(255, 255, 255, 0.4),
-                transparent
-            );
-            animation: shimmerEffect 2.5s ease-in-out infinite;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: btnShimmer 2s infinite;
         }
 
-        @keyframes shimmerEffect {
-            0% { left: -100%; }
-            100% { left: 100%; }
+        @keyframes btnShimmer {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
         }
 
-        /* ============================================
-           VERIFICATION MODAL (GLASSMORPHISM)
-           ============================================ */
-        .modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+        .btn-content {
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            gap: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .btn-content i {
+            font-size: 16px;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 24px;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .footer-text {
+            font-size: 12px;
+            color: var(--text-secondary);
+        }
+
+        .footer-text a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-weight: 500;
+            transition: opacity 0.3s;
+        }
+
+        .footer-text a:hover {
+            opacity: 0.7;
+        }
+
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(20px);
+            padding: 14px 24px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1;
+        }
+
+        .toast.success {
+            border-color: rgba(0, 255, 136, 0.3);
+        }
+
+        .toast.error {
+            border-color: rgba(255, 0, 51, 0.3);
+        }
+
+        .toast.info {
+            border-color: rgba(88, 101, 242, 0.3);
+        }
+
+        .toast i {
+            font-size: 18px;
+        }
+
+        .toast.success i { color: var(--success); }
+        .toast.error i { color: var(--youtube); }
+        .toast.info i { color: var(--discord); }
+
+        .toast-message {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Verification Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             opacity: 0;
             visibility: hidden;
-            transition: all 0.3s ease;
-            padding: 20px;
+            transition: all 0.3s;
         }
 
         .modal-overlay.active {
@@ -767,90 +523,44 @@
             visibility: visible;
         }
 
-        .modal-container {
-            width: 100%;
-            max-width: 420px;
-            background: rgba(20, 20, 30, 0.9);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 28px;
-            padding: 40px 32px;
-            position: relative;
-            overflow: hidden;
-            transform: scale(0.9) translateY(20px);
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            transform: scale(0.9);
+            transition: transform 0.3s;
         }
 
-        .modal-overlay.active .modal-container {
-            transform: scale(1) translateY(0);
-        }
-
-        .modal-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-        }
-
-        .modal-container::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 50%;
-            background: radial-gradient(ellipse at 50% 0%, rgba(255,255,255,0.05), transparent);
-            pointer-events: none;
-        }
-
-        .modal-close {
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            width: 36px;
-            height: 36px;
-            border: none;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-        }
-
-        .modal-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
+        .modal-overlay.active .modal {
+            transform: scale(1);
         }
 
         .modal-header {
             text-align: center;
-            margin-bottom: 28px;
+            margin-bottom: 24px;
         }
 
-        .modal-icon-wrapper {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
+        .modal-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(88, 101, 242, 0.15);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
-            color: var(--accent-cyan);
+            margin: 0 auto 16px;
+        }
+
+        .modal-icon i {
+            font-size: 28px;
+            color: var(--discord);
         }
 
         .modal-title {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: 700;
             margin-bottom: 8px;
         }
@@ -858,1727 +568,655 @@
         .modal-subtitle {
             font-size: 14px;
             color: var(--text-secondary);
-            line-height: 1.6;
         }
 
-        /* Verification Steps */
-        .verification-steps {
-            margin-bottom: 28px;
-        }
-
-        .step-indicator {
-            display: flex;
-            justify-content: center;
-            gap: 8px;
-            margin-bottom: 24px;
-        }
-
-        .step-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.15);
-            transition: all 0.3s;
-        }
-
-        .step-dot.active {
-            background: var(--accent-green);
-            box-shadow: 0 0 15px var(--accent-green-glow);
-        }
-
-        .step-dot.completed {
-            background: var(--accent-green);
-        }
-
-        /* Step 1: Code Input */
-        .verification-step {
-            display: none;
-            animation: stepFadeIn 0.4s ease;
-        }
-
-        .verification-step.active {
-            display: block;
-        }
-
-        @keyframes stepFadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
-        }
-
-        .code-display-box {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 20px;
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .code-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .code-value {
-            font-size: 36px;
-            font-weight: 800;
-            letter-spacing: 12px;
-            color: var(--accent-green);
-            font-family: 'Courier New', monospace;
-            text-shadow: 0 0 20px var(--accent-green-glow);
-        }
-
-        .code-input {
+        .verification-input {
             width: 100%;
-            padding: 18px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
+            padding: 14px 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            border-radius: 10px;
             color: var(--text-primary);
-            font-size: 20px;
-            font-weight: 600;
-            text-align: center;
-            letter-spacing: 8px;
-            text-transform: uppercase;
-            transition: all 0.3s;
-            font-family: inherit;
-        }
-
-        .code-input:focus {
-            outline: none;
-            border-color: var(--accent-green);
-            box-shadow: 0 0 0 4px rgba(0, 255, 136, 0.1);
-            background: rgba(0, 255, 136, 0.03);
-        }
-
-        .code-input.error {
-            border-color: var(--accent-red);
-            animation: shakeError 0.4s ease;
-        }
-
-        @keyframes shakeError {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-8px); }
-            40%, 80% { transform: translateX(8px); }
-        }
-
-        /* Step 2: Slider Puzzle */
-        .slider-puzzle {
-            margin-bottom: 24px;
-        }
-
-        .slider-instruction {
-            text-align: center;
-            margin-bottom: 16px;
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
+            margin-bottom: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .verification-input:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .verification-input::placeholder {
             color: var(--text-secondary);
         }
 
-        .slider-track {
-            height: 56px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .slider-fill {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 0;
-            background: linear-gradient(90deg, var(--accent-green), #00cc6a);
-            transition: width 0.1s;
-            opacity: 0.3;
-        }
-
-        .slider-target {
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 44px;
-            height: 44px;
-            background: rgba(0, 255, 136, 0.2);
-            border: 2px dashed var(--accent-green);
-            border-radius: 12px;
+        .modal-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--accent-green);
-        }
-
-        .slider-thumb {
-            position: absolute;
-            left: 6px;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, #ffffff, #e0e0e0);
-            border-radius: 12px;
-            cursor: grab;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--primary-black);
-            font-size: 18px;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            transition: box-shadow 0.2s;
-            user-select: none;
-        }
-
-        .slider-thumb:active {
-            cursor: grabbing;
-            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-        }
-
-        .slider-thumb.success {
-            background: var(--accent-green);
-            color: var(--primary-black);
-        }
-
-        /* Step 3: Pattern Verification */
-        .pattern-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            max-width: 240px;
-            margin: 0 auto 20px;
-        }
-
-        .pattern-cell {
-            aspect-ratio: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: 24px;
-        }
-
-        .pattern-cell:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.05);
-        }
-
-        .pattern-cell.selected {
-            background: rgba(0, 255, 136, 0.15);
-            border-color: var(--accent-green);
-            box-shadow: 0 0 20px var(--accent-green-glow);
-        }
-
-        .pattern-cell.error {
-            background: rgba(255, 51, 102, 0.15);
-            border-color: var(--accent-red);
-            animation: patternError 0.3s ease;
-        }
-
-        @keyframes patternError {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(0.95); }
-        }
-
-        .pattern-hint {
-            text-align: center;
-            padding: 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            margin-bottom: 16px;
-        }
-
-        .pattern-hint-label {
-            font-size: 11px;
-            color: var(--text-muted);
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 8px;
-        }
-
-        .pattern-sequence {
-            font-size: 28px;
-            letter-spacing: 16px;
-        }
-
-        /* Modal Buttons */
-        .modal-actions {
-            display: flex;
-            flex-direction: column;
             gap: 12px;
         }
 
         .modal-btn {
-            width: 100%;
-            padding: 16px;
+            flex: 1;
+            padding: 12px 20px;
             border: none;
-            border-radius: 14px;
+            border-radius: 10px;
+            font-family: 'Inter', sans-serif;
             font-size: 14px;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: inherit;
         }
 
-        .modal-btn-primary {
-            background: linear-gradient(135deg, #ffffff, #e8e8e8);
-            color: var(--primary-black);
-        }
-
-        .modal-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
-        }
-
-        .modal-btn-primary:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .modal-btn-secondary {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text-secondary);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .modal-btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
             color: var(--text-primary);
         }
 
-        /* Timer */
-        .timer-section {
-            text-align: center;
-            margin-top: 20px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        .modal-btn.primary {
+            background: var(--discord);
+            color: #fff;
         }
 
-        .timer-label {
-            font-size: 12px;
-            color: var(--text-muted);
-            margin-bottom: 6px;
+        .modal-btn:hover {
+            transform: translateY(-1px);
         }
 
-        .timer-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--accent-green);
-            font-family: 'Courier New', monospace;
-        }
-
-        .timer-value.warning {
-            color: #ffa500;
-        }
-
-        .timer-value.danger {
-            color: var(--accent-red);
-            animation: timerPulse 0.5s ease-in-out infinite;
-        }
-
-        @keyframes timerPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        /* ============================================
-           TOAST NOTIFICATIONS
-           ============================================ */
-        .toast-wrapper {
-            position: fixed;
-            top: 24px;
-            right: 24px;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            pointer-events: none;
-        }
-
-        .toast {
-            min-width: 320px;
-            max-width: 400px;
-            background: rgba(20, 20, 30, 0.95);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            transform: translateX(120%);
-            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            pointer-events: auto;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
-        }
-
-        .toast.show {
-            transform: translateX(0);
-        }
-
-        .toast-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            font-size: 18px;
-        }
-
-        .toast.success .toast-icon {
-            background: rgba(0, 255, 136, 0.15);
-            color: var(--accent-green);
-        }
-
-        .toast.error .toast-icon {
-            background: rgba(255, 51, 102, 0.15);
-            color: var(--accent-red);
-        }
-
-        .toast.info .toast-icon {
-            background: rgba(88, 101, 242, 0.15);
-            color: var(--accent-blue);
-        }
-
-        .toast.warning .toast-icon {
-            background: rgba(255, 165, 0, 0.15);
-            color: #ffa500;
-        }
-
-        .toast-content {
-            flex: 1;
-        }
-
-        .toast-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .toast-message {
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-
-        /* ============================================
-           FOOTER
-           ============================================ */
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            animation: fadeSlideUp 0.8s ease-out 0.4s both;
-        }
-
-        .footer-text {
-            font-size: 13px;
-            color: var(--text-muted);
-        }
-
-        .footer-link {
-            color: var(--text-secondary);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s;
-        }
-
-        .footer-link:hover {
-            color: var(--accent-green);
-        }
-
-        .footer-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-top: 12px;
-            padding: 8px 16px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 100px;
-            font-size: 11px;
-            color: var(--text-muted);
-        }
-
-        .footer-badge i {
-            color: var(--accent-green);
-        }
-
-        /* ============================================
-           RESPONSIVE
-           ============================================ */
-        @media (max-width: 540px) {
-            .main-title {
-                font-size: 36px;
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container {
+                padding: 30px 16px;
             }
 
-            .glass-card {
-                padding: 28px 20px;
-                border-radius: 24px;
+            .title {
+                font-size: 24px;
             }
 
             .task-card {
                 padding: 16px;
             }
 
-            .task-icon-wrapper {
-                width: 48px;
-                height: 48px;
+            .task-icon {
+                width: 42px;
+                height: 42px;
+                font-size: 18px;
             }
+        }
 
-            .task-icon-wrapper i {
-                font-size: 20px;
+        /* Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 15s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
             }
-
-            .modal-container {
-                padding: 32px 24px;
+            10% {
+                opacity: 1;
             }
-
-            .code-value {
-                font-size: 28px;
-                letter-spacing: 8px;
+            90% {
+                opacity: 1;
             }
-
-            .toast {
-                min-width: auto;
-                max-width: calc(100vw - 48px);
-            }
-
-            .toast-wrapper {
-                left: 24px;
-                right: 24px;
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Animated Background -->
-    <div class="bg-container">
-        <div class="gradient-mesh"></div>
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
-        <div class="orb orb-4"></div>
-        <div class="grid-overlay"></div>
-        <div class="noise-overlay"></div>
-        <div class="light-rays"></div>
-    </div>
+    <!-- Background Elements -->
+    <div class="bg-animation"></div>
+    <div class="grid-overlay"></div>
+    <div class="particles" id="particles"></div>
 
-    <!-- Toast Notifications -->
-    <div class="toast-wrapper" id="toastWrapper"></div>
-
-    <!-- Main Content -->
-    <main class="main-wrapper">
-        <!-- Header -->
+    <!-- Main Container -->
+    <div class="container">
         <header class="header">
-            <div class="logo-wrapper">
-                <div class="logo-box">
-                    <i class="fas fa-code"></i>
-                </div>
+            <div class="logo">
+                <i class="fas fa-bolt"></i>
             </div>
-            <h1 class="main-title">Get KS Rivals Script</h1>
-            <p class="subtitle">Complete verification steps to unlock your script</p>
+            <h1 class="title">Get KS Rivals Script</h1>
+            <p class="subtitle">Complete all steps below to unlock your script access</p>
         </header>
 
-        <!-- Glass Card -->
-        <div class="glass-card">
-            <!-- Security Badge -->
-            <div class="security-badge">
-                <div class="security-dot"></div>
-                <i class="fas fa-shield-alt"></i>
-                <span>Secure Verification</span>
+        <!-- Progress Section -->
+        <div class="progress-section">
+            <div class="progress-header">
+                <span class="progress-label">Progress</span>
+                <span class="progress-count"><span id="completedCount">0</span>/3 Completed</span>
             </div>
-
-            <!-- Progress -->
-            <div class="progress-section">
-                <div class="progress-header">
-                    <span class="progress-label">Progress</span>
-                    <span class="progress-value"><span id="completedCount">0</span>/3 Verified</span>
-                </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
+        </div>
 
-            <!-- Tasks -->
-            <div class="tasks-container">
-                <!-- Subscribe Task -->
-                <div class="task-card" id="task-subscribe" data-task="subscribe">
-                    <div class="task-icon-wrapper youtube">
+        <!-- Task Cards -->
+        <div class="tasks">
+            <!-- Subscribe Task -->
+            <div class="task-card" id="task-subscribe" data-task="subscribe">
+                <div class="task-content">
+                    <div class="task-icon youtube">
                         <i class="fab fa-youtube"></i>
                     </div>
                     <div class="task-info">
                         <div class="task-title">Subscribe to Channel</div>
-                        <div class="task-desc">Subscribe to KS Script on YouTube</div>
+                        <div class="task-description">Subscribe to KS Script YouTube channel</div>
                     </div>
-                    <div class="task-status-wrapper">
-                        <div class="loading-spinner"></div>
-                        <div class="status-circle">
-                            <i class="fas fa-check"></i>
-                        </div>
+                    <div class="task-status">
+                        <i class="fas fa-check"></i>
                     </div>
                 </div>
+            </div>
 
-                <!-- Like Task -->
-                <div class="task-card" id="task-like" data-task="like">
-                    <div class="task-icon-wrapper youtube">
-                        <i class="fas fa-heart"></i>
+            <!-- Like Task -->
+            <div class="task-card" id="task-like" data-task="like">
+                <div class="task-content">
+                    <div class="task-icon youtube">
+                        <i class="fas fa-thumbs-up"></i>
                     </div>
                     <div class="task-info">
                         <div class="task-title">Like the Video</div>
-                        <div class="task-desc">Like our latest video</div>
+                        <div class="task-description">Like our latest YouTube video</div>
                     </div>
-                    <div class="task-status-wrapper">
-                        <div class="loading-spinner"></div>
-                        <div class="status-circle">
-                            <i class="fas fa-check"></i>
-                        </div>
+                    <div class="task-status">
+                        <i class="fas fa-check"></i>
                     </div>
                 </div>
+            </div>
 
-                <!-- Discord Task -->
-                <div class="task-card" id="task-discord" data-task="discord">
-                    <div class="task-icon-wrapper discord">
+            <!-- Discord Task -->
+            <div class="task-card" id="task-discord" data-task="discord">
+                <div class="task-content">
+                    <div class="task-icon discord">
                         <i class="fab fa-discord"></i>
                     </div>
                     <div class="task-info">
                         <div class="task-title">Join Discord Server</div>
-                        <div class="task-desc">Join our community</div>
+                        <div class="task-description">Join our community for updates</div>
                     </div>
-                    <div class="task-status-wrapper">
-                        <div class="loading-spinner"></div>
-                        <div class="status-circle">
-                            <i class="fas fa-check"></i>
-                        </div>
+                    <div class="task-status">
+                        <i class="fas fa-check"></i>
                     </div>
                 </div>
             </div>
-
-            <!-- Unlock Button -->
-            <button class="unlock-btn locked" id="unlockBtn" disabled>
-                <div class="btn-inner">
-                    <i class="fas fa-lock btn-icon"></i>
-                    <span class="btn-text">Complete All Steps</span>
-                </div>
-            </button>
         </div>
+
+        <!-- Get Script Button -->
+        <button class="get-script-btn locked" id="getScriptBtn" disabled>
+            <span class="btn-content">
+                <i class="fas fa-lock"></i>
+                <span>Complete All Steps to Unlock</span>
+            </span>
+        </button>
 
         <!-- Footer -->
         <footer class="footer">
-            <p class="footer-text">Powered by <a href="#" class="footer-link">KS Script</a></p>
-            <div class="footer-badge">
-                <i class="fas fa-check-circle"></i>
-                <span>Advanced Security System v2.0</span>
-            </div>
+            <p class="footer-text">
+                Powered by <a href="#">KS Script</a> • Secure Verification
+            </p>
         </footer>
-    </main>
+    </div>
 
-    <!-- Verification Modal -->
-    <div class="modal-overlay" id="verificationModal">
-        <div class="modal-container">
-            <button class="modal-close" id="modalClose">
-                <i class="fas fa-times"></i>
-            </button>
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span class="toast-message"></span>
+    </div>
 
+    <!-- Discord Verification Modal -->
+    <div class="modal-overlay" id="discordModal">
+        <div class="modal">
             <div class="modal-header">
-                <div class="modal-icon-wrapper" id="modalIcon">
-                    <i class="fas fa-shield-alt"></i>
+                <div class="modal-icon">
+                    <i class="fab fa-discord"></i>
                 </div>
-                <h2 class="modal-title" id="modalTitle">Verification Required</h2>
-                <p class="modal-subtitle" id="modalSubtitle">Complete the verification steps below</p>
+                <h2 class="modal-title">Discord Verification</h2>
+                <p class="modal-subtitle">Enter your Discord username to verify</p>
             </div>
-
-            <!-- Step Indicators -->
-            <div class="step-indicator">
-                <div class="step-dot active" data-step="1"></div>
-                <div class="step-dot" data-step="2"></div>
-                <div class="step-dot" data-step="3"></div>
-            </div>
-
-            <!-- Verification Steps -->
-            <div class="verification-steps">
-                <!-- Step 1: Code Verification -->
-                <div class="verification-step active" id="step1">
-                    <div class="code-display-box">
-                        <div class="code-label">Enter This Code</div>
-                        <div class="code-value" id="verifyCode">----</div>
-                    </div>
-                    <input type="text" class="code-input" id="codeInput" placeholder="Enter code" maxlength="4" autocomplete="off" spellcheck="false">
-                </div>
-
-                <!-- Step 2: Slider Verification -->
-                <div class="verification-step" id="step2">
-                    <div class="slider-puzzle">
-                        <div class="slider-instruction">Slide to verify you're human</div>
-                        <div class="slider-track" id="sliderTrack">
-                            <div class="slider-fill" id="sliderFill"></div>
-                            <div class="slider-target">
-                                <i class="fas fa-check"></i>
-                            </div>
-                            <div class="slider-thumb" id="sliderThumb">
-                                <i class="fas fa-arrows-alt-h"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Step 3: Pattern Verification -->
-                <div class="verification-step" id="step3">
-                    <div class="pattern-hint">
-                        <div class="pattern-hint-label">Select in this order</div>
-                        <div class="pattern-sequence" id="patternSequence">🔵 🔴 🟢</div>
-                    </div>
-                    <div class="pattern-grid" id="patternGrid">
-                        <div class="pattern-cell" data-symbol="🔴">🔴</div>
-                        <div class="pattern-cell" data-symbol="🟢">🟢</div>
-                        <div class="pattern-cell" data-symbol="🔵">🔵</div>
-                        <div class="pattern-cell" data-symbol="🟡">🟡</div>
-                        <div class="pattern-cell" data-symbol="🟣">🟣</div>
-                        <div class="pattern-cell" data-symbol="🟠">🟠</div>
-                        <div class="pattern-cell" data-symbol="⚪">⚪</div>
-                        <div class="pattern-cell" data-symbol="🟤">🟤</div>
-                        <div class="pattern-cell" data-symbol="⚫">⚫</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Actions -->
-            <div class="modal-actions">
-                <button class="modal-btn modal-btn-primary" id="verifyBtn">
-                    <span id="verifyBtnText">Verify Code</span>
-                </button>
-                <button class="modal-btn modal-btn-secondary" id="cancelBtn">Cancel</button>
-            </div>
-
-            <!-- Timer -->
-            <div class="timer-section">
-                <div class="timer-label">Time Remaining</div>
-                <div class="timer-value" id="timerDisplay">00:45</div>
+            <input type="text" class="verification-input" id="discordUsername" placeholder="Username#0000 or @username">
+            <div class="modal-buttons">
+                <button class="modal-btn secondary" id="modalCancel">Cancel</button>
+                <button class="modal-btn primary" id="modalVerify">Verify</button>
             </div>
         </div>
     </div>
 
     <script>
-        /**
-         * =====================================================
-         * LINK UNLOCKER - ADVANCED VERIFICATION SYSTEM v2.0
-         * =====================================================
-         * Features:
-         * - 3-Step Verification (Code + Slider + Pattern)
-         * - AES Encryption for stored data
-         * - Behavior Analysis (Mouse tracking)
-         * - Anti-tampering measures
-         * - Integrity hash verification
-         * =====================================================
-         */
+        // ============================================
+        // LINKUNLOCKER - VERIFICATION SYSTEM
+        // ============================================
 
         (function() {
             'use strict';
 
-            // ==========================================
-            // CONFIGURATION
-            // ==========================================
+            // Configuration
             const CONFIG = {
-                LINKS: {
+                urls: {
                     subscribe: 'https://www.youtube.com/@KS_SCRIPT_Owner?sub_confirmation=1',
                     like: 'https://www.youtube.com/shorts/bGm4dt_Isrk',
-                    discord: 'https://discord.com/channels/@me'
+                    discord: 'https://discord.com/channels/@me',
+                    redirect: 'https://ks-script.github.io/KS.WEB/'
                 },
-                REDIRECT_URL: 'https://ks-script.github.io/KS.WEB/',
-                VERIFICATION_TIMEOUT: 45,
-                MIN_TIME_STEP1: 5,
-                MIN_TIME_STEP2: 3,
-                MIN_TIME_STEP3: 4,
-                STORAGE_KEY: '_ksr_v2_secure',
-                ENCRYPTION_KEY: 'KS_R1V4LS_2024_S3CUR3',
-                VERSION: '2.0.0'
-            };
-
-            // ==========================================
-            // ENCRYPTION MODULE
-            // ==========================================
-            const Crypto = {
-                // Simple XOR encryption (for client-side, this provides obfuscation)
-                encrypt: function(text, key) {
-                    let result = '';
-                    for (let i = 0; i < text.length; i++) {
-                        result += String.fromCharCode(
-                            text.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-                        );
-                    }
-                    return btoa(unescape(encodeURIComponent(result)));
+                verification: {
+                    minTimeOnPage: 8000,      // Minimum time user must spend on external page (8 seconds)
+                    verificationDelay: 3000,  // Delay before verification check (3 seconds)
+                    secretKey: 'KS_RIVALS_2024_SECURE'
                 },
-
-                decrypt: function(encoded, key) {
-                    try {
-                        const text = decodeURIComponent(escape(atob(encoded)));
-                        let result = '';
-                        for (let i = 0; i < text.length; i++) {
-                            result += String.fromCharCode(
-                                text.charCodeAt(i) ^ key.charCodeAt(i % key.length)
-                            );
-                        }
-                        return result;
-                    } catch {
-                        return null;
-                    }
-                },
-
-                // Generate SHA-256 like hash
-                hash: function(str) {
-                    let hash = 0;
-                    const salt = CONFIG.ENCRYPTION_KEY;
-                    const combined = salt + str + salt;
-                    
-                    for (let i = 0; i < combined.length; i++) {
-                        const char = combined.charCodeAt(i);
-                        hash = ((hash << 5) - hash) + char;
-                        hash = hash & hash;
-                    }
-                    
-                    // Create longer hash
-                    let hashStr = Math.abs(hash).toString(16);
-                    while (hashStr.length < 16) {
-                        hashStr = '0' + hashStr;
-                    }
-                    
-                    // Add timestamp component
-                    const timeComponent = Math.floor(Date.now() / (1000 * 60 * 60 * 24)).toString(16);
-                    return hashStr + timeComponent;
-                },
-
-                generateToken: function() {
-                    const array = new Uint8Array(32);
-                    crypto.getRandomValues(array);
-                    return Array.from(array, b => b.toString(16).padStart(2, '0')).join('');
-                },
-
-                generateCode: function() {
-                    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
-                    let code = '';
-                    const array = new Uint8Array(4);
-                    crypto.getRandomValues(array);
-                    for (let i = 0; i < 4; i++) {
-                        code += chars[array[i] % chars.length];
-                    }
-                    return code;
+                storage: {
+                    prefix: 'ks_unlocker_'
                 }
             };
 
-            // ==========================================
-            // BEHAVIOR ANALYSIS MODULE
-            // ==========================================
-            const BehaviorAnalysis = {
-                mousePositions: [],
-                clickTimings: [],
-                keyTimings: [],
-                startTime: 0,
-                interactions: 0,
+            // State Management
+            const state = {
+                tasks: {
+                    subscribe: { completed: false, startTime: null, windowRef: null },
+                    like: { completed: false, startTime: null, windowRef: null },
+                    discord: { completed: false, startTime: null, windowRef: null }
+                },
+                sessionId: null
+            };
+
+            // DOM Elements
+            const elements = {
+                tasks: {
+                    subscribe: document.getElementById('task-subscribe'),
+                    like: document.getElementById('task-like'),
+                    discord: document.getElementById('task-discord')
+                },
+                progressFill: document.getElementById('progressFill'),
+                completedCount: document.getElementById('completedCount'),
+                getScriptBtn: document.getElementById('getScriptBtn'),
+                toast: document.getElementById('toast'),
+                discordModal: document.getElementById('discordModal'),
+                discordUsername: document.getElementById('discordUsername'),
+                modalCancel: document.getElementById('modalCancel'),
+                modalVerify: document.getElementById('modalVerify')
+            };
+
+            // ============================================
+            // SECURITY & ENCRYPTION
+            // ============================================
+
+            function generateSessionId() {
+                return 'sess_' + Date.now().toString(36) + Math.random().toString(36).substr(2);
+            }
+
+            function hashData(data) {
+                let hash = 0;
+                const str = data + CONFIG.verification.secretKey;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return Math.abs(hash).toString(36);
+            }
+
+            function encryptState(taskState) {
+                const data = {
+                    ...taskState,
+                    timestamp: Date.now(),
+                    session: state.sessionId
+                };
+                const jsonStr = JSON.stringify(data);
+                const encrypted = btoa(jsonStr.split('').reverse().join(''));
+                const checksum = hashData(encrypted);
+                return `${encrypted}.${checksum}`;
+            }
+
+            function decryptState(encryptedData) {
+                try {
+                    const [encrypted, checksum] = encryptedData.split('.');
+                    if (hashData(encrypted) !== checksum) return null;
+                    
+                    const jsonStr = atob(encrypted).split('').reverse().join('');
+                    const data = JSON.parse(jsonStr);
+                    
+                    // Verify session and timestamp
+                    if (Date.now() - data.timestamp > 24 * 60 * 60 * 1000) return null; // Expire after 24h
+                    
+                    return data;
+                } catch {
+                    return null;
+                }
+            }
+
+            function saveState() {
+                const stateData = {
+                    subscribe: state.tasks.subscribe.completed,
+                    like: state.tasks.like.completed,
+                    discord: state.tasks.discord.completed
+                };
+                const encrypted = encryptState(stateData);
+                localStorage.setItem(CONFIG.storage.prefix + 'state', encrypted);
+            }
+
+            function loadState() {
+                const encrypted = localStorage.getItem(CONFIG.storage.prefix + 'state');
+                if (!encrypted) return;
                 
-                init: function() {
-                    this.startTime = Date.now();
-                    this.mousePositions = [];
-                    this.clickTimings = [];
-                    this.keyTimings = [];
-                    this.interactions = 0;
-                    
-                    // Track mouse movement
-                    document.addEventListener('mousemove', (e) => {
-                        if (this.mousePositions.length < 100) {
-                            this.mousePositions.push({
-                                x: e.clientX,
-                                y: e.clientY,
-                                t: Date.now() - this.startTime
-                            });
-                        }
-                        this.interactions++;
-                    });
-                    
-                    // Track clicks
-                    document.addEventListener('click', () => {
-                        this.clickTimings.push(Date.now() - this.startTime);
-                        this.interactions++;
-                    });
-                    
-                    // Track keypresses
-                    document.addEventListener('keydown', () => {
-                        this.keyTimings.push(Date.now() - this.startTime);
-                        this.interactions++;
-                    });
-                },
-
-                getScore: function() {
-                    let score = 0;
-                    
-                    // Mouse movement variety
-                    if (this.mousePositions.length > 10) {
-                        const uniqueX = new Set(this.mousePositions.map(p => Math.floor(p.x / 50))).size;
-                        const uniqueY = new Set(this.mousePositions.map(p => Math.floor(p.y / 50))).size;
-                        score += Math.min(uniqueX * 5, 25);
-                        score += Math.min(uniqueY * 5, 25);
-                    }
-                    
-                    // Click timing variance
-                    if (this.clickTimings.length > 1) {
-                        const intervals = [];
-                        for (let i = 1; i < this.clickTimings.length; i++) {
-                            intervals.push(this.clickTimings[i] - this.clickTimings[i-1]);
-                        }
-                        const variance = this.calculateVariance(intervals);
-                        if (variance > 100) score += 20;
-                    }
-                    
-                    // Interaction count
-                    score += Math.min(this.interactions / 5, 30);
-                    
-                    return Math.min(score, 100);
-                },
-
-                calculateVariance: function(arr) {
-                    if (arr.length === 0) return 0;
-                    const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
-                    return arr.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / arr.length;
-                },
-
-                isHumanLike: function() {
-                    return this.getScore() >= 30 && this.interactions >= 5;
-                },
-
-                getFingerprint: function() {
-                    return {
-                        score: this.getScore(),
-                        mouseCount: this.mousePositions.length,
-                        clickCount: this.clickTimings.length,
-                        keyCount: this.keyTimings.length,
-                        interactions: this.interactions,
-                        timeSpent: Date.now() - this.startTime
-                    };
+                const data = decryptState(encrypted);
+                if (!data) {
+                    localStorage.removeItem(CONFIG.storage.prefix + 'state');
+                    return;
                 }
-            };
+                
+                state.tasks.subscribe.completed = data.subscribe || false;
+                state.tasks.like.completed = data.like || false;
+                state.tasks.discord.completed = data.discord || false;
+            }
 
-            // ==========================================
-            // STORAGE MODULE
-            // ==========================================
-            const Storage = {
-                get: function() {
-                    try {
-                        const encrypted = localStorage.getItem(CONFIG.STORAGE_KEY);
-                        if (!encrypted) return null;
-                        
-                        const decrypted = Crypto.decrypt(encrypted, CONFIG.ENCRYPTION_KEY);
-                        if (!decrypted) return null;
-                        
-                        const data = JSON.parse(decrypted);
-                        
-                        // Verify integrity
-                        if (!this.verifyIntegrity(data)) {
-                            this.clear();
-                            return null;
-                        }
-                        
-                        return data;
-                    } catch {
-                        return null;
-                    }
-                },
+            // ============================================
+            // VERIFICATION SYSTEM
+            // ============================================
 
-                set: function(data) {
-                    try {
-                        // Add integrity hash
-                        data._integrity = Crypto.hash(JSON.stringify(data.tasks || {}));
-                        data._updated = Date.now();
-                        data._version = CONFIG.VERSION;
-                        
-                        const encrypted = Crypto.encrypt(
-                            JSON.stringify(data),
-                            CONFIG.ENCRYPTION_KEY
-                        );
-                        localStorage.setItem(CONFIG.STORAGE_KEY, encrypted);
-                    } catch (e) {
-                        console.error('Storage error');
-                    }
-                },
+            function generateVerificationToken(taskName) {
+                const payload = {
+                    task: taskName,
+                    time: Date.now(),
+                    session: state.sessionId,
+                    random: Math.random().toString(36).substr(2)
+                };
+                return btoa(JSON.stringify(payload));
+            }
 
-                verifyIntegrity: function(data) {
-                    if (!data || !data._integrity) return false;
-                    const expectedHash = Crypto.hash(JSON.stringify(data.tasks || {}));
-                    // Check first 16 chars (hash portion, excluding time component)
-                    return data._integrity.substring(0, 16) === expectedHash.substring(0, 16);
-                },
-
-                init: function() {
-                    const existing = this.get();
-                    if (!existing) {
-                        this.set({
-                            tasks: {},
-                            sessionId: Crypto.generateToken(),
-                            created: Date.now(),
-                            fingerprint: this.getBrowserFingerprint()
-                        });
-                    }
-                    return this.get();
-                },
-
-                getBrowserFingerprint: function() {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    ctx.textBaseline = 'top';
-                    ctx.font = '14px Arial';
-                    ctx.fillText('KS_FINGERPRINT', 2, 2);
+            function validateVerificationToken(token, taskName) {
+                try {
+                    const payload = JSON.parse(atob(token));
+                    const elapsed = Date.now() - payload.time;
                     
-                    return Crypto.hash(
-                        navigator.userAgent +
-                        screen.width + 'x' + screen.height +
-                        new Date().getTimezoneOffset() +
-                        navigator.language +
-                        canvas.toDataURL()
+                    return (
+                        payload.task === taskName &&
+                        payload.session === state.sessionId &&
+                        elapsed >= CONFIG.verification.minTimeOnPage &&
+                        elapsed < 600000 // Max 10 minutes
                     );
-                },
-
-                updateTask: function(taskId, taskData) {
-                    const data = this.get() || { tasks: {} };
-                    data.tasks[taskId] = {
-                        ...taskData,
-                        completedAt: Date.now(),
-                        token: Crypto.generateToken(),
-                        behavior: BehaviorAnalysis.getFingerprint()
-                    };
-                    this.set(data);
-                },
-
-                clear: function() {
-                    localStorage.removeItem(CONFIG.STORAGE_KEY);
-                },
-
-                isTaskCompleted: function(taskId) {
-                    const data = this.get();
-                    return data?.tasks?.[taskId]?.completed === true;
+                } catch {
+                    return false;
                 }
-            };
+            }
 
-            // ==========================================
-            // UI CONTROLLER
-            // ==========================================
-            const UI = {
-                elements: {},
-
-                init: function() {
-                    this.elements = {
-                        progressFill: document.getElementById('progressFill'),
-                        completedCount: document.getElementById('completedCount'),
-                        unlockBtn: document.getElementById('unlockBtn'),
-                        btnText: document.querySelector('.btn-text'),
-                        btnIcon: document.querySelector('.btn-icon'),
-                        modal: document.getElementById('verificationModal'),
-                        modalClose: document.getElementById('modalClose'),
-                        modalIcon: document.getElementById('modalIcon'),
-                        modalTitle: document.getElementById('modalTitle'),
-                        modalSubtitle: document.getElementById('modalSubtitle'),
-                        verifyCode: document.getElementById('verifyCode'),
-                        codeInput: document.getElementById('codeInput'),
-                        verifyBtn: document.getElementById('verifyBtn'),
-                        verifyBtnText: document.getElementById('verifyBtnText'),
-                        cancelBtn: document.getElementById('cancelBtn'),
-                        timerDisplay: document.getElementById('timerDisplay'),
-                        stepDots: document.querySelectorAll('.step-dot'),
-                        steps: {
-                            step1: document.getElementById('step1'),
-                            step2: document.getElementById('step2'),
-                            step3: document.getElementById('step3')
-                        },
-                        sliderTrack: document.getElementById('sliderTrack'),
-                        sliderThumb: document.getElementById('sliderThumb'),
-                        sliderFill: document.getElementById('sliderFill'),
-                        patternGrid: document.getElementById('patternGrid'),
-                        patternSequence: document.getElementById('patternSequence'),
-                        toastWrapper: document.getElementById('toastWrapper')
-                    };
-                },
-
-                updateProgress: function(completed) {
-                    const percentage = (completed / 3) * 100;
-                    this.elements.progressFill.style.width = percentage + '%';
-                    this.elements.completedCount.textContent = completed;
-                },
-
-                markTaskComplete: function(taskId) {
-                    const task = document.getElementById('task-' + taskId);
-                    if (task) {
-                        task.classList.remove('processing');
-                        task.classList.add('completed');
-                    }
-                },
-
-                setTaskProcessing: function(taskId, processing) {
-                    const task = document.getElementById('task-' + taskId);
-                    if (task) {
-                        task.classList.toggle('processing', processing);
-                    }
-                },
-
-                unlockButton: function() {
-                    const btn = this.elements.unlockBtn;
-                    btn.classList.remove('locked');
-                    btn.classList.add('unlocked');
-                    btn.disabled = false;
-                    this.elements.btnIcon.className = 'fas fa-unlock btn-icon';
-                    this.elements.btnText.textContent = 'Get Script Now';
-                },
-
-                showModal: function() {
-                    this.elements.modal.classList.add('active');
-                    document.body.style.overflow = 'hidden';
-                },
-
-                hideModal: function() {
-                    this.elements.modal.classList.remove('active');
-                    document.body.style.overflow = '';
-                },
-
-                setStep: function(step) {
-                    // Update dots
-                    this.elements.stepDots.forEach((dot, index) => {
-                        dot.classList.remove('active');
-                        if (index + 1 < step) {
-                            dot.classList.add('completed');
-                        } else if (index + 1 === step) {
-                            dot.classList.add('active');
-                        }
-                    });
-
-                    // Update steps
-                    Object.values(this.elements.steps).forEach(s => s.classList.remove('active'));
-                    this.elements.steps['step' + step].classList.add('active');
-
-                    // Update button text
-                    const texts = ['Verify Code', 'Complete Slider', 'Verify Pattern'];
-                    this.elements.verifyBtnText.textContent = texts[step - 1];
-                },
-
-                updateTimer: function(seconds) {
-                    const mins = Math.floor(seconds / 60);
-                    const secs = seconds % 60;
-                    const display = this.elements.timerDisplay;
-                    display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            async function verifyTask(taskName) {
+                const task = state.tasks[taskName];
+                const taskElement = elements.tasks[taskName];
+                
+                if (task.completed) return true;
+                
+                // Set verifying state
+                taskElement.classList.add('verifying');
+                
+                return new Promise((resolve) => {
+                    // Generate verification token
+                    const token = generateVerificationToken(taskName);
+                    task.verificationToken = token;
+                    task.startTime = Date.now();
                     
-                    display.classList.remove('warning', 'danger');
-                    if (seconds <= 10) {
-                        display.classList.add('danger');
-                    } else if (seconds <= 20) {
-                        display.classList.add('warning');
-                    }
-                },
-
-                showToast: function(type, title, message) {
-                    const toast = document.createElement('div');
-                    toast.className = `toast ${type}`;
+                    // Open the URL
+                    task.windowRef = window.open(CONFIG.urls[taskName], '_blank');
                     
-                    const icons = {
-                        success: 'fa-check',
-                        error: 'fa-times',
-                        warning: 'fa-exclamation',
-                        info: 'fa-info'
-                    };
-                    
-                    toast.innerHTML = `
-                        <div class="toast-icon">
-                            <i class="fas ${icons[type]}"></i>
-                        </div>
-                        <div class="toast-content">
-                            <div class="toast-title">${title}</div>
-                            <div class="toast-message">${message}</div>
-                        </div>
-                    `;
-                    
-                    this.elements.toastWrapper.appendChild(toast);
-                    
-                    requestAnimationFrame(() => {
-                        toast.classList.add('show');
-                    });
-                    
-                    setTimeout(() => {
-                        toast.classList.remove('show');
-                        setTimeout(() => toast.remove(), 400);
-                    }, 4000);
-                },
-
-                shakeInput: function() {
-                    this.elements.codeInput.classList.add('error');
-                    setTimeout(() => {
-                        this.elements.codeInput.classList.remove('error');
-                    }, 400);
-                }
-            };
-
-            // ==========================================
-            // VERIFICATION CONTROLLER
-            // ==========================================
-            const Verification = {
-                currentTask: null,
-                currentStep: 1,
-                verificationCode: null,
-                timerInterval: null,
-                timeRemaining: 0,
-                stepStartTime: 0,
-                patternTarget: [],
-                patternInput: [],
-                sliderCompleted: false,
-                windowOpened: false,
-
-                start: function(taskId) {
-                    if (Storage.isTaskCompleted(taskId)) {
-                        UI.showToast('info', 'Already Verified', 'This step has already been completed.');
-                        return;
-                    }
-
-                    this.currentTask = taskId;
-                    this.currentStep = 1;
-                    this.windowOpened = false;
-                    this.sliderCompleted = false;
-                    this.patternInput = [];
-                    
-                    // Generate verification code
-                    this.verificationCode = Crypto.generateCode();
-                    UI.elements.verifyCode.textContent = this.verificationCode;
-                    UI.elements.codeInput.value = '';
-                    
-                    // Generate pattern
-                    this.generatePattern();
-                    
-                    // Open link
-                    const link = CONFIG.LINKS[taskId];
-                    const newWindow = window.open(link, '_blank');
-                    
-                    if (newWindow) {
-                        this.windowOpened = true;
-                        UI.setTaskProcessing(taskId, true);
+                    // Check for window focus return and validate
+                    const checkInterval = setInterval(() => {
+                        // Check if enough time has passed
+                        const elapsed = Date.now() - task.startTime;
                         
-                        // Show modal after delay
-                        setTimeout(() => {
-                            UI.setStep(1);
-                            UI.showModal();
-                            this.startTimer();
-                            this.stepStartTime = Date.now();
+                        if (elapsed >= CONFIG.verification.minTimeOnPage) {
+                            clearInterval(checkInterval);
                             
-                            setTimeout(() => {
-                                UI.elements.codeInput.focus();
-                            }, 300);
-                        }, 1500);
-                    } else {
-                        UI.showToast('error', 'Popup Blocked', 'Please allow popups and try again.');
-                    }
-                },
-
-                generatePattern: function() {
-                    const symbols = ['🔴', '🟢', '🔵', '🟡', '🟣', '🟠'];
-                    const shuffled = symbols.sort(() => Math.random() - 0.5);
-                    this.patternTarget = shuffled.slice(0, 3);
-                    UI.elements.patternSequence.textContent = this.patternTarget.join(' ');
-                    
-                    // Reset pattern cells
-                    document.querySelectorAll('.pattern-cell').forEach(cell => {
-                        cell.classList.remove('selected', 'error');
-                    });
-                },
-
-                startTimer: function() {
-                    this.timeRemaining = CONFIG.VERIFICATION_TIMEOUT;
-                    UI.updateTimer(this.timeRemaining);
-                    
-                    this.timerInterval = setInterval(() => {
-                        this.timeRemaining--;
-                        UI.updateTimer(this.timeRemaining);
-                        
-                        if (this.timeRemaining <= 0) {
-                            this.fail('Time expired. Please try again.');
-                        }
-                    }, 1000);
-                },
-
-                verifyCurrentStep: function() {
-                    const elapsedTime = (Date.now() - this.stepStartTime) / 1000;
-                    
-                    switch (this.currentStep) {
-                        case 1:
-                            this.verifyCode(elapsedTime);
-                            break;
-                        case 2:
-                            this.verifySlider(elapsedTime);
-                            break;
-                        case 3:
-                            this.verifyPattern(elapsedTime);
-                            break;
-                    }
-                },
-
-                verifyCode: function(elapsed) {
-                    const input = UI.elements.codeInput.value.toUpperCase().trim();
-                    
-                    // Check minimum time
-                    if (elapsed < CONFIG.MIN_TIME_STEP1) {
-                        UI.showToast('warning', 'Too Fast', 'Please complete the action first.');
-                        UI.shakeInput();
-                        return;
-                    }
-                    
-                    // Check code
-                    if (input !== this.verificationCode) {
-                        UI.showToast('error', 'Invalid Code', 'Please check the code and try again.');
-                        UI.shakeInput();
-                        UI.elements.codeInput.value = '';
-                        UI.elements.codeInput.focus();
-                        return;
-                    }
-                    
-                    // Check if window was actually opened
-                    if (!this.windowOpened) {
-                        UI.showToast('error', 'Invalid Request', 'Please click the task first.');
-                        return;
-                    }
-                    
-                    // Success - move to step 2
-                    this.currentStep = 2;
-                    this.stepStartTime = Date.now();
-                    this.sliderCompleted = false;
-                    UI.setStep(2);
-                    this.initSlider();
-                },
-
-                initSlider: function() {
-                    const thumb = UI.elements.sliderThumb;
-                    const track = UI.elements.sliderTrack;
-                    const fill = UI.elements.sliderFill;
-                    let isDragging = false;
-                    let startX = 0;
-                    let thumbLeft = 6;
-                    
-                    const maxLeft = track.offsetWidth - thumb.offsetWidth - 14;
-                    const targetZone = maxLeft - 10;
-
-                    const startDrag = (e) => {
-                        isDragging = true;
-                        startX = (e.touches ? e.touches[0].clientX : e.clientX) - thumbLeft;
-                        thumb.style.transition = 'none';
-                        fill.style.transition = 'none';
-                    };
-
-                    const doDrag = (e) => {
-                        if (!isDragging) return;
-                        e.preventDefault();
-                        
-                        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-                        let newLeft = clientX - startX;
-                        newLeft = Math.max(6, Math.min(newLeft, maxLeft));
-                        
-                        thumbLeft = newLeft;
-                        thumb.style.left = newLeft + 'px';
-                        fill.style.width = (newLeft / maxLeft * 100) + '%';
-                    };
-
-                    const endDrag = () => {
-                        if (!isDragging) return;
-                        isDragging = false;
-                        
-                        thumb.style.transition = 'all 0.3s';
-                        fill.style.transition = 'width 0.3s';
-                        
-                        if (thumbLeft >= targetZone) {
-                            // Success
-                            thumb.style.left = maxLeft + 'px';
-                            fill.style.width = '100%';
-                            thumb.classList.add('success');
-                            thumb.innerHTML = '<i class="fas fa-check"></i>';
-                            this.sliderCompleted = true;
-                        } else {
-                            // Reset
-                            thumbLeft = 6;
-                            thumb.style.left = '6px';
-                            fill.style.width = '0%';
-                        }
-                    };
-
-                    // Remove old listeners
-                    const newThumb = thumb.cloneNode(true);
-                    thumb.parentNode.replaceChild(newThumb, thumb);
-                    UI.elements.sliderThumb = newThumb;
-
-                    newThumb.addEventListener('mousedown', startDrag);
-                    newThumb.addEventListener('touchstart', startDrag, { passive: false });
-                    document.addEventListener('mousemove', doDrag);
-                    document.addEventListener('touchmove', doDrag, { passive: false });
-                    document.addEventListener('mouseup', endDrag.bind(this));
-                    document.addEventListener('touchend', endDrag.bind(this));
-                },
-
-                verifySlider: function(elapsed) {
-                    if (elapsed < CONFIG.MIN_TIME_STEP2) {
-                        UI.showToast('warning', 'Too Fast', 'Please complete the slider.');
-                        return;
-                    }
-                    
-                    if (!this.sliderCompleted) {
-                        UI.showToast('error', 'Incomplete', 'Please slide to the end.');
-                        return;
-                    }
-                    
-                    // Check behavior
-                    if (!BehaviorAnalysis.isHumanLike()) {
-                        UI.showToast('warning', 'Verification Failed', 'Please interact more naturally.');
-                        return;
-                    }
-                    
-                    // Success - move to step 3
-                    this.currentStep = 3;
-                    this.stepStartTime = Date.now();
-                    this.patternInput = [];
-                    UI.setStep(3);
-                    this.initPattern();
-                },
-
-                initPattern: function() {
-                    this.patternInput = [];
-                    
-                    document.querySelectorAll('.pattern-cell').forEach(cell => {
-                        cell.classList.remove('selected', 'error');
-                        
-                        // Clone to remove old listeners
-                        const newCell = cell.cloneNode(true);
-                        cell.parentNode.replaceChild(newCell, cell);
-                        
-                        newCell.addEventListener('click', () => {
-                            const symbol = newCell.dataset.symbol;
-                            const targetIndex = this.patternInput.length;
-                            
-                            if (symbol === this.patternTarget[targetIndex]) {
-                                // Correct
-                                newCell.classList.add('selected');
-                                this.patternInput.push(symbol);
-                                
-                                if (this.patternInput.length === 3) {
-                                    // Pattern complete - auto verify
-                                    setTimeout(() => this.verifyPattern(
-                                        (Date.now() - this.stepStartTime) / 1000
-                                    ), 300);
-                                }
-                            } else {
-                                // Wrong
-                                newCell.classList.add('error');
-                                setTimeout(() => {
-                                    // Reset
-                                    document.querySelectorAll('.pattern-cell').forEach(c => {
-                                        c.classList.remove('selected', 'error');
-                                    });
-                                    this.patternInput = [];
-                                }, 500);
-                            }
-                        });
-                    });
-                },
-
-                verifyPattern: function(elapsed) {
-                    if (elapsed < CONFIG.MIN_TIME_STEP3) {
-                        UI.showToast('warning', 'Too Fast', 'Please complete the pattern.');
-                        return;
-                    }
-                    
-                    if (this.patternInput.length !== 3) {
-                        UI.showToast('error', 'Incomplete', 'Please select all symbols in order.');
-                        return;
-                    }
-                    
-                    // Verify pattern matches
-                    const isCorrect = this.patternInput.every((s, i) => s === this.patternTarget[i]);
-                    
-                    if (!isCorrect) {
-                        UI.showToast('error', 'Wrong Pattern', 'Please try again.');
-                        this.patternInput = [];
-                        document.querySelectorAll('.pattern-cell').forEach(c => {
-                            c.classList.remove('selected');
-                        });
-                        return;
-                    }
-                    
-                    // Final behavior check
-                    if (!BehaviorAnalysis.isHumanLike()) {
-                        UI.showToast('warning', 'Verification Failed', 'Suspicious activity detected.');
-                        return;
-                    }
-                    
-                    // ALL STEPS COMPLETE!
-                    this.complete();
-                },
-
-                complete: function() {
-                    clearInterval(this.timerInterval);
-                    UI.hideModal();
-                    
-                    // Save to storage
-                    Storage.updateTask(this.currentTask, {
-                        completed: true,
-                        steps: {
-                            code: true,
-                            slider: true,
-                            pattern: true
-                        },
-                        verification: {
-                            code: this.verificationCode,
-                            patternTarget: this.patternTarget
-                        }
-                    });
-                    
-                    UI.markTaskComplete(this.currentTask);
-                    UI.showToast('success', 'Verified!', `${this.formatTaskName(this.currentTask)} completed successfully.`);
-                    
-                    this.reset();
-                    App.checkAllCompleted();
-                },
-
-                fail: function(message) {
-                    clearInterval(this.timerInterval);
-                    UI.hideModal();
-                    UI.setTaskProcessing(this.currentTask, false);
-                    UI.showToast('error', 'Verification Failed', message);
-                    this.reset();
-                },
-
-                cancel: function() {
-                    clearInterval(this.timerInterval);
-                    UI.hideModal();
-                    UI.setTaskProcessing(this.currentTask, false);
-                    this.reset();
-                },
-
-                reset: function() {
-                    this.currentTask = null;
-                    this.currentStep = 1;
-                    this.verificationCode = null;
-                    this.windowOpened = false;
-                    this.sliderCompleted = false;
-                    this.patternInput = [];
-                    this.patternTarget = [];
-                    
-                    // Reset slider UI
-                    const thumb = UI.elements.sliderThumb;
-                    if (thumb) {
-                        thumb.style.left = '6px';
-                        thumb.classList.remove('success');
-                        thumb.innerHTML = '<i class="fas fa-arrows-alt-h"></i>';
-                    }
-                    UI.elements.sliderFill.style.width = '0%';
-                },
-
-                formatTaskName: function(taskId) {
-                    const names = {
-                        subscribe: 'Subscribe',
-                        like: 'Like',
-                        discord: 'Discord'
-                    };
-                    return names[taskId] || taskId;
-                }
-            };
-
-            // ==========================================
-            // MAIN APPLICATION
-            // ==========================================
-            const App = {
-                init: function() {
-                    Storage.init();
-                    UI.init();
-                    BehaviorAnalysis.init();
-                    this.bindEvents();
-                    this.restoreState();
-                    this.setupSecurity();
-                },
-
-                bindEvents: function() {
-                    // Task clicks
-                    document.querySelectorAll('.task-card').forEach(task => {
-                        task.addEventListener('click', function() {
-                            const taskId = this.dataset.task;
-                            Verification.start(taskId);
-                        });
-                    });
-
-                    // Modal events
-                    UI.elements.verifyBtn.addEventListener('click', () => {
-                        Verification.verifyCurrentStep();
-                    });
-
-                    UI.elements.cancelBtn.addEventListener('click', () => {
-                        Verification.cancel();
-                    });
-
-                    UI.elements.modalClose.addEventListener('click', () => {
-                        Verification.cancel();
-                    });
-
-                    UI.elements.codeInput.addEventListener('keypress', (e) => {
-                        if (e.key === 'Enter') {
-                            Verification.verifyCurrentStep();
-                        }
-                    });
-
-                    // Auto uppercase
-                    UI.elements.codeInput.addEventListener('input', function() {
-                        this.value = this.value.toUpperCase();
-                    });
-
-                    // Unlock button
-                    UI.elements.unlockBtn.addEventListener('click', () => {
-                        if (!UI.elements.unlockBtn.disabled) {
-                            // Final security check
-                            const data = Storage.get();
-                            const tasks = ['subscribe', 'like', 'discord'];
-                            const allCompleted = tasks.every(t => data?.tasks?.[t]?.completed);
-                            
-                            if (allCompleted && BehaviorAnalysis.getScore() >= 20) {
-                                window.location.href = CONFIG.REDIRECT_URL;
-                            } else {
-                                UI.showToast('error', 'Verification Error', 'Please complete all steps properly.');
-                            }
-                        }
-                    });
-
-                    // Close modal on overlay click
-                    UI.elements.modal.addEventListener('click', (e) => {
-                        if (e.target === UI.elements.modal) {
-                            Verification.cancel();
-                        }
-                    });
-
-                    // Escape key
-                    document.addEventListener('keydown', (e) => {
-                        if (e.key === 'Escape' && UI.elements.modal.classList.contains('active')) {
-                            Verification.cancel();
-                        }
-                    });
-                },
-
-                restoreState: function() {
-                    const data = Storage.get();
-                    if (data?.tasks) {
-                        let completed = 0;
-                        ['subscribe', 'like', 'discord'].forEach(taskId => {
-                            if (data.tasks[taskId]?.completed) {
-                                UI.markTaskComplete(taskId);
-                                completed++;
-                            }
-                        });
-                        UI.updateProgress(completed);
-                        
-                        if (completed === 3) {
-                            UI.unlockButton();
-                        }
-                    }
-                },
-
-                checkAllCompleted: function() {
-                    const data = Storage.get();
-                    const tasks = ['subscribe', 'like', 'discord'];
-                    let completed = 0;
-                    
-                    tasks.forEach(taskId => {
-                        if (data?.tasks?.[taskId]?.completed) {
-                            completed++;
-                        }
-                    });
-                    
-                    UI.updateProgress(completed);
-                    
-                    if (completed === 3) {
-                        setTimeout(() => {
-                            UI.unlockButton();
-                            UI.showToast('success', 'All Steps Complete!', 'You can now access the script.');
-                        }, 500);
-                    }
-                },
-
-                setupSecurity: function() {
-                    // Storage tampering detection
-                    const originalSetItem = localStorage.setItem.bind(localStorage);
-                    localStorage.setItem = function(key, value) {
-                        if (key === CONFIG.STORAGE_KEY) {
-                            // Only allow our encrypted format
-                            try {
-                                const decrypted = Crypto.decrypt(value, CONFIG.ENCRYPTION_KEY);
-                                if (!decrypted) {
-                                    console.warn('Invalid storage format');
-                                    return;
-                                }
-                            } catch {
+                            // Additional verification for Discord
+                            if (taskName === 'discord') {
+                                taskElement.classList.remove('verifying');
+                                showDiscordModal(resolve);
                                 return;
                             }
+                            
+                            // Validate token
+                            setTimeout(() => {
+                                if (validateVerificationToken(task.verificationToken, taskName)) {
+                                    completeTask(taskName);
+                                    taskElement.classList.remove('verifying');
+                                    resolve(true);
+                                } else {
+                                    taskElement.classList.remove('verifying');
+                                    showToast('Verification failed. Please try again.', 'error');
+                                    resolve(false);
+                                }
+                            }, CONFIG.verification.verificationDelay);
                         }
-                        originalSetItem(key, value);
-                    };
-
-                    // Console warning
-                    console.log(
-                        '%c⚠️ Security Warning',
-                        'color: #ff3366; font-size: 24px; font-weight: bold;'
-                    );
-                    console.log(
-                        '%cAttempting to manipulate this system will result in your progress being reset.',
-                        'color: #ffa500; font-size: 14px;'
-                    );
-
-                    // Detect devtools
-                    let devtoolsWarned = false;
-                    const detectDevTools = () => {
-                        const threshold = 160;
-                        const widthThreshold = window.outerWidth - window.innerWidth > threshold;
-                        const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-                        
-                        if ((widthThreshold || heightThreshold) && !devtoolsWarned) {
-                            devtoolsWarned = true;
-                            UI.showToast('warning', 'DevTools Detected', 'Manipulation attempts are logged.');
-                        }
-                    };
+                    }, 1000);
                     
-                    setInterval(detectDevTools, 2000);
+                    // Timeout after 10 minutes
+                    setTimeout(() => {
+                        clearInterval(checkInterval);
+                        taskElement.classList.remove('verifying');
+                        resolve(false);
+                    }, 600000);
+                });
+            }
 
-                    // Integrity check interval
-                    setInterval(() => {
-                        const data = Storage.get();
-                        if (data && !Storage.verifyIntegrity(data)) {
-                            Storage.clear();
-                            UI.showToast('error', 'Tampering Detected', 'Progress has been reset.');
-                            setTimeout(() => location.reload(), 2000);
-                        }
-                    }, 5000);
+            function showDiscordModal(resolveCallback) {
+                elements.discordModal.classList.add('active');
+                elements.discordUsername.value = '';
+                elements.discordUsername.focus();
+                
+                const handleVerify = () => {
+                    const username = elements.discordUsername.value.trim();
+                    
+                    // Validate Discord username format
+                    const isValidFormat = 
+                        /^.{2,32}#\d{4}$/.test(username) || // Old format: Username#0000
+                        /^@?[a-z0-9_.]{2,32}$/.test(username.toLowerCase()); // New format: @username
+                    
+                    if (!isValidFormat) {
+                        showToast('Invalid Discord username format', 'error');
+                        return;
+                    }
+                    
+                    // Additional verification: Check if they spent enough time
+                    const task = state.tasks.discord;
+                    if (!validateVerificationToken(task.verificationToken, 'discord')) {
+                        showToast('Please join the Discord server first', 'error');
+                        return;
+                    }
+                    
+                    elements.discordModal.classList.remove('active');
+                    completeTask('discord');
+                    resolveCallback(true);
+                };
+                
+                const handleCancel = () => {
+                    elements.discordModal.classList.remove('active');
+                    resolveCallback(false);
+                };
+                
+                elements.modalVerify.onclick = handleVerify;
+                elements.modalCancel.onclick = handleCancel;
+                
+                elements.discordUsername.onkeydown = (e) => {
+                    if (e.key === 'Enter') handleVerify();
+                    if (e.key === 'Escape') handleCancel();
+                };
+            }
 
-                    // Block right-click on sensitive elements
-                    document.addEventListener('contextmenu', (e) => {
-                        if (e.target.closest('.task-card, .unlock-btn, .modal-container')) {
-                            e.preventDefault();
-                        }
-                    });
+            function completeTask(taskName) {
+                const task = state.tasks[taskName];
+                const taskElement = elements.tasks[taskName];
+                
+                task.completed = true;
+                taskElement.classList.add('completed');
+                
+                saveState();
+                updateProgress();
+                
+                const taskTitles = {
+                    subscribe: 'Subscription',
+                    like: 'Like',
+                    discord: 'Discord'
+                };
+                
+                showToast(`${taskTitles[taskName]} verified successfully!`, 'success');
+            }
+
+            // ============================================
+            // UI UPDATES
+            // ============================================
+
+            function updateProgress() {
+                const completed = Object.values(state.tasks).filter(t => t.completed).length;
+                const percentage = (completed / 3) * 100;
+                
+                elements.completedCount.textContent = completed;
+                elements.progressFill.style.width = `${percentage}%`;
+                
+                if (completed === 3) {
+                    unlockScript();
                 }
-            };
+            }
+
+            function unlockScript() {
+                const btn = elements.getScriptBtn;
+                btn.classList.remove('locked');
+                btn.classList.add('unlocked');
+                btn.disabled = false;
+                btn.querySelector('.btn-content').innerHTML = `
+                    <i class="fas fa-unlock"></i>
+                    <span>Get Script Now</span>
+                `;
+                
+                showToast('All tasks completed! Script unlocked!', 'success');
+            }
+
+            function showToast(message, type = 'info') {
+                const toast = elements.toast;
+                const icon = toast.querySelector('i');
+                const msgSpan = toast.querySelector('.toast-message');
+                
+                toast.className = 'toast';
+                toast.classList.add(type);
+                
+                const icons = {
+                    success: 'fas fa-check-circle',
+                    error: 'fas fa-times-circle',
+                    info: 'fas fa-info-circle'
+                };
+                
+                icon.className = icons[type] || icons.info;
+                msgSpan.textContent = message;
+                
+                toast.classList.add('show');
+                
+                setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 4000);
+            }
+
+            function renderCompletedTasks() {
+                Object.entries(state.tasks).forEach(([taskName, task]) => {
+                    if (task.completed) {
+                        elements.tasks[taskName].classList.add('completed');
+                    }
+                });
+                updateProgress();
+            }
+
+            // ============================================
+            // PARTICLES ANIMATION
+            // ============================================
+
+            function createParticles() {
+                const container = document.getElementById('particles');
+                for (let i = 0; i < 30; i++) {
+                    const particle = document.createElement('div');
+                    particle.className = 'particle';
+                    particle.style.left = Math.random() * 100 + '%';
+                    particle.style.animationDelay = Math.random() * 15 + 's';
+                    particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+                    container.appendChild(particle);
+                }
+            }
+
+            // ============================================
+            // EVENT HANDLERS
+            // ============================================
+
+            function initEventListeners() {
+                // Task card clicks
+                Object.entries(elements.tasks).forEach(([taskName, taskElement]) => {
+                    taskElement.addEventListener('click', async () => {
+                        if (state.tasks[taskName].completed) {
+                            showToast('This task is already completed', 'info');
+                            return;
+                        }
+                        await verifyTask(taskName);
+                    });
+                });
+                
+                // Get Script button
+                elements.getScriptBtn.addEventListener('click', () => {
+                    if (elements.getScriptBtn.classList.contains('unlocked')) {
+                        // Final verification
+                        const allCompleted = Object.values(state.tasks).every(t => t.completed);
+                        if (allCompleted) {
+                            showToast('Redirecting to script...', 'success');
+                            setTimeout(() => {
+                                window.location.href = CONFIG.urls.redirect;
+                            }, 1000);
+                        }
+                    }
+                });
+                
+                // Anti-cheat: Detect DevTools
+                const devToolsCheck = () => {
+                    const threshold = 160;
+                    const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+                    const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+                    
+                    if (widthThreshold || heightThreshold) {
+                        // DevTools might be open - add subtle indicator
+                        document.body.setAttribute('data-dt', '1');
+                    }
+                };
+                
+                setInterval(devToolsCheck, 1000);
+            }
+
+            // ============================================
+            // INITIALIZATION
+            // ============================================
+
+            function init() {
+                state.sessionId = generateSessionId();
+                loadState();
+                renderCompletedTasks();
+                createParticles();
+                initEventListeners();
+            }
 
             // Start application
             if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', () => App.init());
+                document.addEventListener('DOMContentLoaded', init);
             } else {
-                App.init();
+                init();
             }
-
         })();
     </script>
 </body>
